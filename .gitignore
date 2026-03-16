@@ -1,0 +1,24 @@
+# Secrets and local env
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.csr
+
+# Node / package noise
+node_modules/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# OpenClaw transient/local state
+.openclaw/
+
+# Logs
+*.log
