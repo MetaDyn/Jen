@@ -10,8 +10,9 @@ This documentation is focused primarily on the **platform portion** of MetaDyn:
 - deployment and hosting model
 - platform systems and SDK boundaries
 - WebGL-first delivery model
+- productization gaps between current implementation and target platform model
 
-This section intentionally avoids over-merging broader AI-specific documentation that will be added later.
+This section intentionally avoids over-merging broader AI-specific documentation that will be added later, even though the imported source makes clear that embodied AI is a major platform differentiator.
 
 ## Platform Snapshot
 
@@ -40,6 +41,7 @@ MetaDyn is not just a Unity project. It is a platform product made of:
 - `system-architecture.md` — core technical architecture and major systems
 - `core-systems.md` — platform subsystems and implementation patterns
 - `deployment-hosting.md` — hosting, deployment, Cloudflare, and per-space delivery model
+- `platform-deep-dive.md` — fuller platform understanding, strengths, gaps, and strategic direction
 - `import-notes.md` — source import summary and mapping from imported `.claude` docs
 
 ## Source Basis

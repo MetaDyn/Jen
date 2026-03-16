@@ -75,3 +75,24 @@ The Unity platform is not described as a one-off app. It is a reusable metaverse
 - reusable SDK systems
 - future dashboard/backend integration
 - eventual broader cross-platform identity and presence workflows
+
+## Important Architectural Reality
+
+A key conclusion from the deeper import review is that MetaDyn is already thinking like a **multi-space platform**, but the implementation boundary between project code and platform code is still transitional.
+
+In practice, the current platform spans both:
+- `Assets/MetaDyn/**`
+- several still-essential files outside that root, such as shared/common and Pavilion runtime files
+
+That means the platform architecture is real, but the packaging boundary is not fully clean yet.
+
+## Productization Gaps Visible From Architecture
+
+The imported docs also make it clear that some platform-level architecture is more mature in concept than in final productized form.
+
+Examples include:
+- SDK extraction and packaging boundaries
+- dashboard-versus-Unity source-of-truth rules
+- rollback/versioned deployment model
+- shared-hosting provisioning automation
+- unified cross-runtime identity flows beyond current Unity-first implementation

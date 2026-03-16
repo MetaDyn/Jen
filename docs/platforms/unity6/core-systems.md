@@ -76,6 +76,12 @@ The platform includes a MetaDyn SDK layer that provides:
 - runtime config handling
 - component conventions for inspector-friendly world-building features
 
+A deeper read of the imported docs shows an important nuance:
+- the **SDK is conceptually first-class**
+- but the current physical file boundary is still partly entangled with non-`Assets/MetaDyn` project files that remain essential to the platform runtime
+
+This matters for future packaging, updater design, and install/distribution workflows.
+
 Imported docs describe a consistent SDK component pattern with:
 - clear namespaces
 - XML documentation

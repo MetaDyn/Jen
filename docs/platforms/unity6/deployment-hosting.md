@@ -84,3 +84,22 @@ The imported docs point toward a more mature hosting/control model over time, in
 This is one of the clearest platform differentiators in the imported material:
 
 MetaDyn is not just offering a Unity world. It is building a **deployable platform workflow** where creation, packaging, and hosting are part of one continuous product experience.
+
+## Important Gaps Still Visible
+
+The deeper documentation pass also shows that deployment maturity is uneven across layers.
+
+What appears comparatively mature already:
+- Unity editor-driven deploy workflow
+- SSH preflight and remote-path verification
+- Cloudflare + nginx delivery model
+- per-space isolated deployment rule
+
+What still appears to be evolving:
+- versioned release directories and rollback
+- host deployment API / dashboard-driven deployment execution
+- authoritative deployment metadata model
+- automated DNS / proxy provisioning at platform scale
+- cleaner dev/staging/prod environment governance
+
+So the deployment model is strong, but not fully productized yet as a large-scale managed platform workflow.
