@@ -58,6 +58,7 @@ Hosted experience platforms currently include:
   - `docs/platforms/unity6/` — MetaDyn Unity 6 platform documentation
 - `docs/ai-systems/` — Jen, OpenClaw, Codex, memory, and orchestration docs
 - `docs/runbooks/` — operational procedures and setup guides
+  - `docs/runbooks/local-static-demo-server.md` — workaround for serving LAN-accessible static demos when gateway approvals fail
 - `docs/standards/` — naming, conventions, security, and documentation practices
 
 ## Notes
