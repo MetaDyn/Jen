@@ -13,11 +13,25 @@ This repository serves as the control-plane workspace for:
 
 ## High-Level Context
 
-MetaDyn is building an advanced, connected digital fabric described as the metaverse. That work spans:
+MetaDyn — short for **Metaverse Dynamix** — is a metaverse builder creating both the connective fabric across platforms and the immersive spaces that run on it.
+
+MetaDyn is both:
+- **MetaDyn, LLC**, registered in Missouri, United States
+- a vibrant open-source-oriented builder community centered primarily around Discord
+
+Its work serves:
+- brands
+- enterprises
+- creators
+
+The broader mission spans:
 - identity across platforms
 - persistent presence across digital environments
+- immersive spaces across multiple runtimes
 - advanced AI avatars on multiple platforms
 - unified, persistent memory across experiences and systems
+
+MetaDyn brings more than 20 years of cumulative experience, with especially heavy metaverse-platform work over the last 3 years, including substantial work on Spatial.io and its Unity toolkit. Spatial is no longer a strong fit for MetaDyn or its clients, so MetaDyn is building a next-generation alternative.
 
 Jen runs on OpenClaw using GPT Codex 5.4 and acts as the main orchestrator for this environment.
 
@@ -37,6 +51,7 @@ Hosted experience platforms currently include:
 ## Repository Layout
 
 - `docs/architecture/` — system concepts, orchestration, and high-level design
+- `docs/company/` — company identity, mission, and top-level positioning
 - `docs/infrastructure/` — hosting, topology, environments, and deployment surfaces
 - `docs/platforms/` — platform-specific implementation notes
   - `docs/platforms/unity6/` — MetaDyn Unity 6 platform documentation

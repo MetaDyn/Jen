@@ -2,7 +2,17 @@
 
 ## Mission Context
 
-MetaDyn is building a connected digital fabric that links identity, presence, immersive environments, and advanced AI avatars into a persistent metaverse ecosystem.
+MetaDyn — Metaverse Dynamix — is a metaverse builder creating a connected digital fabric that links identity, presence, immersive environments, and advanced AI avatars into a persistent metaverse ecosystem.
+
+It builds both:
+- the connective layer across platforms
+- and immersive spaces for brands, enterprises, and creators
+
+MetaDyn is also both:
+- **MetaDyn, LLC**, registered in Missouri, United States
+- an open-source-oriented builder community with its primary social gravity on Discord
+
+This direction is grounded in more than 20 years of cumulative experience, with especially heavy metaverse-platform work over the last 3 years, including substantial work on Spatial.io and its Unity toolkit. Spatial is no longer a good fit for MetaDyn or its clients, which is a key reason MetaDyn is building a next-generation alternative.
 
 ## Core Architecture Themes
 
