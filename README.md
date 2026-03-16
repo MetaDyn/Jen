@@ -39,6 +39,7 @@ Hosted experience platforms currently include:
 - `docs/architecture/` — system concepts, orchestration, and high-level design
 - `docs/infrastructure/` — hosting, topology, environments, and deployment surfaces
 - `docs/platforms/` — platform-specific implementation notes
+  - `docs/platforms/unity6/` — MetaDyn Unity 6 platform documentation
 - `docs/ai-systems/` — Jen, OpenClaw, Codex, memory, and orchestration docs
 - `docs/runbooks/` — operational procedures and setup guides
 - `docs/standards/` — naming, conventions, security, and documentation practices
