@@ -41,3 +41,7 @@ MetaDyn should be understood as a hybrid of:
 - a **builder community**
 
 That matters because MetaDyn is not simply producing isolated worlds. It is working toward a broader platform layer for immersive identity, connected presence, cross-platform continuity, and deployable metaverse infrastructure.
+
+## Canonical Positioning Draft
+
+**MetaDyn is building the future of the internet: a next-generation digital fabric that connects people, places, and things through immersive experiences, with true ownership of identity, presence, and 3D assets.**

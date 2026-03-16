@@ -52,6 +52,7 @@ Hosted experience platforms currently include:
 
 - `docs/architecture/` — system concepts, orchestration, and high-level design
 - `docs/company/` — company identity, mission, and top-level positioning
+  - `docs/company/positioning.md` — canonical positioning drafts and mission language
 - `docs/infrastructure/` — hosting, topology, environments, and deployment surfaces
 - `docs/platforms/` — platform-specific implementation notes
   - `docs/platforms/unity6/` — MetaDyn Unity 6 platform documentation
