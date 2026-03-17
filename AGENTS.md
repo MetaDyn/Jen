@@ -65,6 +65,19 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - `trash` > `rm` (recoverable beats gone forever)
 - When in doubt, ask.
 
+## Structural Change Rule
+
+Do not create new structural entities unless the user explicitly asked for them.
+
+This includes:
+- new agents
+- new services
+- new dashboards, routes, or pages
+- new background jobs or helper workflows
+- new fallback models or alternate architectures
+
+If the user asked for a capability inside the current system, implement it inside the current system. Do not create a sidecar or temporary object without approval.
+
 ## External vs Internal
 
 **Safe to do freely:**
