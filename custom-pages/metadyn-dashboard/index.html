@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MetaDyn Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <main class="shell">
+      <header class="hero card">
+        <div>
+          <p class="eyebrow">Custom Pages / Dashboard</p>
+          <h1>MetaDyn Dashboard</h1>
+          <p class="lede">
+            A high-level command view for MetaDyn with quick drill-down paths into
+            company positioning, platform understanding, orchestration, and network-facing needs.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#beta-testers">Beta Testers</a>
+          <a class="button" href="#company">Company</a>
+          <a class="button" href="#platform">Platform</a>
+          <a class="button" href="../metadyn-docs/">Docs Hub</a>
+          <a class="button" href="#network">Network</a>
+        </div>
+      </header>
+
+      <section id="beta-testers" class="card panel section-gap beta-panel">
+        <div class="panel-head">
+          <h2>Beta Tester Intake Dashboard</h2>
+          <span class="badge">Operator View</span>
+        </div>
+        <p>
+          This is the live beta tester intake view inside the main MetaDyn dashboard. It is meant to be
+          comprehensive: roster, emails, outreach priority, and the exact local source currently driving the page.
+        </p>
+        <div class="beta-actions">
+          <a class="button primary" href="../beta-testers-dashboard.html">Open full-screen beta dashboard</a>
+        </div>
+        <div class="beta-frame-wrap">
+          <iframe
+            class="beta-frame"
+            src="../beta-testers-dashboard.html"
+            title="MetaDyn Beta Tester Dashboard"
+            loading="eager"
+          ></iframe>
+        </div>
+      </section>
+
+      <section class="grid three-up">
+        <article class="card stat">
+          <span class="label">Identity</span>
+          <strong>MetaDyn = Metaverse Dynamix</strong>
+          <p>Company + platform builder + open-source-oriented builder community.</p>
+        </article>
+        <article class="card stat">
+          <span class="label">Current Delivery Core</span>
+          <strong>Unity 6 Platform</strong>
+          <p>WebGL-first multi-space platform with auth, deployment, voice, and social foundations.</p>
+        </article>
+        <article class="card stat">
+          <span class="label">Operating Model</span>
+          <strong>Jen + Specialist Agents</strong>
+          <p>Main orchestrator coordinating human collaborators and specialized sub-agents.</p>
+        </article>
+      </section>
+
+      <section id="company" class="card panel">
+        <div class="panel-head">
+          <h2>Company & Positioning</h2>
+          <span class="badge">High Level</span>
+        </div>
+        <ul class="bullet-list">
+          <li>Building the future of the internet through an immersive digital fabric.</li>
+          <li>Focused on true ownership of identity, presence, and 3D assets.</li>
+          <li>Serving brands, enterprises, and creators.</li>
+          <li>MetaDyn, LLC + a vibrant Discord-centered builder community.</li>
+        </ul>
+      </section>
+
+      <section id="platform" class="grid two-up section-gap">
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>Platform Drill-Down</h2>
+            <span class="badge">Architecture</span>
+          </div>
+          <ul class="bullet-list compact">
+            <li>Unity 6 / URP</li>
+            <li>Photon Fusion Shared Mode</li>
+            <li>Supabase auth + profile systems</li>
+            <li>WebRTC voice</li>
+            <li>Cloudflare + nginx delivery</li>
+            <li>Per-space build/deploy model</li>
+          </ul>
+        </article>
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>Priority Areas</h2>
+            <span class="badge">Actionable</span>
+          </div>
+          <ul class="bullet-list compact">
+            <li>Canonical architecture / identity model</li>
+            <li>Beta tester onboarding and outreach</li>
+            <li>Platform docs deep dive and decomposition</li>
+            <li>Agent orchestration model</li>
+            <li>Execution friction / approvals hardening</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="card panel section-gap">
+        <div class="panel-head">
+          <h2>Documentation Access</h2>
+          <span class="badge">End User</span>
+        </div>
+        <p>
+          The curated MetaDyn docs now have a browser-facing entry point designed for end users,
+          partners, and collaborators who need high-level context without navigating the raw workspace.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="../metadyn-docs/">Open Docs Hub</a>
+        </div>
+      </section>
+
+      <section id="network" class="card panel section-gap">
+        <div class="panel-head">
+          <h2>Network / Infrastructure View</h2>
+          <span class="badge">Needs</span>
+        </div>
+        <div class="network-grid">
+          <div>
+            <h3>Preview Workflow</h3>
+            <p>Local static pages served over LAN first, then promoted to external hosting if they graduate.</p>
+          </div>
+          <div>
+            <h3>Reachability</h3>
+            <p>Headless Ubuntu workflow means demos should bind to <code>0.0.0.0</code> and expose a reachable LAN URL.</p>
+          </div>
+          <div>
+            <h3>Control Plane Direction</h3>
+            <p>Custom Pages can become a dashboard layer for internal tools, partner views, onboarding surfaces, and ops panels.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
