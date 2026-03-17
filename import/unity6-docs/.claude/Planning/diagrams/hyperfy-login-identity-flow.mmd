@@ -1,0 +1,58 @@
+sequenceDiagram
+    autonumber
+    participant User
+    participant Browser
+    participant Client as Hyperfy Client
+    participant Cookie as Browser Cookie Jar
+    participant Env as env.PUBLIC_DASHBOARD_URL
+    participant WS as Hyperfy WebSocket Endpoint
+    participant Server as Hyperfy ServerNetwork
+    participant Verify as External JWT Verifier
+    participant DB as Hyperfy users table
+    participant World as Hyperfy World Snapshot / Entities
+
+    User->>Browser: Visit hyperfy.metadyn.xyz
+    Browser->>Client: Load client bundle
+    Client->>Cookie: Read metadyn_token
+    Client->>Env: Read dashboard login URL
+
+    alt metadyn_token missing
+        alt dashboard URL configured
+            Client-->>Browser: Redirect to dashboard login with ?redirect=current_url
+        else dashboard URL missing
+            Client-->>Browser: Log auth gate error and stop init
+        end
+    else metadyn_token present
+        Client->>WS: Open websocket with authToken
+        WS->>Server: onConnection(authToken, name?, avatar?)
+        Server->>Verify: Validate external trusted JWT
+
+        alt External JWT valid
+            Verify-->>Server: Claims: sub, email, user_metadata
+            Server->>Server: Normalize trusted identity
+            Server->>DB: Lookup existing user by trusted id
+            alt Existing user found
+                DB-->>Server: Existing row
+                Server->>DB: Merge updated trusted fields<br/>currently name only, avatar sync disabled
+            else New user
+                Server->>DB: Insert trusted user row
+            end
+            DB-->>Server: Final user record
+            Server->>World: Spawn player entity with trusted identity
+            Server-->>Client: Snapshot(authToken, entities, settings, livekit, user state)
+            Client->>Client: Deserialize snapshot and preload avatar
+            Client-->>User: Enter world as authenticated MetaDyn user
+        else External JWT invalid
+            Server->>Server: Attempt legacy local JWT fallback
+            alt Legacy local JWT valid
+                Server->>DB: Load local Hyperfy user
+                DB-->>Server: Existing local user
+                Server->>World: Spawn with legacy local identity
+                Server-->>Client: Snapshot with local user
+            else No valid token
+                Server->>DB: Create anonymous local user
+                Server->>World: Spawn anonymous player
+                Server-->>Client: Snapshot with anonymous identity
+            end
+        end
+    end

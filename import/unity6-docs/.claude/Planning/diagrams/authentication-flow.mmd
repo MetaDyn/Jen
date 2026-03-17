@@ -1,0 +1,51 @@
+sequenceDiagram
+    autonumber
+    participant User
+    participant Browser
+    participant Dashboard as Dashboard UI/App
+    participant Supabase as Supabase Auth
+    participant Cookie as Browser Cookie Jar
+    participant Unity as Unity WebGL App
+    participant Hyperfy as Hyperfy Client App
+    participant HServer as Hyperfy Server
+
+    User->>Browser: Navigate to dashboard login/signup
+    Browser->>Dashboard: Load dashboard app
+    User->>Dashboard: Submit credentials or signup form
+    Dashboard->>Supabase: signInWithPassword / signUp
+    Supabase-->>Dashboard: Session + access_token + user metadata
+    Dashboard->>Cookie: Set metadyn_token for .metadyn.xyz
+    Dashboard-->>Browser: Authenticated dashboard state
+
+    par Unity path
+        User->>Browser: Open Unity space URL
+        Browser->>Unity: Load Unity app shell
+        Unity->>Cookie: Read metadyn_token
+        alt No cookie
+            Unity-->>Browser: Redirect to dashboard login with redirect param
+            Browser->>Dashboard: Open login page
+            Dashboard->>Cookie: Set metadyn_token after auth
+            Dashboard-->>Browser: Redirect back to Unity URL
+            Browser->>Unity: Reload Unity app
+            Unity->>Cookie: Re-read metadyn_token
+            Unity-->>User: Continue into Unity world
+        else Cookie present
+            Unity-->>User: Continue into Unity world immediately
+        end
+    and Hyperfy path
+        User->>Browser: Open Hyperfy space URL
+        Browser->>Hyperfy: Load Hyperfy client bundle
+        Hyperfy->>Cookie: Read metadyn_token
+        alt No cookie
+            Hyperfy-->>Browser: Redirect to dashboard login with redirect param
+            Browser->>Dashboard: Open login page
+            Dashboard->>Cookie: Set metadyn_token after auth
+            Dashboard-->>Browser: Redirect back to Hyperfy URL
+            Browser->>Hyperfy: Reload Hyperfy app
+            Hyperfy->>Cookie: Re-read metadyn_token
+        else Cookie present
+            Hyperfy->>HServer: Open websocket with authToken query param
+            HServer-->>Hyperfy: Authenticated snapshot
+            Hyperfy-->>User: Continue into Hyperfy world
+        end
+    end

@@ -1,0 +1,31 @@
+flowchart TD
+    Canonical[Canonical Space URL<br/>myspace.metadyn.xyz]
+    Settings[Dashboard Domain Settings UI]
+    Custom[Requested Custom Domain<br/>world.clientbrand.com]
+    DNSInstr[Dashboard shows DNS instructions<br/>usually CNAME to canonical space]
+    CustDNS[Customer DNS Provider]
+    Verify[MetaDyn verifies ownership / routing]
+    HostAPI[Host Deployment API]
+    Nginx[Nginx host config update]
+    Live[Custom domain live]
+    Auth{MetaDyn session available?}
+    Login[Redirect to dashboard login]
+    Return[Return to custom domain]
+    Enter[Enter space]
+    Fallback[Canonical MetaDyn URL remains fallback]
+
+    Canonical --> Settings
+    Settings --> Custom
+    Custom --> DNSInstr
+    DNSInstr --> CustDNS
+    CustDNS --> Verify
+    Verify --> HostAPI
+    HostAPI --> Nginx
+    Nginx --> Live
+    Canonical --> Fallback
+
+    Live --> Auth
+    Auth -->|No| Login
+    Login --> Return
+    Return --> Enter
+    Auth -->|Yes| Enter

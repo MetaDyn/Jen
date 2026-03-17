@@ -1,0 +1,36 @@
+sequenceDiagram
+    autonumber
+    participant User
+    participant Browser
+    participant UnityShell as Unity Host Page
+    participant Bridge as Unity Web Auth Bridge
+    participant Dashboard
+    participant Supabase
+    participant Cookie as Browser Cookie Jar
+    participant UnityRuntime as Unity WebGL Runtime
+
+    User->>Browser: Open Unity space URL
+    Browser->>UnityShell: Load Unity host page
+    UnityShell->>Bridge: Initialize web auth bridge
+    Bridge->>Cookie: Read metadyn_token
+
+    alt Token missing
+        Bridge-->>Browser: Redirect to dashboard login with redirect=current_unity_url
+        Browser->>Dashboard: Open login/signup page
+        User->>Dashboard: Authenticate
+        Dashboard->>Supabase: signIn / signUp
+        Supabase-->>Dashboard: Session + access_token
+        Dashboard->>Cookie: Set metadyn_token for .metadyn.xyz
+        Dashboard-->>Browser: Redirect back to Unity space
+        Browser->>UnityShell: Reload page
+        UnityShell->>Bridge: Check cookie again
+    else Token present
+        Bridge-->>UnityRuntime: Provide token to Unity auth manager
+    end
+
+    UnityRuntime->>Bridge: Read token
+    alt Token available
+        UnityRuntime-->>User: Continue load/spawn flow
+    else Token unavailable after redirect
+        UnityRuntime-->>User: Remain gated / login required
+    end

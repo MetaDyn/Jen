@@ -1,0 +1,37 @@
+flowchart LR
+    User[Operator / Creator] --> Dashboard[Dashboard UI]
+    Dashboard --> Auth[Dashboard Auth / Authorization]
+    Auth --> DeployReq[Deploy Request]
+    DeployReq --> API[Host Deployment API]
+
+    API --> Validate[Validate Request]
+    Validate --> Choice{Space Type}
+
+    Choice -->|Unity| UnityTemplate[Unity Template Provisioner]
+    Choice -->|Hyperfy| HyperfyTemplate[Hyperfy Template Provisioner]
+
+    UnityTemplate --> UnityFiles[Build / Copy Unity Artifacts]
+    UnityTemplate --> UnityConfig[Generate Unity Runtime Config]
+    HyperfyTemplate --> HyperfyInstance[Provision Hyperfy Instance / Directory]
+    HyperfyTemplate --> HyperfyConfig[Generate Hyperfy Env / Runtime Config]
+
+    UnityFiles --> DNS[Create / Update DNS Record]
+    UnityConfig --> DNS
+    HyperfyInstance --> DNS
+    HyperfyConfig --> DNS
+
+    DNS --> ProxyTemplate{Proxy Type}
+    ProxyTemplate -->|Static Unity| UnityProxy[Generate Unity Nginx Config]
+    ProxyTemplate -->|Hyperfy Node| HyperfyProxy[Generate Hyperfy Nginx Config]
+
+    UnityProxy --> Enable[Write sites-available and symlink sites-enabled]
+    HyperfyProxy --> Enable
+
+    Enable --> Test[Run nginx -t]
+    Test -->|Pass| Reload[Reload Nginx]
+    Test -->|Fail| Rollback[Abort / Rollback / Report Error]
+
+    Reload --> Verify[Verify Public URL + Health]
+    Verify --> Status[Return Status / Logs / URL]
+    Rollback --> Status
+    Status --> Dashboard

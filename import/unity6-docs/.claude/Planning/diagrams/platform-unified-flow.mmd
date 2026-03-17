@@ -1,0 +1,52 @@
+flowchart TD
+    U[User / Creator / Operator]
+
+    subgraph ControlPlane[Control Plane]
+        D[Dashboard UI<br/>dashboard.metadyn.xyz]
+        DA[Dashboard App Logic<br/>auth, spaces, deploy controls]
+        DS[(Supabase<br/>auth.users / profiles / spaces)]
+        DC[Shared Session Cookie<br/>metadyn_token<br/>Domain=.metadyn.xyz]
+    end
+
+    subgraph ExecutionPlane[Execution Plane]
+        API[Host Deployment API]
+        JOB[Deployment Job Runner]
+        DNS[DNS / Cloudflare Records]
+        NX[Nginx Name-Based SSL Proxy]
+    end
+
+    subgraph RuntimePlane[Runtime Plane]
+        UT[Unity Space Template]
+        HT[Hyperfy Space Template]
+        UW[Unity Runtime Space<br/>pavilion.metadyn.xyz or space host]
+        HW[Hyperfy Runtime Space<br/>hyperfy.metadyn.xyz or space host]
+        UDB[(Unity Space Content / Build Files)]
+        HDB[(Hyperfy World Data / users table / assets)]
+    end
+
+    U --> D
+    D --> DA
+    DA --> DS
+    DA --> DC
+
+    DC --> UW
+    DC --> HW
+
+    D --> API
+    API --> JOB
+    JOB --> DNS
+    JOB --> NX
+    JOB --> UT
+    JOB --> HT
+
+    UT --> UDB
+    HT --> HDB
+
+    UDB --> UW
+    HDB --> HW
+
+    NX --> UW
+    NX --> HW
+
+    DS -. identity / profile source .-> UW
+    DS -. identity / profile source .-> HW
