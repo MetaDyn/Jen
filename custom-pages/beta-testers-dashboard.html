@@ -122,6 +122,11 @@
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.07);
     }
+    .stack {
+      display: grid;
+      gap: 20px;
+      margin-top: 20px;
+    }
     .person-card h3 {
       margin-bottom: 6px;
       font-size: 18px;
@@ -234,15 +239,73 @@
       </div>
     </div>
 
-    <div class="panel full-width">
-      <div class="section-title">
-        <div>
-          <h2>Full tester roster</h2>
-          <div class="small">Complete locally-present records, including email addresses and raw intake detail</div>
+    <div class="stack full-width">
+      <div class="panel">
+        <div class="section-title">
+          <div>
+            <h2>Complete outreach roster</h2>
+            <div class="small">Every locally-present tester with direct email, lane recommendation, and suggested first-touch path</div>
+          </div>
+          <span class="small" id="rosterCount"></span>
         </div>
-        <span class="small" id="rosterCount"></span>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Lane</th>
+                <th>Platforms</th>
+                <th>Feedback</th>
+                <th>Next touch</th>
+              </tr>
+            </thead>
+            <tbody id="emailRosterTable"></tbody>
+          </table>
+        </div>
       </div>
-      <div class="roster-grid" id="rosterCards"></div>
+
+      <div class="grid">
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>Outreach lanes</h2>
+              <div class="small">Grouped from the exact tester roster embedded in this page</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Lane</th>
+                  <th>Who</th>
+                  <th>Why they belong here</th>
+                </tr>
+              </thead>
+              <tbody id="laneTable"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="section-title">
+            <div>
+              <h2>Email copy targets</h2>
+              <div class="small">Ready-made contact blocks pulled from the rendered roster</div>
+            </div>
+          </div>
+          <div class="notes" id="emailTargets"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">
+          <div>
+            <h2>Full tester roster cards</h2>
+            <div class="small">Complete locally-present records, including email addresses and raw intake detail</div>
+          </div>
+        </div>
+        <div class="roster-grid" id="rosterCards"></div>
+      </div>
     </div>
   </div>
 
@@ -407,6 +470,16 @@
       if (/Community/i.test(t.interest)) return 'community-led use case';
       return 'general tester fit';
     }
+    function outreachLane(t) {
+      if (/Enterprise|Professional|brand|Business|academic/i.test(t.interest)) return 'Business / deployment';
+      if (/Community/i.test(t.interest)) return 'Community / ecosystem';
+      return 'Creator / hobby';
+    }
+    function nextTouch(t) {
+      if (/Yes, absolutely/.test(t.interview)) return 'Email now, then schedule interview';
+      if (/Maybe/.test(t.interview)) return 'Email now, offer flexible interview slot';
+      return 'Email now, collect written feedback async';
+    }
     function countBy(values) {
       const map = new Map();
       values.forEach(v => map.set(v, (map.get(v) || 0) + 1));
@@ -517,6 +590,42 @@
     document.getElementById('nextActions').innerHTML = nextActions.map(v => `<li>${escapeHtml(v)}</li>`).join('');
 
     document.getElementById('rosterCount').textContent = `${total} records shown`;
+    document.getElementById('emailRosterTable').innerHTML = enriched.map(t => `
+      <tr>
+        <td><strong>${escapeHtml(t.name)}</strong></td>
+        <td><a href="mailto:${encodeURIComponent(t.email)}">${escapeHtml(t.email)}</a></td>
+        <td>${escapeHtml(outreachLane(t))}</td>
+        <td>${escapeHtml(t.os.join(', '))}</td>
+        <td>${escapeHtml(t.feedback.join(' • '))}</td>
+        <td>${escapeHtml(nextTouch(t))}</td>
+      </tr>
+    `).join('');
+
+    const laneGroups = countBy(enriched.map(t => outreachLane(t)));
+    document.getElementById('laneTable').innerHTML = laneGroups.map(([lane]) => {
+      const members = enriched.filter(t => outreachLane(t) === lane);
+      return `
+        <tr>
+          <td><strong>${escapeHtml(lane)}</strong></td>
+          <td>${members.map(t => `${escapeHtml(t.name)} <span class="small">(${escapeHtml(t.email)})</span>`).join('<br>')}</td>
+          <td>${members.map(t => escapeHtml(keySignal(t))).join('<br>')}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const firstWaveEmails = enriched.slice(0,5).map(t => t.email).join('; ');
+    const allEmails = enriched.map(t => t.email).join('; ');
+    document.getElementById('emailTargets').innerHTML = `
+      <div class="mini-card" style="margin-bottom:12px;">
+        <div class="k">First-wave outreach block</div>
+        <div class="notes" style="margin-top:8px; word-break: break-word;">${escapeHtml(firstWaveEmails)}</div>
+      </div>
+      <div class="mini-card">
+        <div class="k">Full roster email block</div>
+        <div class="notes" style="margin-top:8px; word-break: break-word;">${escapeHtml(allEmails)}</div>
+      </div>
+    `;
+
     document.getElementById('rosterCards').innerHTML = enriched.map(t => `
       <article class="person-card">
         <h3>${escapeHtml(t.name)}</h3>
