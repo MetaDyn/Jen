@@ -39,13 +39,20 @@
         <div class="beta-actions">
           <a class="button primary" href="../beta-testers-dashboard.html">Open full-screen beta dashboard</a>
         </div>
-        <div class="beta-frame-wrap">
-          <iframe
-            class="beta-frame"
-            src="../beta-testers-dashboard.html"
-            title="MetaDyn Beta Tester Dashboard"
-            loading="eager"
-          ></iframe>
+        <div class="card" style="padding:18px;display:grid;gap:12px; margin-top: 16px;">
+          <div>
+            <strong>Inline dashboard summary restored</strong>
+            <p style="margin:8px 0 0; color: rgba(226,232,240,0.8);">
+              The iframe embed was removed. This panel now points people to the native Control UI beta route and the standalone artifact, while the actual in-app route renders the full roster directly.
+            </p>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+            <div class="card" style="padding:14px;"><div class="label">Total testers</div><strong>10</strong></div>
+            <div class="card" style="padding:14px;"><div class="label">Emails captured</div><strong>10</strong></div>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="../beta-testers-dashboard.html">Open standalone beta dashboard</a>
+          </div>
         </div>
       </section>
 
