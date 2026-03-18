@@ -10,6 +10,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `architecture/collaboration-model.md` — human/agent orchestration model
 - `ai-systems/jen.md` — Jen's role as the main orchestration layer
 - `infrastructure/topology.md` — current environment and infrastructure shape
+- `infrastructure/nginx-ssl-proxy.md` — documented Cloudflare + nginx + SSL origin pattern
 
 ## Platform Docs
 
@@ -28,6 +29,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `runbooks/repo-setup.md` — repo and local environment setup
 - `runbooks/local-static-demo-server.md` — local static serving for LAN/testing
 - `runbooks/cloudflare-jen-tunnel.md` — recommended HTTPS ingress pattern for `jen.metadyn.xyz`
+- `runbooks/ubuntu-server-bootstrap-checklist.md` — baseline Ubuntu host setup for Cloudflare + nginx origin workloads
 - `standards/documentation.md` — documentation conventions for this workspace
 
 ## Raw Imported Source
