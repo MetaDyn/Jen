@@ -132,7 +132,7 @@ Test config:
 sudo nginx -t
 ```
 
-## 8. Create a basic nginx site config
+## 8. Create an nginx site config using the full MetaDyn pattern
 
 ### Static Unity/WebGL example
 
@@ -142,40 +142,89 @@ Create a site file:
 sudo nano /etc/nginx/sites-available/example-space.metadyn.xyz
 ```
 
-Basic starting pattern:
+Use the full static-host pattern:
 
 ```nginx
+# HTTP to HTTPS redirect
 server {
     listen 80;
     server_name example-space.metadyn.xyz;
+
     return 301 https://$host$request_uri;
 }
 
+# HTTPS - Static Unity WebGL / app host
 server {
     listen 443 ssl http2;
     server_name example-space.metadyn.xyz;
 
-    ssl_certificate /etc/letsencrypt/live/metadyn.xyz/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/metadyn.xyz/privkey.pem;
-
     root /var/www/unity-webgl/example-space;
     index index.html;
 
+    ssl_certificate /etc/letsencrypt/live/metadyn.xyz/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/metadyn.xyz/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Brotli compressed WASM files - most specific first
+    location ~* \.wasm\.br$ {
+        types { }
+        default_type application/wasm;
+        add_header Content-Encoding br;
+    }
+
+    # Brotli compressed data files
+    location ~* \.data\.br$ {
+        types { }
+        default_type application/octet-stream;
+        add_header Content-Encoding br;
+    }
+
+    # Brotli compressed JS files
+    location ~* \.js\.br$ {
+        types { }
+        default_type application/javascript;
+        add_header Content-Encoding br;
+    }
+
+    # Regular WASM and data files
+    location ~* \.(data|wasm|symbols\.json)$ {
+        gzip on;
+        gzip_types application/octet-stream application/wasm;
+        gzip_vary on;
+    }
+
+    # Cache static assets
+    location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Main app route
     location / {
         try_files $uri $uri/ /index.html;
+
+        add_header Access-Control-Allow-Origin '*' always;
+        add_header Access-Control-Allow-Methods 'GET, OPTIONS' always;
+        add_header Access-Control-Allow-Headers 'Content-Type' always;
     }
+
+    client_max_body_size 200M;
 }
 ```
 
 ### Reverse proxy example
 
 ```nginx
+# HTTP to HTTPS redirect
 server {
     listen 80;
     server_name hyperfy.metadyn.xyz;
+
     return 301 https://$host$request_uri;
 }
 
+# HTTPS - Reverse proxy to Hyperfy / Node app
 server {
     listen 443 ssl http2;
     server_name hyperfy.metadyn.xyz;
@@ -183,19 +232,25 @@ server {
     ssl_certificate /etc/letsencrypt/live/metadyn.xyz/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/metadyn.xyz/privkey.pem;
 
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+
     location / {
         proxy_pass http://127.0.0.1:3001;
         proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
         proxy_cache_bypass $http_upgrade;
     }
 }
 ```
+
+These are intentionally the full examples matching the current MetaDyn config patterns, not slimmed-down placeholders.
 
 Enable the site and validate:
 
