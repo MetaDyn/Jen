@@ -52,6 +52,7 @@ If you want the fastest solid understanding of the platform, read in this order:
 
 ### Identity, Presence, And Social Runtime
 - `auth-identity.md` — current web-first auth bridge, Supabase-backed identity, and cross-surface continuity direction
+- `security-priority-fixes.md` — current trust-boundary flaws, exploit path, and priority remediation sequence for Unity auth/identity
 - `multiplayer-social.md` — player/session model, synchronized presence, moderation, and social-runtime architecture
 - `realtime-voice.md` — AI voice path, player-to-player voice path, WebGL media constraints, and scale direction
 

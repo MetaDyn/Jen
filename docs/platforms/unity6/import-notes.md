@@ -40,6 +40,8 @@ The goal was to extract and normalize:
 
 AI-specific material is expected to be organized separately as additional source material is uploaded.
 
+A later review also added a security-remediation track derived from uploaded security findings, now captured in `security-priority-fixes.md` so the curated docs reflect current platform risk rather than only the earlier architectural/planning material.
+
 ## Notes
 
 The imported `.claude` docs are valuable as source documentation and historical context, but they are not yet treated as the final curated structure for the Jen repo.

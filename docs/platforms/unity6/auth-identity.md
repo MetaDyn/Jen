@@ -198,6 +198,19 @@ That creates a future requirement for a more explicit auth handoff, likely dashb
 - logout must clear session state cleanly across surfaces
 - editor-side developer auth must remain distinct from runtime end-user auth
 
+### Newly Elevated Security Concern: Trust Boundaries Inside Unity
+A more recent security review surfaced an important distinction: the browser/dashboard auth bridge can still be real and useful while Unity-side authorization remains under-hardened.
+
+The most important issue is that client-supplied identity values must not be treated as proof of identity for role or permission decisions.
+
+Current highest-priority concerns now include:
+- raw UUID values influencing owner/admin behavior
+- profile bootstrap APIs shaped around arbitrary `userId` lookup rather than current-session identity
+- display identity being too loosely tied to mutable local state
+- JavaScript-readable shared browser tokens increasing XSS sensitivity on trusted subdomains
+
+See `security-priority-fixes.md` for the priority remediation plan and file-level patch scope.
+
 ## Recommended Documentation Position
 
 The Unity auth story should be documented as:

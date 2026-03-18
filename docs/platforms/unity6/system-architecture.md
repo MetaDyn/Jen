@@ -24,7 +24,9 @@ Unity scenes, player interactions, social spaces, avatars, UI, and immersive wor
 MetaDyn-owned runtime/editor/deployment systems that provide the reusable platform capabilities inside projects.
 
 ### Identity Layer
-Supabase-backed authentication, profile loading, avatar persistence, cookie/session continuity, and owner/admin identity.
+Supabase-backed authentication, profile loading, avatar persistence, cookie/session continuity, and Unity-side authorization boundaries.
+
+A newly documented security priority is that authorization decisions inside Unity must not trust client-supplied identity fields as proof of identity. Owner/admin behavior should ultimately come from validated session state or signed backend claims rather than raw UUID comparison.
 
 ### Realtime Social Layer
 Photon Fusion sessions, spawning, user list synchronization, permissions/moderation, and presence handling.

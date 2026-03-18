@@ -66,6 +66,9 @@ Versioned deployment releases, rollback, manifest discipline, and deployment his
 ### Cross-Runtime Identity Completion
 Unity auth is comparatively coherent today, while broader unified identity across additional runtimes like Hyperfy is still more architectural direction than completed system.
 
+### Unity Authorization Hardening
+A newly elevated gap is not just cross-runtime identity completion, but Unity-side trust-boundary hardening. The current review indicates that client-supplied UUID values may still influence authorization-sensitive behavior in ways that are too trusting. That shifts identity hardening from a future cleanup concern into an active priority fix track.
+
 ### Realistic Scale Boundaries
 Some maturity claims are more optimistic than the underlying topology fully guarantees, especially around WebRTC mesh scaling and platform-wide production readiness.
 

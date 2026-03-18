@@ -19,6 +19,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `platforms/unity6/system-architecture.md` — major technical systems
 - `platforms/unity6/core-systems.md` — implementation patterns and subsystem map
 - `platforms/unity6/auth-identity.md` — web-first auth, Supabase identity, and cross-surface continuity direction
+- `platforms/unity6/security-priority-fixes.md` — current Unity auth/identity trust failures and remediation sequence
 - `platforms/unity6/multiplayer-social.md` — player/session model, presence, moderation, and social runtime
 - `platforms/unity6/realtime-voice.md` — AI voice path, WebRTC player voice, and media scale direction
 - `platforms/unity6/deployment-hosting.md` — deployment, Cloudflare, hosting, and delivery model
