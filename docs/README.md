@@ -14,11 +14,15 @@ This is the fastest entry point for MetaDyn context in this workspace.
 
 ## Platform Docs
 
-- `platforms/unity6/README.md` — overview of the Unity 6 platform doc set
+- `platforms/unity6/README.md` — overview of the Unity 6 platform doc set and recommended reading order
 - `platforms/unity6/platform-overview.md` — platform definition and intended product shape
 - `platforms/unity6/system-architecture.md` — major technical systems
-- `platforms/unity6/core-systems.md` — implementation patterns and subsystems
+- `platforms/unity6/core-systems.md` — implementation patterns and subsystem map
+- `platforms/unity6/auth-identity.md` — web-first auth, Supabase identity, and cross-surface continuity direction
+- `platforms/unity6/multiplayer-social.md` — player/session model, presence, moderation, and social runtime
+- `platforms/unity6/realtime-voice.md` — AI voice path, WebRTC player voice, and media scale direction
 - `platforms/unity6/deployment-hosting.md` — deployment, Cloudflare, hosting, and delivery model
+- `platforms/unity6/sdk-productization.md` — SDK boundary, updater direction, and productization gaps
 - `platforms/unity6/platform-deep-dive.md` — strengths, gaps, and strategic direction
 - `platforms/unity6/import-notes.md` — mapping from raw imported material into the normalized docs
 - `platforms/immersive-spaces.md` — cross-platform immersive-space context outside Unity
