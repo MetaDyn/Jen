@@ -62,6 +62,7 @@ If you want the fastest solid understanding of the platform, read in this order:
 
 ### Source Mapping
 - `import-notes.md` — mapping from the imported `.claude` material into this normalized doc set
+- `platform-capabilities-survey-analysis-2026-01.md` — analysis of early 2026 platform capabilities survey responses, including priority signals and product implications
 
 ## What These Docs Try To Do Differently
 
