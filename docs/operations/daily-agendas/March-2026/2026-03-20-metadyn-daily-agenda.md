@@ -1,6 +1,8 @@
-# MetaDyn Daily Agenda — Friday, March 20, 2026
+# MetaDyn Daily Agenda
 
-**MetaDyn Daily Agenda**
+**Date:** 2026-03-20
+**Timezone:** America/Chicago
+
 - **Top priorities today:**
   - Lock one concrete product/build milestone that can visibly move today, not just stay in planning.
   - Publish one community-facing prompt in Discord that invites co-creation around a real product decision.
