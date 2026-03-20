@@ -75,8 +75,11 @@ This includes:
 - new dashboards, routes, or pages
 - new background jobs or helper workflows
 - new fallback models or alternate architectures
+- new doc/file organization patterns, archive schemes, "latest" files, sidecar indexes, or alternate output paths
 
 If the user asked for a capability inside the current system, implement it inside the current system. Do not create a sidecar or temporary object without approval.
+
+If a file set already has an established structure, naming convention, month/day archive layout, or output location, preserve it exactly unless the user explicitly approves a structural change.
 
 ## External vs Internal
 

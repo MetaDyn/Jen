@@ -98,3 +98,8 @@ This framework can later pull from:
 - calendar-driven priorities
 
 Until then, generate the agenda from available workspace context and recent instructions, with Discord included as one important component rather than the entire agenda.
+
+## Structural constraint
+When writing daily agendas, preserve the existing archive structure under `docs/operations/daily-agendas/<Month-YYYY>/YYYY-MM-DD-metadyn-daily-agenda.md` unless Josh explicitly approves changing it.
+
+Do not invent or switch to alternate convenience outputs like `*-latest.md`, replacement archive paths, or parallel file schemes without explicit approval.
