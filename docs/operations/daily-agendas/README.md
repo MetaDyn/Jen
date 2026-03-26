@@ -7,6 +7,8 @@ This folder tracks Josh's daily MetaDyn agendas over time.
 - `March-2026/` — daily agendas for March 2026
 - `April-2026/` — daily agendas for April 2026
 
+The monthly subdirectories should stay in sync with the actual archived agenda files so canvas/control-ui directory views do not drift behind the docs tree.
+
 ## Naming convention
 
 Use one file per day:
