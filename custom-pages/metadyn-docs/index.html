@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MetaDyn Docs Hub</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <main class="shell">
+      <header class="hero card">
+        <div>
+          <p class="eyebrow">MetaDyn / Documentation</p>
+          <h1>Docs Hub</h1>
+          <p class="lede">
+            A browser-facing entry point for MetaDyn company, platform, infrastructure,
+            and orchestration context. This page is designed for humans first, with the
+            deeper source material still maintained in the workspace docs tree.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="#overview">Overview</a>
+          <a class="button" href="#platform">Platform</a>
+          <a class="button" href="#operations">Operations</a>
+        </div>
+      </header>
+
+      <section class="grid three-up">
+        <article class="card stat">
+          <span class="label">What MetaDyn Is</span>
+          <strong>Company + Platform + Builder Community</strong>
+          <p>MetaDyn operates as both an LLC and an open-source-oriented metaverse builder ecosystem.</p>
+        </article>
+        <article class="card stat">
+          <span class="label">Primary Delivery Stack</span>
+          <strong>Unity 6 WebGL Platform</strong>
+          <p>Current platform emphasis is WebGL-first delivery with multiplayer, identity, voice, and deployment systems.</p>
+        </article>
+        <article class="card stat">
+          <span class="label">Control Plane</span>
+          <strong>Jen + OpenClaw</strong>
+          <p>Operational coordination, documentation context, and agent orchestration are centered here.</p>
+        </article>
+      </section>
+
+      <section id="overview" class="grid two-up section-gap">
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>Core Reading</h2>
+            <span class="badge">Start Here</span>
+          </div>
+          <ul class="doc-list">
+            <li>
+              <strong>MetaDyn</strong>
+              <p>Identity, strategic framing, and what the company is building.</p>
+              <span class="path">docs/company/metadyn.md</span>
+            </li>
+            <li>
+              <strong>Positioning</strong>
+              <p>External-facing language, mission framing, and narrative direction.</p>
+              <span class="path">docs/company/positioning.md</span>
+            </li>
+            <li>
+              <strong>Architecture Overview</strong>
+              <p>Mission context, core themes, and high-level control-plane thinking.</p>
+              <span class="path">docs/architecture/overview.md</span>
+            </li>
+            <li>
+              <strong>Collaboration Model</strong>
+              <p>How humans, Jen, and specialist agents are intended to operate together.</p>
+              <span class="path">docs/architecture/collaboration-model.md</span>
+            </li>
+          </ul>
+        </article>
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>How To Use This Hub</h2>
+            <span class="badge">Audience</span>
+          </div>
+          <ul class="bullet-list">
+            <li>Use this page for quick orientation and cross-functional briefings.</li>
+            <li>Use the workspace docs tree for deeper technical and operational detail.</li>
+            <li>Use imported source material only when curated docs do not answer the question.</li>
+            <li>Treat this as the public or partner-friendly face of the current documentation set.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="platform" class="card panel section-gap">
+        <div class="panel-head">
+          <h2>Platform Documentation</h2>
+          <span class="badge">Unity 6</span>
+        </div>
+        <div class="docs-grid">
+          <article class="doc-card">
+            <h3>Platform Overview</h3>
+            <p>Defines the Unity 6 platform as a reusable product layer rather than a single isolated world.</p>
+            <span class="path">docs/platforms/unity6/platform-overview.md</span>
+          </article>
+          <article class="doc-card">
+            <h3>System Architecture</h3>
+            <p>Covers the major systems, boundaries, and core stack choices behind the platform.</p>
+            <span class="path">docs/platforms/unity6/system-architecture.md</span>
+          </article>
+          <article class="doc-card">
+            <h3>Core Systems</h3>
+            <p>Summarizes the platform subsystems, implementation patterns, and technical organization.</p>
+            <span class="path">docs/platforms/unity6/core-systems.md</span>
+          </article>
+          <article class="doc-card">
+            <h3>Deployment & Hosting</h3>
+            <p>Documents delivery, Cloudflare, hosting, and per-space deployment patterns.</p>
+            <span class="path">docs/platforms/unity6/deployment-hosting.md</span>
+          </article>
+          <article class="doc-card">
+            <h3>Deep Dive</h3>
+            <p>Captures platform strengths, gaps, and strategic direction.</p>
+            <span class="path">docs/platforms/unity6/platform-deep-dive.md</span>
+          </article>
+          <article class="doc-card">
+            <h3>Import Notes</h3>
+            <p>Maps the curated platform docs back to the raw imported Unity documentation set.</p>
+            <span class="path">docs/platforms/unity6/import-notes.md</span>
+          </article>
+        </div>
+      </section>
+
+      <section id="operations" class="grid two-up section-gap">
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>Operations & Infrastructure</h2>
+            <span class="badge">Runbooks</span>
+          </div>
+          <ul class="doc-list">
+            <li>
+              <strong>Infrastructure Topology</strong>
+              <p>Documents the hybrid environment across local systems, VPSs, and hosted surfaces.</p>
+              <span class="path">docs/infrastructure/topology.md</span>
+            </li>
+            <li>
+              <strong>Local Static Demo Server</strong>
+              <p>Runbook for serving static pages over LAN for review and testing.</p>
+              <span class="path">docs/runbooks/local-static-demo-server.md</span>
+            </li>
+            <li>
+              <strong>Repo Setup</strong>
+              <p>Repository and environment setup instructions.</p>
+              <span class="path">docs/runbooks/repo-setup.md</span>
+            </li>
+          </ul>
+        </article>
+        <article class="card panel">
+          <div class="panel-head">
+            <h2>AI & Control Plane</h2>
+            <span class="badge">Jen</span>
+          </div>
+          <ul class="doc-list">
+            <li>
+              <strong>Jen</strong>
+              <p>Explains Jen as the operational and documentation hub within the MetaDyn control plane.</p>
+              <span class="path">docs/ai-systems/jen.md</span>
+            </li>
+            <li>
+              <strong>OpenClaw Overview</strong>
+              <p>Host-specific notes on the current OpenClaw install, access model, and operator behavior.</p>
+              <span class="path">OPENCLAW_OVERVIEW.md</span>
+            </li>
+            <li>
+              <strong>Documentation Standard</strong>
+              <p>Sets the tone and structure for future documentation work.</p>
+              <span class="path">docs/standards/documentation.md</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section id="daily-agendas" class="card panel section-gap">
+        <div class="panel-head">
+          <h2>Daily Agendas</h2>
+          <span class="badge">Dynamic</span>
+        </div>
+        <p>
+          This section reads the existing daily agenda archive directly from the docs tree,
+          so new agenda files appear here automatically without manually editing this page.
+        </p>
+        <ul id="dailyAgendaList" class="doc-list">
+          <li>
+            <strong>Loading latest agenda entries…</strong>
+            <p>Scanning <code>docs/operations/daily-agendas/</code>.</p>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <script>
+      async function fetchDirectoryEntries(url) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Failed to fetch ${url}: ${response.status}`);
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return Array.from(doc.querySelectorAll('a'))
+          .map((a) => a.getAttribute('href'))
+          .filter(Boolean)
+          .filter((href) => href !== '../' && href !== './');
+      }
+
+      function escapeHtml(value) {
+        return value
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#39;');
+      }
+
+      async function loadDailyAgendas() {
+        const list = document.getElementById('dailyAgendaList');
+        const root = '../../docs/operations/daily-agendas/';
+
+        try {
+          const monthEntries = await fetchDirectoryEntries(root);
+          const monthDirs = monthEntries
+            .filter((href) => href.endsWith('/'))
+            .filter((href) => /[A-Za-z]+-\d{4}\/$/.test(href));
+
+          const agendaFiles = [];
+          for (const monthDir of monthDirs) {
+            const monthUrl = `${root}${monthDir}`;
+            const entries = await fetchDirectoryEntries(monthUrl);
+            for (const href of entries) {
+              if (/^\d{4}-\d{2}-\d{2}-metadyn-daily-agenda\.md$/.test(href)) {
+                agendaFiles.push({
+                  href: `${monthUrl}${href}`,
+                  name: href,
+                  date: href.slice(0, 10),
+                });
+              }
+            }
+          }
+
+          agendaFiles.sort((a, b) => b.date.localeCompare(a.date));
+          const latest = agendaFiles.slice(0, 10);
+
+          if (!latest.length) {
+            list.innerHTML = `
+              <li>
+                <strong>No daily agendas found</strong>
+                <p>The archive directory is reachable, but no agenda files matched the expected naming pattern yet.</p>
+                <span class="path">docs/operations/daily-agendas/</span>
+              </li>
+            `;
+            return;
+          }
+
+          list.innerHTML = latest.map((item) => `
+            <li>
+              <strong>${escapeHtml(item.date)} MetaDyn Daily Agenda</strong>
+              <p>Auto-discovered from the archived daily agenda docs.</p>
+              <a class="path" href="${escapeHtml(item.href)}">${escapeHtml(item.name)}</a>
+            </li>
+          `).join('');
+        } catch (error) {
+          list.innerHTML = `
+            <li>
+              <strong>Daily agendas could not be loaded dynamically</strong>
+              <p>${escapeHtml(error.message)}</p>
+              <span class="path">If directory listing is disabled on the host, this page will need a small JSON manifest instead.</span>
+            </li>
+          `;
+          console.error(error);
+        }
+      }
+
+      loadDailyAgendas();
+    </script>
+  </body>
+</html>
