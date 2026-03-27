@@ -50,6 +50,7 @@ When generating the daily agenda:
 - Keep it concise and easy to scan
 - If there are no fresh inputs for a category, still keep the category lightweight rather than inventing work
 - Discord/community should usually appear, but should not dominate unless it is the highest-priority area that day
+- After writing or updating any agenda file under `docs/operations/daily-agendas/`, run `python3 /home/jza/.openclaw/workspace/scripts/sync_control_ui_daily_agendas.py` so the control-ui directory/dashboard canvas reflects the real archive instead of drifting behind it
 
 ## Current standing Discord/community rhythm
 Use the weekly Discord plan as a supporting source, not the whole agenda.
