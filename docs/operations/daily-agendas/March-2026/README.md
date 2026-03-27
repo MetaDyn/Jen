@@ -13,3 +13,4 @@ Daily agenda archive for March 2026.
 - `2026-03-24-metadyn-daily-agenda.md`
 - `2026-03-25-metadyn-daily-agenda.md`
 - `2026-03-26-metadyn-daily-agenda.md`
+- `2026-03-27-metadyn-daily-agenda.md`
