@@ -35,6 +35,20 @@ Experiences are deployed across multiple immersive/web-native stacks including U
 
 Jen serves as the central orchestrator for documentation, context management, operational coordination, and system-level assistance through OpenClaw running on GPT Codex 5.4.
 
+The intended operating model is collaborative and multi-agent:
+- several human collaborators work alongside Jen
+- Jen acts as the main orchestrator
+- a set of roughly 6 subordinate agents can operate beneath Jen
+- those agents may have both individual specialties and composable/compounded skills
+
+This implies that the architecture should eventually document not just platform systems, but also:
+- orchestration hierarchy
+- agent roles and boundaries
+- skill ownership
+- delegation patterns
+- memory/context-sharing rules
+- human-in-the-loop control points
+
 ## To Be Expanded
 
 Future revisions should document:

@@ -50,3 +50,14 @@ Supplementary infrastructure used where appropriate for hosting, services, routi
 - monitoring and alerting
 - security controls
 - cost ownership and provider roles
+
+## Current Ingress Direction
+
+For the Jen / OpenClaw control surface, the preferred ingress direction is:
+
+- Cloudflare Tunnel
+- Cloudflare Access
+- local loopback-bound OpenClaw gateway
+
+See:
+- `docs/runbooks/cloudflare-jen-tunnel.md`

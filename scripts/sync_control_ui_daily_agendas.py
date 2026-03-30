@@ -86,7 +86,7 @@ def build_root_object() -> str:
 
 def replace_object(text: str, path: str, replacement: str) -> str:
     pattern = re.compile(r'\{"id":"[^\"]+","path":"' + re.escape(path) + r'","label":"[^"]+","docs":\[(?:.|\n)*?\]\}')
-    new_text, count = pattern.subn(replacement, text, count=1)
+    new_text, count = pattern.subn(lambda _m: replacement, text, count=1)
     if count != 1:
         raise RuntimeError(f'Failed to replace embedded object for {path}; matched {count} blocks')
     return new_text

@@ -1,0 +1,215 @@
+:root {
+  --bg-1: #07141d;
+  --bg-2: #10283c;
+  --card: rgba(7, 15, 25, 0.8);
+  --card-border: rgba(128, 198, 255, 0.15);
+  --text: #edf7ff;
+  --muted: #9eb8cf;
+  --accent: #44d0ff;
+  --accent-2: #0ea5e9;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+}
+
+body { position: relative; }
+
+.bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(68, 208, 255, 0.16), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(14, 165, 233, 0.14), transparent 22%),
+    radial-gradient(circle at 50% 100%, rgba(255, 255, 255, 0.05), transparent 34%);
+}
+
+.shell {
+  width: min(1220px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 72px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px);
+}
+
+.hero {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  line-height: 1.04;
+}
+
+.lede {
+  max-width: 760px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 700;
+}
+
+.button.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border: 0;
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.three-up { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.two-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.stat, .panel { padding: 22px; }
+
+.label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+  margin-bottom: 8px;
+}
+
+.stat strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.08rem;
+}
+
+.stat p, .panel p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.panel h2 {
+  margin: 0;
+}
+
+.badge {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: rgba(68, 208, 255, 0.14);
+  color: var(--accent);
+  border: 1px solid rgba(68, 208, 255, 0.18);
+}
+
+.section-gap { margin-top: 16px; }
+
+.doc-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.doc-list li {
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.doc-list li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.doc-list strong, .doc-card h3 {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.path {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #d1e7ff;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.78rem;
+}
+
+.bullet-list {
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.bullet-list li {
+  margin: 10px 0;
+  color: var(--muted);
+}
+
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.doc-card {
+  padding: 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+@media (max-width: 920px) {
+  .hero { flex-direction: column; }
+  .three-up, .two-up, .docs-grid { grid-template-columns: 1fr; }
+}
