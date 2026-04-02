@@ -478,3 +478,21 @@ That is currently the strongest practical line because it is:
 - specific enough to guide copy decisions
 
 Everything else should ladder up from there.
+
+---
+
+## 19. Recent Messaging Record
+
+### 2026-04-02 — Portable Identity / Cross-Platform Continuity Social Post
+Recorded that MetaDyn published a portable identity / portable assets / cross-platform continuity post to **Twitter/X** and **LinkedIn**.
+
+Key themes included:
+- building in public
+- the open-source SDK
+- "un-platforming the platform"
+- portable identity not tied to a single platform
+- portable assets including custom IPFS-based and locally utilized assets
+- support for Hyperfy, Three.js, Gaussian Splats, and 360 VR video
+- support for multiple avatar SDKs and networking approaches including Photon, Unity Gaming Services, and custom WebSocket-based solutions
+- Chrome extension / bridge direction inspired in part by the Lighthouse-style model
+- acknowledgment that this direction was significantly informed by Platform Capability Survey feedback
