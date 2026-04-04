@@ -19,21 +19,26 @@ Use this structure for the automated morning agenda:
 1. **Top priorities today**
    - 3-5 highest-value MetaDyn actions for the day
 
-2. **Platform / product build**
+2. **Recent carry-forward context**
+   - 2-5 bullets capturing meaningful recent updates from conversation, memory files, sent posts/emails, strategy shifts, or newly stated priorities
+   - This section should make the agenda visibly reflect what Josh has said recently
+   - Do not include stale trivia; include only updates that should shape near-term execution
+
+3. **Platform / product build**
    - Current build item, feature review, blocker, test, or implementation priority
 
-3. **Community / Discord**
+4. **Community / Discord**
    - The key Discord/community action for the day
    - One engagement mechanic or post if relevant
    - One follow-up/community ops task if relevant
 
-4. **Beta / user outreach**
+5. **Beta / user outreach**
    - Survey follow-up, beta onboarding, tester check-ins, founder outreach, or partner follow-up
 
-5. **Business / strategy / coordination**
+6. **Business / strategy / coordination**
    - Coordination with co-founders, planning, messaging, positioning, documentation, or next-step decisions
 
-6. **If there’s extra time**
+7. **If there’s extra time**
    - Useful but non-critical actions
 
 ## Weekly framing
@@ -46,10 +51,12 @@ The automated agenda should also maintain awareness of the broader week:
 ## How to assemble the daily agenda
 When generating the daily agenda:
 - Prefer the most current context from this workspace and recent conversation
+- Review the latest relevant `memory/YYYY-MM-DD.md` notes and recent documented updates before drafting
 - Include only what is actionable and relevant
 - Keep it concise and easy to scan
 - If there are no fresh inputs for a category, still keep the category lightweight rather than inventing work
 - Carry forward meaningful new updates, decisions, published communications, and strategic signals from recent conversation unless Josh indicates they are one-off or no longer relevant
+- Explicitly surface the most relevant carry-forward items in the **Recent carry-forward context** section rather than leaving them buried only in memory or docs
 - Discord/community should usually appear, but should not dominate unless it is the highest-priority area that day
 - After writing or updating any agenda file under `docs/operations/daily-agendas/`, run `python3 /home/jza/.openclaw/workspace/scripts/sync_control_ui_daily_agendas.py` so the control-ui directory/dashboard canvas reflects the real archive instead of drifting behind it
 
@@ -62,6 +69,8 @@ Reference file:
 
 **MetaDyn Daily Agenda**
 - **Top priorities today:**
+  - ...
+- **Recent carry-forward context:**
   - ...
 - **Platform / product build:**
   - ...
