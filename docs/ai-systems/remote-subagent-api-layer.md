@@ -813,6 +813,10 @@ Known reverse-proxy app patterns from the runbooks:
 
 These examples matter because Hyperfy and other app-backed immersive runtimes should use the same host principle: local loopback app runtime, public TLS at host nginx, no extra public app port.
 
+GitLab and Umami should not be treated as default workloads that the orchestration API deploys from scratch. They are already native production installs on the host. The API layer may still need to modify or verify their nginx routing, service health, tracking integration, or handoff state when explicitly requested and approved.
+
+The primary deployment use case for this orchestration layer remains MetaDyn's immersive space layers: Unity WebGL, Hyperfy, ThreeJS, WebXR, and related dashboard-created platform spaces.
+
 ## Dashboard-To-Remote-Host Deployment Flow
 
 The intended "one click" deployment path should look like this:
@@ -1323,6 +1327,8 @@ The GitLab, Umami, and Grafana runbooks document the same reverse-proxy pattern 
 - nginx site is validated with `nginx -t`
 - nginx reload is separate and must be approved/requested
 - runtime secrets stay out of the docs tree and task packets
+
+This section is not saying GitLab or Umami should normally be provisioned by the immersive-space orchestration API. For those existing production installs, `deploy.proxy_app` is mainly useful for explicit maintenance, routing changes, health verification, or carefully approved handoff updates. New immersive app runtimes, such as Hyperfy-style spaces, are the natural deployment target for this pattern.
 
 Example task for a generic app-backed space or internal app:
 
