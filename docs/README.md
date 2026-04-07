@@ -37,6 +37,9 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `runbooks/local-static-demo-server.md` — local static serving for LAN/testing
 - `runbooks/cloudflare-jen-tunnel.md` — recommended HTTPS ingress pattern for `jen.metadyn.xyz`
 - `runbooks/grafana-supabase-monitoring.md` — Grafana deployment pattern for Supabase reporting at `monitor.metadyn.xyz`
+- `runbooks/metadyn-unity-webgl-site-deployment.md` — nginx + Unity WebGL site deployment pattern for `*.metadyn.xyz`
+- `runbooks/gitlab-ce-nginx-proxy-handoff.md` — sanitized GitLab CE handoff for the MetaDyn nginx proxy host
+- `runbooks/umami-analytics-nginx-proxy-handoff.md` — sanitized Umami analytics handoff for the MetaDyn nginx proxy host
 - `runbooks/ubuntu-server-bootstrap-checklist.md` — baseline Ubuntu host setup for Cloudflare + nginx origin workloads
 - `standards/documentation.md` — documentation conventions for this workspace
 
