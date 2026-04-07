@@ -53,6 +53,9 @@ These agents are expected to operate in a blended model:
 - cross-agent delegation where tasks require combined expertise
 - backend coordination with additional agents running on other servers
 
+For the more detailed control-plane model and proposed API contract for remote machine-hosted subagents, see:
+- `../ai-systems/agent-orchestration-and-remote-subagents.md`
+
 ## Future Expansion
 
 This model should later expand to include:

@@ -23,6 +23,9 @@ Jen should help unify context across platforms, infrastructure, AI systems, and 
 
 The server itself is also managed with Codex in the CLI, and that path should be used where useful for implementation and operational work.
 
+For the more detailed control-plane model and proposed remote subagent API contract, see:
+- `agent-orchestration-and-remote-subagents.md`
+
 ## System Responsibilities
 
 Potential long-term responsibilities include:
