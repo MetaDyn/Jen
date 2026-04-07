@@ -10,6 +10,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `architecture/collaboration-model.md` — human/agent orchestration model
 - `ai-systems/jen.md` — Jen's role as the main orchestration layer
 - `ai-systems/agent-orchestration-and-remote-subagents.md` — Jen control-plane model and proposed remote subagent API contract
+- `ai-systems/remote-subagent-api-layer.md` — detailed remote subagent API layer spec with sample requests and reference code
 - `infrastructure/topology.md` — current environment and infrastructure shape
 - `infrastructure/nginx-ssl-proxy.md` — documented Cloudflare + nginx + SSL origin pattern
 

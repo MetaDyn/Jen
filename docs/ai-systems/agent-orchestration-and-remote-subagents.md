@@ -90,6 +90,9 @@ Responsibilities:
 
 This is a proposed minimal contract. It should be implemented only after host inventory, security boundaries, and OpenClaw plugin integration are confirmed.
 
+For the detailed API-layer specification, request/response examples, and reference server/client code, see:
+- `remote-subagent-api-layer.md`
+
 ### Capability Discovery
 
 Endpoint:
