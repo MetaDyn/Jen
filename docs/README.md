@@ -30,6 +30,14 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `platforms/unity6/import-notes.md` — mapping from raw imported material into the normalized docs
 - `platforms/immersive-spaces.md` — cross-platform immersive-space context outside Unity
 
+## Project Workspaces
+
+- `projects/README.md` — index for active project-specific working memory
+- `projects/pavilion/README.md` — Pavilion project snapshot and active implementation context
+- `projects/netflix-house/README.md` — Netflix House project workspace
+- `projects/seaworld/README.md` — SeaWorld project workspace
+- `projects/vitl-medical/README.md` — VITL Medical project workspace
+
 ## Operations, Runbooks, And Standards
 
 - `operations/community-marketing-cadence.md` — weekly and monthly operating cadence for community + marketing
