@@ -124,6 +124,116 @@
   - **Confidence:** Low
   - **Signals / sources:** teamLab Phenomena Abu Dhabi opened in Saadiyat Cultural District as a major permanent immersive destination and reflects sustained regional appetite for technologically advanced cultural experiences. Source: search results citing Miral and Abu Dhabi culture sources.
 
+- **Nelson-Atkins Museum of Art (Kansas City)**
+  - **Geography:** Local
+  - **Size:** Enterprise
+  - **Sector / type:** Museum / cultural institution / expansion-era campus
+  - **Why it looks timely or promising:** Nelson-Atkins remains one of the clearest local institutional fits because expansion-era planning, donor storytelling, education growth, and public-program development all create openings for a digital extension layer before physical changes are fully realized.
+  - **Best MetaDyn angle:** A browser-first social museum layer for donor/member previews, education programming, curator-guided events, expansion storytelling, and remote audience participation tied to the museum’s evolving campus identity.
+  - **Recommended cold outreach positioning:** “As Nelson shapes its next chapter, MetaDyn can help turn that future campus into a living digital experience for members, educators, donors, and remote audiences—not just a static preview page or virtual tour.”
+  - **Suggested next step:** Package a concept around a “digital belonging layer” tied to expansion storytelling, member events, and educational access.
+  - **Confidence:** Medium
+  - **Signals / sources:** Expansion planning and future-campus conversation continue to make Nelson a strong local audience-extension candidate; prior brief work already identified this as one of the strongest Kansas City museum fits.
+
+- **Gymshark NYC Flagship (New York City)**
+  - **Geography:** National
+  - **Size:** Medium
+  - **Sector / type:** Retail flagship / brand community / experiential commerce
+  - **Why it looks timely or promising:** Gymshark is not treating its flagship as a simple store; it is community- and event-oriented, which means there is a strong case for a persistent digital layer that keeps drops, workshops, creator touchpoints, and member identity alive beyond in-person moments.
+  - **Best MetaDyn angle:** A browser-first digital flagship for event continuity, creator programming, fan/community identity, product storytelling, and remote participation that extends the Bond Street energy into a persistent online environment.
+  - **Recommended cold outreach positioning:** “MetaDyn can help Gymshark turn flagship energy into a year-round digital community space where panels, launches, creators, and member identity continue between IRL activations.”
+  - **Suggested next step:** Reach North America retail/community leadership with a concept focused on event continuity, creator/community engagement, and remote member participation.
+  - **Confidence:** High
+  - **Signals / sources:** Gymshark’s U.S. flagship rollout has been framed around brand community, events, and member experience rather than plain retail throughput, which is exactly the kind of experiential posture MetaDyn can extend.
+
+- **VEVOR U.S. flagship (Houston)**
+  - **Geography:** National
+  - **Size:** Medium
+  - **Sector / type:** Retail / omnichannel product experience / training-oriented commerce
+  - **Why it looks timely or promising:** VEVOR is already mixing physical product demos, tutorials, QR-linked content, and in-store learning behavior, which suggests a genuine omnichannel posture rather than a one-off retail launch.
+  - **Best MetaDyn angle:** A spatial product-learning and showroom environment where customers can explore categories, attend community workshops, compare tools, and move smoothly between product education and purchase intent.
+  - **Recommended cold outreach positioning:** “MetaDyn can extend VEVOR’s flagship into a browser-first digital showroom and training layer that makes demos, education, and product discovery social, persistent, and measurable.”
+  - **Suggested next step:** Build a concept around category showrooms, workshop continuity, and product education journeys tied to real customer conversion paths.
+  - **Confidence:** Medium-High
+  - **Signals / sources:** The flagship’s hands-on demo and QR-linked learning behavior make it a better fit than generic retail targets because the company is already bridging physical and digital buyer education.
+
+- **Canary Islands digital-twin tourism initiative / EMOTUR Lab**
+  - **Geography:** Global
+  - **Size:** Enterprise
+  - **Sector / type:** Tourism innovation / public-private digital twin / destination strategy
+  - **Why it looks timely or promising:** EMOTUR Lab has publicly committed to operational tourism digital twin work by 2026, which means the conversation has already advanced beyond vague experimentation and toward real implementation and stakeholder utility.
+  - **Best MetaDyn angle:** The public-facing human layer on top of tourism twins: shared destination previews, stakeholder collaboration, training spaces, scenario environments, and visitor-facing narrative exploration rather than another internal-only planning dashboard.
+  - **Recommended cold outreach positioning:** “Where many tourism digital twins stay expert-facing, MetaDyn helps turn them into social, browser-accessible environments that stakeholders, operators, and even visitors can actually inhabit together.”
+  - **Suggested next step:** Outreach with a thesis around public-facing tourism twins, stakeholder collaboration rooms, and destination storytelling environments.
+  - **Confidence:** High
+  - **Signals / sources:** Prior MetaDyn opportunity work identified EMOTUR Lab as unusually on-strategy because it already combines digital twins, immersive simulation, and public-sector tourism thinking.
+
+- **Wake The Tiger London expansion (London)**
+  - **Geography:** Global
+  - **Size:** Medium
+  - **Sector / type:** Immersive entertainment / worldbuilding attraction / fandom opportunity
+  - **Why it looks timely or promising:** Wake The Tiger is already built on distinctive lore, visual identity, and participatory curiosity. Expansion creates an especially strong moment for a digital layer because worldbuilding-rich attractions benefit from repeat-touchpoint community systems far more than generic exhibit venues do.
+  - **Best MetaDyn angle:** A persistent companion world for lore drops, remote fandom, paid digital events, creator collaborations, clue trails, and community retention between physical visits.
+  - **Recommended cold outreach positioning:** “MetaDyn can help Wake The Tiger preserve the weirdness online—turning a venue into an always-on social world rather than leaving the story trapped inside the building.”
+  - **Suggested next step:** Founder-style outreach with a highly visual concept for community lore spaces, digital memberships, and recurring online activations.
+  - **Confidence:** Medium
+  - **Signals / sources:** Expansion chatter plus the attraction’s inherently narrative, participatory style make it a natural fit for an owned online continuity layer.
+
+- **Rabbit hOle (Kansas City)**
+  - **Geography:** Local
+  - **Size:** Small
+  - **Sector / type:** Children’s museum / literary immersion / education
+  - **Why it looks timely or promising:** Rabbit hOle is unusually aligned with story-driven, family-friendly digital extension because its physical experience already revolves around inhabitable book worlds, education, and playful discovery.
+  - **Best MetaDyn angle:** Browser-first story spaces for classrooms, family participation, membership/donor programming, and remote educational access tied to specific literary worlds or rotating cultural programming.
+  - **Recommended cold outreach positioning:** “MetaDyn can help Rabbit hOle extend its story worlds into digital spaces for classrooms, families, and supporters without flattening them into static educational content.”
+  - **Suggested next step:** Propose a small-footprint pilot around one book world, one classroom program, or one donor/member digital companion experience.
+  - **Confidence:** Medium
+  - **Signals / sources:** Earlier opportunity research already flagged Rabbit hOle as a strong fit because it combines narrative immersion, education, and community in a way that maps cleanly to browser-first social worlds.
+
+- **Negro Leagues Baseball Museum (Kansas City)**
+  - **Geography:** Local
+  - **Size:** Medium
+  - **Sector / type:** Museum / heritage / sports culture institution
+  - **Why it looks timely or promising:** Expansion energy, strong cultural storytelling, and obvious sponsor/community pathways make this a compelling target where a digital layer can serve education, remote access, events, and heritage programming rather than just spectacle.
+  - **Best MetaDyn angle:** A persistent heritage and education environment for multiplayer tours, archival storytelling, community events, and sponsor-supported programming tied to baseball history and 18th & Vine cultural identity.
+  - **Recommended cold outreach positioning:** “MetaDyn can help extend the museum beyond the building into a living history space for schools, community members, and partners—social, educational, and accessible from anywhere.”
+  - **Suggested next step:** Prepare a concept around online museum storytelling, community events, and sponsor/donor activation in a shared digital environment.
+  - **Confidence:** High
+  - **Signals / sources:** Prior brief work identified the museum’s expansion and program mix as especially favorable for digital storytelling, education, and community engagement.
+
+- **Cleveland Museum of Art / ArtLens relaunch**
+  - **Geography:** National
+  - **Size:** Enterprise
+  - **Sector / type:** Major art museum / immersive engagement relaunch
+  - **Why it looks timely or promising:** A complete ArtLens reimagining means active design and experience decisions are happening now, which creates a real timing window for an external platform layer that complements in-gallery interaction with browser-native continuity.
+  - **Best MetaDyn angle:** A multiplayer take-home extension of museum interactives: shared tours, curator/community events, art-learning worlds, and audience continuity beyond the gallery visit.
+  - **Recommended cold outreach positioning:** “MetaDyn can complement ArtLens as the social, web-native continuation layer that keeps identity, programming, and community alive outside the museum walls.”
+  - **Suggested next step:** Build a tight concept around an “ArtLens online continuation” experience targeted at digital engagement or innovation leadership.
+  - **Confidence:** Medium-High
+  - **Signals / sources:** Previous MetaDyn opportunity research already identified the 2026 ArtLens relaunch as one of the clearest timing-based national openings.
+
+- **West AlabamaWorks**
+  - **Geography:** National
+  - **Size:** Medium
+  - **Sector / type:** Workforce development / immersive training intermediary
+  - **Why it looks timely or promising:** West AlabamaWorks has already demonstrated willingness to use immersive training through simulator deployments, which means the category education burden is lower than with a cold market.
+  - **Best MetaDyn angle:** The layer after isolated simulators: browser-first collaborative workforce campuses, employer showcases, onboarding/training worlds, and career-exploration environments that work across laptop, mobile, and XR entry points.
+  - **Recommended cold outreach positioning:** “Don’t think of MetaDyn as ‘more VR’—think of it as the persistent, multi-device workforce world that sits around and beyond point-solution simulators.”
+  - **Suggested next step:** Pitch a manufacturing-career world or employer-facing collaborative training campus tied to real regional partners.
+  - **Confidence:** Medium
+  - **Signals / sources:** Prior opportunity work identified the organization’s existing VR simulator rollout as proof that immersive delivery is already institutionally accepted there.
+
+- **Visit KC**
+  - **Geography:** Local
+  - **Size:** Medium
+  - **Sector / type:** Destination marketing / tourism / visitor discovery
+  - **Why it looks timely or promising:** Visit KC is already operating in a moment where the city needs stronger visitor discovery, district storytelling, and pre-arrival engagement ahead of major tourism demand. That makes a browser-first immersive layer more plausible than in a colder destination-marketing context.
+  - **Best MetaDyn angle:** A shared city-preview and district-discovery environment for trip planning, convention pitching, sponsor storytelling, and fan/visitor onboarding around major event traffic.
+  - **Recommended cold outreach positioning:** “MetaDyn can help visitors feel Kansas City before arrival through a shared, browser-accessible discovery layer built for neighborhoods, events, sponsors, and community stories.”
+  - **Suggested next step:** Position an initial use case around World Cup-era discovery, convention sales support, or district partner storytelling.
+  - **Confidence:** Medium
+  - **Signals / sources:** Previous briefs identified Visit KC as a timely destination-layer target because it is already pushing richer digital visitor experience and event-readiness work.
+
 - **Best outreach angles:**
   - “You already have the immersive destination; MetaDyn adds the persistent digital layer that keeps audiences engaged before, during, and after the visit.”
   - “We’re strongest when a project needs browser-first access, social presence, and low-friction onboarding instead of another closed or headset-only experience.”
