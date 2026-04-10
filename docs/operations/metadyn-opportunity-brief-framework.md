@@ -95,11 +95,20 @@ Use this structure:
 - Keep it readable and founder-useful
 
 ## Delivery guidance
-After writing the full brief file, post a concise summary to the Architects Discord channel with:
-- the date/title
-- a top-5 skim of the strongest opportunities
-- one-line positioning notes for each
-- a note that the saved brief contains the full top 20
-- the path to the saved brief
+After writing the full brief file, post the **full detailed 20-target list** to the Architects Discord channel, not just a short summary.
 
-Do not collapse the written brief itself into only 3-5 targets. The Discord post can be short; the saved brief should remain the full expanded format by default.
+The Architects post should include:
+- the date/title
+- all 20 targets
+- for each target, the same detailed field set used in the brief:
+  - Geography
+  - Size
+  - Sector/type
+  - Why timely
+  - Best MetaDyn angle
+  - Outreach positioning
+  - Suggested next step
+  - Confidence
+- the saved file path
+
+Do not collapse either the written brief or the Architects Discord post into only 3-5 targets unless Josh explicitly asks for a shorter version.
