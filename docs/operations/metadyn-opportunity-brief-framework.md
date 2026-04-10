@@ -63,13 +63,27 @@ Use this structure:
 **MetaDyn Opportunity Brief — YYYY-MM-DD**
 - **Why these opportunities now:**
   - 2-4 bullets summarizing what patterns make these targets ripe
-- **Top opportunities:**
-  - grouped by Local / National / Global
-  - each target should be a concise, high-signal bullet block
+- **Top 5 immediate reachouts:**
+  - a fast founder skim with the 5 strongest targets
+  - each should include a short one-line reason / positioning angle
+- **Full top 20 opportunities:**
+  - exactly 20 targets unless Josh explicitly asks for a different count
+  - grouped by `Local`, `National`, and `Global`
+  - every target should include the full field set:
+    - organization name
+    - geography
+    - size
+    - sector / type
+    - why it looks timely or promising
+    - best MetaDyn angle
+    - recommended cold outreach positioning
+    - suggested next step
+    - confidence
+    - signal/source notes when available
 - **Best outreach angles:**
   - 3-6 bullets with reusable positioning language
 - **Recommended immediate reachouts:**
-  - shortlist of the strongest 3-5 targets to contact first
+  - ranked list of the same top 5 to contact first
 - **Notes / caveats:**
   - anything uncertain, timing-sensitive, or worth validating manually
 
@@ -83,6 +97,9 @@ Use this structure:
 ## Delivery guidance
 After writing the full brief file, post a concise summary to the Architects Discord channel with:
 - the date/title
-- the strongest 3-5 opportunities
+- a top-5 skim of the strongest opportunities
 - one-line positioning notes for each
+- a note that the saved brief contains the full top 20
 - the path to the saved brief
+
+Do not collapse the written brief itself into only 3-5 targets. The Discord post can be short; the saved brief should remain the full expanded format by default.
