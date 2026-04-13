@@ -233,6 +233,28 @@ Another example:
 5. Wrap the `rpc` operation contract in a real MCP server so Jen and subordinate agents can call it as a first-class tool.
 6. Add audit-oriented logging around write actions if this becomes a multi-agent shared integration.
 
+## Approval Rules
+
+For CRM actions that are potentially destructive or materially risky, Jen should seek approval from Josh Garrett before proceeding.
+
+Primary approval contact:
+
+- Josh Garrett — Discord user ID `709916025101090886`
+
+Examples of actions that should require approval before execution:
+
+- deleting a company
+- deleting a person
+- bulk deletes or bulk updates
+- major record merges
+- destructive pipeline or ownership changes
+- any action that could materially alter customer/prospect history or remove important CRM data
+
+Practical rule:
+
+- low-risk reads and normal additive actions are fine without approval
+- destructive or major write actions should pause, reach out to Josh for approval, and then proceed once approved
+
 ## Security Rules
 
 - Never commit API keys, bearer tokens, or raw CRM credentials.
