@@ -226,12 +226,12 @@ Another example:
 
 ## Recommended Next Steps
 
-1. Add task listing and task update support.
-2. Add note update/delete support.
-3. Add company/person search by richer multi-field criteria.
-4. Add opportunity/deal operations once MetaDyn defines its pipeline usage.
-5. Wrap the `rpc` operation contract in a real MCP server so Jen and subordinate agents can call it as a first-class tool.
-6. Add audit-oriented logging around write actions if this becomes a multi-agent shared integration.
+1. Add company/person search by richer multi-field criteria.
+2. Add assignee-aware task workflows and task ownership tooling.
+3. Add opportunity stage/pipeline metadata helpers once MetaDyn defines its exact sales process.
+4. Add audit-oriented logging around write actions if this becomes a multi-agent shared integration.
+5. Optionally wire the stdio bridge into OpenClaw/ACP-facing tool registration so CRM operations become first-class callable tools.
+6. Add approval-aware wrappers for destructive operations so deletion requests can automatically route to Josh for confirmation.
 
 ## Approval Rules
 
@@ -251,6 +251,18 @@ Examples of actions that should require approval before execution:
 - any action that could materially alter customer/prospect history or remove important CRM data
 
 Practical rule:
+
+- low-risk reads and normal additive actions are fine without approval
+- destructive or major write actions should pause, reach out to Josh for approval, and then proceed once approved
+
+## Security Rules
+
+- Never commit API keys, bearer tokens, or raw CRM credentials.
+- Never dump broad customer datasets into docs or memory files.
+- Prefer targeted queries over large exports.
+- Treat CRM writes as production actions.
+- For bulk or potentially destructive updates, require explicit human confirmation.
+ctical rule:
 
 - low-risk reads and normal additive actions are fine without approval
 - destructive or major write actions should pause, reach out to Josh for approval, and then proceed once approved

@@ -16,10 +16,7 @@ def gql(query: str, variables: Optional[Dict[str, Any]] = None) -> Dict[str, Any
     req = urllib.request.Request(
         API_URL,
         data=payload,
-        headers={
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {token}',
-        },
+        headers={'Content-Type': 'application/json', 'Authorization': f'Bearer {token}'},
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
         data = json.load(resp)
@@ -64,24 +61,23 @@ def _full_name_input(first: Optional[str], last: Optional[str]) -> Optional[Dict
     return compact({'firstName': first, 'lastName': last})
 
 
+def _currency_input(amount: Optional[float], currency: Optional[str]) -> Optional[Dict[str, Any]]:
+    if amount is None and not currency:
+        return None
+    return compact({'amountMicros': int((amount or 0) * 1_000_000), 'currencyCode': currency or 'USD'})
+
+
+def _print_json(data: Any) -> int:
+    print(json.dumps(data, indent=2))
+    return 0
+
+
 def cmd_list_companies(args: argparse.Namespace) -> int:
     query = '''
     query ListCompanies($first: Int!, $offset: Int!) {
       companies(first: $first, offset: $offset, orderBy: [{name: AscNullsLast}]) {
         totalCount
-        edges {
-          node {
-            id
-            name
-            domainName { primaryLinkUrl primaryLinkLabel }
-            employees
-            linkedinLink { primaryLinkUrl primaryLinkLabel }
-            xLink { primaryLinkUrl primaryLinkLabel }
-            idealCustomerProfile
-            createdAt
-            updatedAt
-          }
-        }
+        edges { node { id name domainName { primaryLinkUrl primaryLinkLabel } employees linkedinLink { primaryLinkUrl primaryLinkLabel } xLink { primaryLinkUrl primaryLinkLabel } idealCustomerProfile createdAt updatedAt } }
       }
     }
     '''
@@ -89,11 +85,7 @@ def cmd_list_companies(args: argparse.Namespace) -> int:
     print(f"totalCount: {data['totalCount']}")
     for i, edge in enumerate(data['edges'], start=1 + args.offset):
         node = edge['node']
-        print(
-            f"{i}. {node['name']} | id={node['id']} | domain={_link_value(node.get('domainName'))} | "
-            f"employees={node.get('employees') or '-'} | ICP={node.get('idealCustomerProfile')} | "
-            f"linkedin={_link_value(node.get('linkedinLink'))}"
-        )
+        print(f"{i}. {node['name']} | id={node['id']} | domain={_link_value(node.get('domainName'))} | employees={node.get('employees') or '-'} | ICP={node.get('idealCustomerProfile')} | linkedin={_link_value(node.get('linkedinLink'))}")
     return 0
 
 
@@ -106,20 +98,11 @@ def cmd_search_companies(args: argparse.Namespace) -> int:
         { domainName: { primaryLinkUrl: { ilike: $term } } }
       ]}, orderBy: [{name: AscNullsLast}]) {
         totalCount
-        edges {
-          node {
-            id
-            name
-            domainName { primaryLinkUrl primaryLinkLabel }
-            employees
-            idealCustomerProfile
-          }
-        }
+        edges { node { id name domainName { primaryLinkUrl primaryLinkLabel } employees idealCustomerProfile } }
       }
     }
     '''
-    term = f"%{args.term}%"
-    data = gql(query, {'term': term, 'first': args.limit})['companies']
+    data = gql(query, {'term': f"%{args.term}%", 'first': args.limit})['companies']
     print(f"matches: {data['totalCount']}")
     for edge in data['edges']:
         node = edge['node']
@@ -128,108 +111,38 @@ def cmd_search_companies(args: argparse.Namespace) -> int:
 
 
 def cmd_get_company(args: argparse.Namespace) -> int:
-    if args.id:
-        filter_input = {'id': {'eq': args.id}}
-    else:
-        filter_input = {'name': {'ilike': args.name}}
+    filter_input = {'id': {'eq': args.id}} if args.id else {'name': {'ilike': args.name}}
     query = '''
     query GetCompany($filter: CompanyFilterInput!) {
       company(filter: $filter) {
-        id
-        name
-        domainName { primaryLinkUrl primaryLinkLabel }
-        employees
-        linkedinLink { primaryLinkUrl primaryLinkLabel }
-        xLink { primaryLinkUrl primaryLinkLabel }
-        idealCustomerProfile
-        createdAt
-        updatedAt
-        people(first: 20) {
-          totalCount
-          edges { node { id name { firstName lastName } emails { primaryEmail } jobTitle } }
-        }
+        id name domainName { primaryLinkUrl primaryLinkLabel } employees linkedinLink { primaryLinkUrl primaryLinkLabel } xLink { primaryLinkUrl primaryLinkLabel } idealCustomerProfile createdAt updatedAt
+        people(first: 20) { totalCount edges { node { id name { firstName lastName } emails { primaryEmail } jobTitle } } }
         accountOwner { id }
       }
     }
     '''
-    node = gql(query, {'filter': filter_input})['company']
-    print(json.dumps(node, indent=2))
-    return 0
+    return _print_json(gql(query, {'filter': filter_input})['company'])
 
 
 def cmd_create_company(args: argparse.Namespace) -> int:
-    mutation = '''
-    mutation CreateCompany($data: CompanyCreateInput!) {
-      createCompany(data: $data) {
-        id
-        name
-        domainName { primaryLinkUrl primaryLinkLabel }
-        employees
-        idealCustomerProfile
-        createdAt
-      }
-    }
-    '''
-    data = compact({
-        'name': args.name,
-        'domainName': _links_input(args.domain_label, args.domain_url),
-        'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url),
-        'xLink': _links_input(args.x_label, args.x_url),
-        'employees': args.employees,
-        'idealCustomerProfile': args.icp,
-    })
-    result = gql(mutation, {'data': data})['createCompany']
-    print(json.dumps(result, indent=2))
-    return 0
+    mutation = '''mutation CreateCompany($data: CompanyCreateInput!) { createCompany(data: $data) { id name domainName { primaryLinkUrl primaryLinkLabel } employees idealCustomerProfile createdAt } }'''
+    data = compact({'name': args.name, 'domainName': _links_input(args.domain_label, args.domain_url), 'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url), 'xLink': _links_input(args.x_label, args.x_url), 'employees': args.employees, 'idealCustomerProfile': args.icp})
+    return _print_json(gql(mutation, {'data': data})['createCompany'])
 
 
 def cmd_update_company(args: argparse.Namespace) -> int:
-    mutation = '''
-    mutation UpdateCompany($id: UUID!, $data: CompanyUpdateInput!) {
-      updateCompany(id: $id, data: $data) {
-        id
-        name
-        domainName { primaryLinkUrl primaryLinkLabel }
-        employees
-        linkedinLink { primaryLinkUrl primaryLinkLabel }
-        xLink { primaryLinkUrl primaryLinkLabel }
-        idealCustomerProfile
-        updatedAt
-      }
-    }
-    '''
-    data = compact({
-        'name': args.name,
-        'domainName': _links_input(args.domain_label, args.domain_url),
-        'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url),
-        'xLink': _links_input(args.x_label, args.x_url),
-        'employees': args.employees,
-        'idealCustomerProfile': args.icp,
-    })
-    result = gql(mutation, {'id': args.id, 'data': data})['updateCompany']
-    print(json.dumps(result, indent=2))
-    return 0
+    mutation = '''mutation UpdateCompany($id: UUID!, $data: CompanyUpdateInput!) { updateCompany(id: $id, data: $data) { id name domainName { primaryLinkUrl primaryLinkLabel } employees linkedinLink { primaryLinkUrl primaryLinkLabel } xLink { primaryLinkUrl primaryLinkLabel } idealCustomerProfile updatedAt } }'''
+    data = compact({'name': args.name, 'domainName': _links_input(args.domain_label, args.domain_url), 'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url), 'xLink': _links_input(args.x_label, args.x_url), 'employees': args.employees, 'idealCustomerProfile': args.icp})
+    return _print_json(gql(mutation, {'id': args.id, 'data': data})['updateCompany'])
 
 
 def cmd_list_people(args: argparse.Namespace) -> int:
-    filter_input = None
-    if args.company_id:
-        filter_input = {'companyId': {'eq': args.company_id}}
+    filter_input = {'companyId': {'eq': args.company_id}} if args.company_id else None
     query = '''
     query ListPeople($first: Int!, $offset: Int!, $filter: PersonFilterInput) {
       people(first: $first, offset: $offset, filter: $filter, orderBy: [{createdAt: DescNullsLast}]) {
         totalCount
-        edges {
-          node {
-            id
-            name { firstName lastName }
-            emails { primaryEmail }
-            jobTitle
-            city
-            company { id name }
-            createdAt
-          }
-        }
+        edges { node { id name { firstName lastName } emails { primaryEmail } jobTitle city company { id name } createdAt } }
       }
     }
     '''
@@ -244,91 +157,32 @@ def cmd_list_people(args: argparse.Namespace) -> int:
 
 
 def cmd_create_person(args: argparse.Namespace) -> int:
-    mutation = '''
-    mutation CreatePerson($data: PersonCreateInput!) {
-      createPerson(data: $data) {
-        id
-        name { firstName lastName }
-        emails { primaryEmail }
-        jobTitle
-        city
-        company { id name }
-        createdAt
-      }
-    }
-    '''
-    data = compact({
-        'name': _full_name_input(args.first_name, args.last_name),
-        'emails': _emails_input(args.email),
-        'jobTitle': args.job_title,
-        'city': args.city,
-        'companyId': args.company_id,
-        'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url),
-        'xLink': _links_input(args.x_label, args.x_url),
-        'avatarUrl': args.avatar_url,
-    })
-    result = gql(mutation, {'data': data})['createPerson']
-    print(json.dumps(result, indent=2))
-    return 0
+    mutation = '''mutation CreatePerson($data: PersonCreateInput!) { createPerson(data: $data) { id name { firstName lastName } emails { primaryEmail } jobTitle city company { id name } createdAt } }'''
+    data = compact({'name': _full_name_input(args.first_name, args.last_name), 'emails': _emails_input(args.email), 'jobTitle': args.job_title, 'city': args.city, 'companyId': args.company_id, 'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url), 'xLink': _links_input(args.x_label, args.x_url), 'avatarUrl': args.avatar_url})
+    return _print_json(gql(mutation, {'data': data})['createPerson'])
 
 
 def cmd_update_person(args: argparse.Namespace) -> int:
-    mutation = '''
-    mutation UpdatePerson($id: UUID!, $data: PersonUpdateInput!) {
-      updatePerson(id: $id, data: $data) {
-        id
-        name { firstName lastName }
-        emails { primaryEmail }
-        jobTitle
-        city
-        company { id name }
-        updatedAt
-      }
-    }
-    '''
-    data = compact({
-        'name': _full_name_input(args.first_name, args.last_name),
-        'emails': _emails_input(args.email),
-        'jobTitle': args.job_title,
-        'city': args.city,
-        'companyId': args.company_id,
-        'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url),
-        'xLink': _links_input(args.x_label, args.x_url),
-        'avatarUrl': args.avatar_url,
-    })
-    result = gql(mutation, {'id': args.id, 'data': data})['updatePerson']
-    print(json.dumps(result, indent=2))
-    return 0
+    mutation = '''mutation UpdatePerson($id: UUID!, $data: PersonUpdateInput!) { updatePerson(id: $id, data: $data) { id name { firstName lastName } emails { primaryEmail } jobTitle city company { id name } updatedAt } }'''
+    data = compact({'name': _full_name_input(args.first_name, args.last_name), 'emails': _emails_input(args.email), 'jobTitle': args.job_title, 'city': args.city, 'companyId': args.company_id, 'linkedinLink': _links_input(args.linkedin_label, args.linkedin_url), 'xLink': _links_input(args.x_label, args.x_url), 'avatarUrl': args.avatar_url})
+    return _print_json(gql(mutation, {'id': args.id, 'data': data})['updatePerson'])
 
 
 def cmd_list_notes(args: argparse.Namespace) -> int:
-    if not args.company_id and not args.person_id:
-        raise RuntimeError('Provide --company-id or --person-id')
-    filter_input = compact({
-        'targetCompanyId': {'eq': args.company_id} if args.company_id else None,
-        'targetPersonId': {'eq': args.person_id} if args.person_id else None,
-    })
+    filters = []
+    if args.company_id:
+        filters.append({'targetCompanyId': {'eq': args.company_id}})
+    if args.person_id:
+        filters.append({'targetPersonId': {'eq': args.person_id}})
     query = '''
-    query ListNoteTargets($first: Int!, $filter: NoteTargetFilterInput!) {
+    query ListNoteTargets($first: Int!, $filter: NoteTargetFilterInput) {
       noteTargets(first: $first, filter: $filter, orderBy: [{createdAt: DescNullsLast}]) {
         totalCount
-        edges {
-          node {
-            id
-            createdAt
-            targetCompany { id name }
-            targetPerson { id name { firstName lastName } }
-            note {
-              id
-              title
-              createdAt
-              bodyV2 { markdown }
-            }
-          }
-        }
+        edges { node { id createdAt targetCompany { id name } targetPerson { id name { firstName lastName } } note { id title createdAt bodyV2 { markdown } } } }
       }
     }
     '''
+    filter_input = {'or': filters} if len(filters) > 1 else (filters[0] if filters else None)
     data = gql(query, {'first': args.limit, 'filter': filter_input})['noteTargets']
     print(f"totalCount: {data['totalCount']}")
     for edge in data['edges']:
@@ -343,76 +197,124 @@ def cmd_list_notes(args: argparse.Namespace) -> int:
 
 
 def cmd_create_note(args: argparse.Namespace) -> int:
-    create_note_mutation = '''
-    mutation CreateNote($data: NoteCreateInput!) {
-      createNote(data: $data) { id title createdAt }
-    }
-    '''
-    note_data = {
-        'title': args.title,
-        'bodyV2': {'markdown': args.body},
-    }
-    note = gql(create_note_mutation, {'data': note_data})['createNote']
+    note = gql('''mutation CreateNote($data: NoteCreateInput!) { createNote(data: $data) { id title createdAt } }''', {'data': {'title': args.title, 'bodyV2': {'markdown': args.body}}})['createNote']
+    target = None
+    if args.company_id or args.person_id:
+        target_data = compact({'noteId': note['id'], 'targetCompanyId': args.company_id, 'targetPersonId': args.person_id})
+        target = gql('''mutation CreateNoteTarget($data: NoteTargetCreateInput!) { createNoteTarget(data: $data) { id note { id title } targetCompany { id name } targetPerson { id name { firstName lastName } } } }''', {'data': target_data})['createNoteTarget']
+    return _print_json({'note': note, 'target': target})
 
-    target_mutation = '''
-    mutation CreateNoteTarget($data: NoteTargetCreateInput!) {
-      createNoteTarget(data: $data) {
-        id
-        note { id title }
-        targetCompany { id name }
-        targetPerson { id name { firstName lastName } }
+
+def cmd_update_note(args: argparse.Namespace) -> int:
+    data = compact({'title': args.title, 'bodyV2': {'markdown': args.body} if args.body is not None else None})
+    return _print_json(gql('''mutation UpdateNote($id: UUID!, $data: NoteUpdateInput!) { updateNote(id: $id, data: $data) { id title updatedAt bodyV2 { markdown } } }''', {'id': args.id, 'data': data})['updateNote'])
+
+
+def cmd_delete_note(args: argparse.Namespace) -> int:
+    return _print_json(gql('''mutation DeleteNote($id: UUID!) { deleteNote(id: $id) { id title deletedAt } }''', {'id': args.id})['deleteNote'])
+
+
+def cmd_list_tasks(args: argparse.Namespace) -> int:
+    filters = []
+    if args.company_id:
+        filters.append({'targetCompanyId': {'eq': args.company_id}})
+    if args.person_id:
+        filters.append({'targetPersonId': {'eq': args.person_id}})
+    if args.opportunity_id:
+        filters.append({'targetOpportunityId': {'eq': args.opportunity_id}})
+    if args.status:
+        task_filter = {'status': {'eq': args.status}}
+    else:
+        task_filter = None
+    query = '''
+    query ListTasks($first: Int!, $taskFilter: TaskFilterInput, $targetFilter: TaskTargetFilterInput) {
+      taskTargets(first: $first, filter: $targetFilter, orderBy: [{createdAt: DescNullsLast}]) {
+        totalCount
+        edges { node { id targetCompany { id name } targetPerson { id name { firstName lastName } } targetOpportunity { id name } task { id title status dueAt createdAt bodyV2 { markdown } } } }
+      }
+      tasks(first: $first, filter: $taskFilter, orderBy: [{createdAt: DescNullsLast}]) {
+        totalCount
+        edges { node { id title status dueAt createdAt bodyV2 { markdown } } }
       }
     }
     '''
-    target_data: Dict[str, Any] = {'noteId': note['id']}
-    if args.company_id:
-        target_data['targetCompanyId'] = args.company_id
-    if args.person_id:
-        target_data['targetPersonId'] = args.person_id
-    target = gql(target_mutation, {'data': target_data})['createNoteTarget'] if (args.company_id or args.person_id) else None
-
-    print(json.dumps({'note': note, 'target': target}, indent=2))
+    target_filter = {'or': filters} if len(filters) > 1 else (filters[0] if filters else None)
+    data = gql(query, {'first': args.limit, 'taskFilter': task_filter, 'targetFilter': target_filter})
+    if target_filter:
+        out = data['taskTargets']
+        print(f"totalCount: {out['totalCount']}")
+        for edge in out['edges']:
+            node = edge['node']
+            task = node.get('task')
+            if not task:
+                continue
+            target = (node.get('targetCompany') or {}).get('name') or _full_name((node.get('targetPerson') or {}).get('name')) or (node.get('targetOpportunity') or {}).get('name') or '-'
+            body = ((task.get('bodyV2') or {}).get('markdown') or '').replace('\n', ' ')[:100]
+            print(f"- {task['title']} | taskId={task['id']} | status={task['status']} | dueAt={task.get('dueAt') or '-'} | target={target} | body={body}")
+    else:
+        out = data['tasks']
+        print(f"totalCount: {out['totalCount']}")
+        for edge in out['edges']:
+            task = edge['node']
+            body = ((task.get('bodyV2') or {}).get('markdown') or '').replace('\n', ' ')[:100]
+            print(f"- {task['title']} | taskId={task['id']} | status={task['status']} | dueAt={task.get('dueAt') or '-'} | body={body}")
     return 0
 
 
 def cmd_create_task(args: argparse.Namespace) -> int:
-    mutation = '''
-    mutation CreateTask($data: TaskCreateInput!) {
-      createTask(data: $data) {
-        id
-        title
-        dueAt
-        status
-        createdAt
-      }
-    }
-    '''
-    data = compact({
-        'title': args.title,
-        'bodyV2': {'markdown': args.body} if args.body else None,
-        'dueAt': args.due_at,
-        'status': args.status,
-    })
-    task = gql(mutation, {'data': data})['createTask']
+    data = compact({'title': args.title, 'bodyV2': {'markdown': args.body} if args.body else None, 'dueAt': args.due_at, 'status': args.status})
+    task = gql('''mutation CreateTask($data: TaskCreateInput!) { createTask(data: $data) { id title dueAt status createdAt } }''', {'data': data})['createTask']
+    target = None
+    if args.company_id or args.person_id or args.opportunity_id:
+        target_data = compact({'taskId': task['id'], 'targetCompanyId': args.company_id, 'targetPersonId': args.person_id, 'targetOpportunityId': args.opportunity_id})
+        target = gql('''mutation CreateTaskTarget($data: TaskTargetCreateInput!) { createTaskTarget(data: $data) { id task { id title } targetCompany { id name } targetPerson { id name { firstName lastName } } targetOpportunity { id name } } }''', {'data': target_data})['createTaskTarget']
+    return _print_json({'task': task, 'target': target})
 
-    target_mutation = '''
-    mutation CreateTaskTarget($data: TaskTargetCreateInput!) {
-      createTaskTarget(data: $data) {
-        id
-        task { id title }
-        targetCompany { id name }
-        targetPerson { id name { firstName lastName } }
+
+def cmd_update_task(args: argparse.Namespace) -> int:
+    data = compact({'title': args.title, 'bodyV2': {'markdown': args.body} if args.body is not None else None, 'dueAt': args.due_at, 'status': args.status, 'assigneeId': args.assignee_id})
+    return _print_json(gql('''mutation UpdateTask($id: UUID!, $data: TaskUpdateInput!) { updateTask(id: $id, data: $data) { id title status dueAt updatedAt bodyV2 { markdown } } }''', {'id': args.id, 'data': data})['updateTask'])
+
+
+def cmd_list_opportunities(args: argparse.Namespace) -> int:
+    filter_bits = []
+    if args.company_id:
+        filter_bits.append({'companyId': {'eq': args.company_id}})
+    if args.person_id:
+        filter_bits.append({'pointOfContactId': {'eq': args.person_id}})
+    if args.stage:
+        filter_bits.append({'stage': {'eq': args.stage}})
+    if args.term:
+        filter_bits.append({'name': {'ilike': f"%{args.term}%"}})
+    filter_input = {'and': filter_bits} if len(filter_bits) > 1 else (filter_bits[0] if filter_bits else None)
+    query = '''
+    query ListOpportunities($first: Int!, $filter: OpportunityFilterInput) {
+      opportunities(first: $first, filter: $filter, orderBy: [{closeDate: AscNullsLast}]) {
+        totalCount
+        edges { node { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } amount { amountMicros currencyCode } } }
       }
     }
     '''
-    target_data = compact({
-        'taskId': task['id'],
-        'targetCompanyId': args.company_id,
-        'targetPersonId': args.person_id,
-    })
-    target = gql(target_mutation, {'data': target_data})['createTaskTarget'] if (args.company_id or args.person_id) else None
-    print(json.dumps({'task': task, 'target': target}, indent=2))
+    data = gql(query, {'first': args.limit, 'filter': filter_input})['opportunities']
+    print(f"totalCount: {data['totalCount']}")
+    for edge in data['edges']:
+        node = edge['node']
+        amount = node.get('amount') or {}
+        amount_str = f"{amount.get('currencyCode','USD')} {((amount.get('amountMicros') or 0)/1_000_000):,.2f}" if amount else '-'
+        company = (node.get('company') or {}).get('name') or '-'
+        poc = _full_name((node.get('pointOfContact') or {}).get('name'))
+        print(f"- {node['name']} | id={node['id']} | stage={node['stage']} | closeDate={node.get('closeDate') or '-'} | company={company} | pointOfContact={poc} | amount={amount_str}")
     return 0
+
+
+def cmd_create_opportunity(args: argparse.Namespace) -> int:
+    data = compact({'name': args.name, 'closeDate': args.close_date, 'stage': args.stage, 'amount': _currency_input(args.amount, args.currency), 'companyId': args.company_id, 'pointOfContactId': args.person_id})
+    return _print_json(gql('''mutation CreateOpportunity($data: OpportunityCreateInput!) { createOpportunity(data: $data) { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } amount { amountMicros currencyCode } createdAt } }''', {'data': data})['createOpportunity'])
+
+
+def cmd_update_opportunity(args: argparse.Namespace) -> int:
+    data = compact({'name': args.name, 'closeDate': args.close_date, 'stage': args.stage, 'amount': _currency_input(args.amount, args.currency), 'companyId': args.company_id, 'pointOfContactId': args.person_id})
+    return _print_json(gql('''mutation UpdateOpportunity($id: UUID!, $data: OpportunityUpdateInput!) { updateOpportunity(id: $id, data: $data) { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } amount { amountMicros currencyCode } updatedAt } }''', {'id': args.id, 'data': data})['updateOpportunity'])
 
 
 def build_rpc_map() -> Dict[str, Any]:
@@ -427,127 +329,83 @@ def build_rpc_map() -> Dict[str, Any]:
         'person.update': cmd_update_person,
         'note.list': cmd_list_notes,
         'note.create': cmd_create_note,
+        'note.update': cmd_update_note,
+        'note.delete': cmd_delete_note,
+        'task.list': cmd_list_tasks,
         'task.create': cmd_create_task,
+        'task.update': cmd_update_task,
+        'opportunity.list': cmd_list_opportunities,
+        'opportunity.create': cmd_create_opportunity,
+        'opportunity.update': cmd_update_opportunity,
     }
 
 
 def cmd_rpc(args: argparse.Namespace) -> int:
     payload = json.loads(args.json) if args.json else json.load(sys.stdin)
-    operation = payload['operation']
-    params = payload.get('params', {})
-    ns = argparse.Namespace(**params)
-    func = build_rpc_map().get(operation)
+    func = build_rpc_map().get(payload['operation'])
     if not func:
-        raise RuntimeError(f'Unknown operation: {operation}')
-    return func(ns)
+        raise RuntimeError(f"Unknown operation: {payload['operation']}")
+    params = payload.get('params', {})
+    defaults = {
+        'limit': 25,
+        'offset': 0,
+        'company_id': None,
+        'person_id': None,
+        'opportunity_id': None,
+        'status': None,
+        'term': None,
+        'name': None,
+        'id': None,
+        'title': None,
+        'body': None,
+        'due_at': None,
+        'assignee_id': None,
+        'close_date': None,
+        'stage': None,
+        'amount': None,
+        'currency': 'USD',
+        'domain_label': None,
+        'domain_url': None,
+        'linkedin_label': None,
+        'linkedin_url': None,
+        'x_label': None,
+        'x_url': None,
+        'employees': None,
+        'icp': None,
+        'first_name': None,
+        'last_name': None,
+        'email': None,
+        'job_title': None,
+        'city': None,
+        'avatar_url': None,
+    }
+    defaults.update(params)
+    return func(argparse.Namespace(**defaults))
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='MetaDyn Twenty CRM helper')
     sub = parser.add_subparsers(dest='command', required=True)
 
-    p = sub.add_parser('list-companies', help='List companies')
-    p.add_argument('--limit', type=int, default=25)
-    p.add_argument('--offset', type=int, default=0)
-    p.set_defaults(func=cmd_list_companies)
-
-    p = sub.add_parser('search-companies', help='Search companies by name/domain')
-    p.add_argument('term')
-    p.add_argument('--limit', type=int, default=25)
-    p.set_defaults(func=cmd_search_companies)
-
-    p = sub.add_parser('get-company', help='Get one company by id or name filter')
-    group = p.add_mutually_exclusive_group(required=True)
-    group.add_argument('--id')
-    group.add_argument('--name')
-    p.set_defaults(func=cmd_get_company)
-
-    p = sub.add_parser('create-company', help='Create a company')
-    p.add_argument('--name', required=True)
-    p.add_argument('--domain-label')
-    p.add_argument('--domain-url')
-    p.add_argument('--linkedin-label')
-    p.add_argument('--linkedin-url')
-    p.add_argument('--x-label')
-    p.add_argument('--x-url')
-    p.add_argument('--employees', type=float)
-    p.add_argument('--icp', action='store_true')
-    p.set_defaults(func=cmd_create_company)
-
-    p = sub.add_parser('update-company', help='Update a company')
-    p.add_argument('--id', required=True)
-    p.add_argument('--name')
-    p.add_argument('--domain-label')
-    p.add_argument('--domain-url')
-    p.add_argument('--linkedin-label')
-    p.add_argument('--linkedin-url')
-    p.add_argument('--x-label')
-    p.add_argument('--x-url')
-    p.add_argument('--employees', type=float)
-    p.add_argument('--icp', action='store_true')
-    p.set_defaults(func=cmd_update_company)
-
-    p = sub.add_parser('list-people', help='List people, optionally scoped to a company')
-    p.add_argument('--company-id')
-    p.add_argument('--limit', type=int, default=25)
-    p.add_argument('--offset', type=int, default=0)
-    p.set_defaults(func=cmd_list_people)
-
-    p = sub.add_parser('create-person', help='Create a person')
-    p.add_argument('--first-name')
-    p.add_argument('--last-name')
-    p.add_argument('--email')
-    p.add_argument('--job-title')
-    p.add_argument('--city')
-    p.add_argument('--company-id')
-    p.add_argument('--linkedin-label')
-    p.add_argument('--linkedin-url')
-    p.add_argument('--x-label')
-    p.add_argument('--x-url')
-    p.add_argument('--avatar-url')
-    p.set_defaults(func=cmd_create_person)
-
-    p = sub.add_parser('update-person', help='Update a person')
-    p.add_argument('--id', required=True)
-    p.add_argument('--first-name')
-    p.add_argument('--last-name')
-    p.add_argument('--email')
-    p.add_argument('--job-title')
-    p.add_argument('--city')
-    p.add_argument('--company-id')
-    p.add_argument('--linkedin-label')
-    p.add_argument('--linkedin-url')
-    p.add_argument('--x-label')
-    p.add_argument('--x-url')
-    p.add_argument('--avatar-url')
-    p.set_defaults(func=cmd_update_person)
-
-    p = sub.add_parser('list-notes', help='List notes attached to a company or person')
-    p.add_argument('--company-id')
-    p.add_argument('--person-id')
-    p.add_argument('--limit', type=int, default=25)
-    p.set_defaults(func=cmd_list_notes)
-
-    p = sub.add_parser('create-note', help='Create a note and optionally attach it to a company/person')
-    p.add_argument('--title', required=True)
-    p.add_argument('--body', required=True)
-    p.add_argument('--company-id')
-    p.add_argument('--person-id')
-    p.set_defaults(func=cmd_create_note)
-
-    p = sub.add_parser('create-task', help='Create a task and optionally attach it to a company/person')
-    p.add_argument('--title', required=True)
-    p.add_argument('--body')
-    p.add_argument('--due-at')
-    p.add_argument('--status', default='TODO', choices=['TODO', 'IN_PROGRESS', 'DONE'])
-    p.add_argument('--company-id')
-    p.add_argument('--person-id')
-    p.set_defaults(func=cmd_create_task)
-
-    p = sub.add_parser('rpc', help='MCP-style JSON operation wrapper')
-    p.add_argument('--json', help='JSON payload with operation + params; otherwise read from stdin')
-    p.set_defaults(func=cmd_rpc)
-
+    p = sub.add_parser('list-companies'); p.add_argument('--limit', type=int, default=25); p.add_argument('--offset', type=int, default=0); p.set_defaults(func=cmd_list_companies)
+    p = sub.add_parser('search-companies'); p.add_argument('term'); p.add_argument('--limit', type=int, default=25); p.set_defaults(func=cmd_search_companies)
+    p = sub.add_parser('get-company'); g = p.add_mutually_exclusive_group(required=True); g.add_argument('--id'); g.add_argument('--name'); p.set_defaults(func=cmd_get_company)
+    p = sub.add_parser('create-company'); p.add_argument('--name', required=True); p.add_argument('--domain-label'); p.add_argument('--domain-url'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--employees', type=float); p.add_argument('--icp', action='store_true'); p.set_defaults(func=cmd_create_company)
+    p = sub.add_parser('update-company'); p.add_argument('--id', required=True); p.add_argument('--name'); p.add_argument('--domain-label'); p.add_argument('--domain-url'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--employees', type=float); p.add_argument('--icp', action='store_true'); p.set_defaults(func=cmd_update_company)
+    p = sub.add_parser('list-people'); p.add_argument('--company-id'); p.add_argument('--limit', type=int, default=25); p.add_argument('--offset', type=int, default=0); p.set_defaults(func=cmd_list_people)
+    p = sub.add_parser('create-person'); p.add_argument('--first-name'); p.add_argument('--last-name'); p.add_argument('--email'); p.add_argument('--job-title'); p.add_argument('--city'); p.add_argument('--company-id'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--avatar-url'); p.set_defaults(func=cmd_create_person)
+    p = sub.add_parser('update-person'); p.add_argument('--id', required=True); p.add_argument('--first-name'); p.add_argument('--last-name'); p.add_argument('--email'); p.add_argument('--job-title'); p.add_argument('--city'); p.add_argument('--company-id'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--avatar-url'); p.set_defaults(func=cmd_update_person)
+    p = sub.add_parser('list-notes'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--limit', type=int, default=25); p.set_defaults(func=cmd_list_notes)
+    p = sub.add_parser('create-note'); p.add_argument('--title', required=True); p.add_argument('--body', required=True); p.add_argument('--company-id'); p.add_argument('--person-id'); p.set_defaults(func=cmd_create_note)
+    p = sub.add_parser('update-note'); p.add_argument('--id', required=True); p.add_argument('--title'); p.add_argument('--body'); p.set_defaults(func=cmd_update_note)
+    p = sub.add_parser('delete-note'); p.add_argument('--id', required=True); p.set_defaults(func=cmd_delete_note)
+    p = sub.add_parser('list-tasks'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--opportunity-id'); p.add_argument('--status', choices=['TODO','IN_PROGRESS','DONE']); p.add_argument('--limit', type=int, default=25); p.set_defaults(func=cmd_list_tasks)
+    p = sub.add_parser('create-task'); p.add_argument('--title', required=True); p.add_argument('--body'); p.add_argument('--due-at'); p.add_argument('--status', default='TODO', choices=['TODO','IN_PROGRESS','DONE']); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--opportunity-id'); p.set_defaults(func=cmd_create_task)
+    p = sub.add_parser('update-task'); p.add_argument('--id', required=True); p.add_argument('--title'); p.add_argument('--body'); p.add_argument('--due-at'); p.add_argument('--status', choices=['TODO','IN_PROGRESS','DONE']); p.add_argument('--assignee-id'); p.set_defaults(func=cmd_update_task)
+    p = sub.add_parser('list-opportunities'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--stage', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--term'); p.add_argument('--limit', type=int, default=25); p.set_defaults(func=cmd_list_opportunities)
+    p = sub.add_parser('create-opportunity'); p.add_argument('--name', required=True); p.add_argument('--close-date'); p.add_argument('--stage', default='NEW', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--amount', type=float); p.add_argument('--currency', default='USD'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.set_defaults(func=cmd_create_opportunity)
+    p = sub.add_parser('update-opportunity'); p.add_argument('--id', required=True); p.add_argument('--name'); p.add_argument('--close-date'); p.add_argument('--stage', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--amount', type=float); p.add_argument('--currency', default='USD'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.set_defaults(func=cmd_update_opportunity)
+    p = sub.add_parser('rpc'); p.add_argument('--json'); p.set_defaults(func=cmd_rpc)
     return parser
 
 
