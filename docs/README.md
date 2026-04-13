@@ -11,7 +11,9 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `ai-systems/jen.md` — Jen's role as the main orchestration layer
 - `ai-systems/agent-orchestration-and-remote-subagents.md` — Jen control-plane model and proposed remote subagent API contract
 - `ai-systems/remote-subagent-api-layer.md` — detailed remote subagent API layer spec with sample requests and reference code
+- `ai-systems/metadyn-crm-integration.md` — Twenty CRM integration, local helper commands, operation contract, and next-step MCP direction
 - `infrastructure/topology.md` — current environment and infrastructure shape
+- `infrastructure/local-inference.md` — local LM Studio + OpenClaw inference path, Gemma model notes, and current private-network setup
 - `infrastructure/nginx-ssl-proxy.md` — documented Cloudflare + nginx + SSL origin pattern
 
 ## Platform Docs
