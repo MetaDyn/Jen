@@ -43,6 +43,10 @@ def _full_name(person_name: Optional[Dict[str, Any]]) -> str:
     return ' '.join(x for x in [person_name.get('firstName'), person_name.get('lastName')] if x) or '-'
 
 
+def _workspace_member_name(member_name: Optional[Dict[str, Any]]) -> str:
+    return _full_name(member_name)
+
+
 def _links_input(label: Optional[str], url: Optional[str]) -> Optional[Dict[str, Any]]:
     if not label and not url:
         return None
@@ -153,6 +157,32 @@ def cmd_list_people(args: argparse.Namespace) -> int:
         email = (node.get('emails') or {}).get('primaryEmail') or '-'
         company = (node.get('company') or {}).get('name') or '-'
         print(f"{i}. {_full_name(node.get('name'))} | id={node['id']} | email={email} | title={node.get('jobTitle') or '-'} | city={node.get('city') or '-'} | company={company}")
+    return 0
+
+
+def cmd_list_team(args: argparse.Namespace) -> int:
+    query = '''
+    query ListWorkspaceMembers($first: Int!, $offset: Int!, $filter: WorkspaceMemberFilterInput) {
+      workspaceMembers(first: $first, offset: $offset, filter: $filter, orderBy: [{userEmail: AscNullsLast}]) {
+        totalCount
+        edges { node { id name { firstName lastName } userEmail timeZone avatarUrl } }
+      }
+    }
+    '''
+    filter_bits = []
+    if args.term:
+        term = f"%{args.term}%"
+        filter_bits.append({'or': [
+            {'userEmail': {'ilike': term}},
+            {'name': {'firstName': {'ilike': term}}},
+            {'name': {'lastName': {'ilike': term}}},
+        ]})
+    filter_input = {'and': filter_bits} if len(filter_bits) > 1 else (filter_bits[0] if filter_bits else None)
+    data = gql(query, {'first': args.limit, 'offset': args.offset, 'filter': filter_input})['workspaceMembers']
+    print(f"totalCount: {data['totalCount']}")
+    for i, edge in enumerate(data['edges'], start=1 + args.offset):
+        node = edge['node']
+        print(f"{i}. {_workspace_member_name(node.get('name'))} | id={node['id']} | email={node.get('userEmail') or '-'} | timezone={node.get('timeZone') or '-'}")
     return 0
 
 
@@ -273,7 +303,7 @@ def cmd_create_task(args: argparse.Namespace) -> int:
 
 def cmd_update_task(args: argparse.Namespace) -> int:
     data = compact({'title': args.title, 'bodyV2': {'markdown': args.body} if args.body is not None else None, 'dueAt': args.due_at, 'status': args.status, 'assigneeId': args.assignee_id})
-    return _print_json(gql('''mutation UpdateTask($id: UUID!, $data: TaskUpdateInput!) { updateTask(id: $id, data: $data) { id title status dueAt updatedAt bodyV2 { markdown } } }''', {'id': args.id, 'data': data})['updateTask'])
+    return _print_json(gql('''mutation UpdateTask($id: UUID!, $data: TaskUpdateInput!) { updateTask(id: $id, data: $data) { id title status dueAt updatedAt assignee { id name { firstName lastName } userEmail } bodyV2 { markdown } } }''', {'id': args.id, 'data': data})['updateTask'])
 
 
 def cmd_list_opportunities(args: argparse.Namespace) -> int:
@@ -291,7 +321,7 @@ def cmd_list_opportunities(args: argparse.Namespace) -> int:
     query ListOpportunities($first: Int!, $filter: OpportunityFilterInput) {
       opportunities(first: $first, filter: $filter, orderBy: [{closeDate: AscNullsLast}]) {
         totalCount
-        edges { node { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } amount { amountMicros currencyCode } } }
+        edges { node { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } owner { id name { firstName lastName } userEmail } amount { amountMicros currencyCode } } }
       }
     }
     '''
@@ -303,18 +333,20 @@ def cmd_list_opportunities(args: argparse.Namespace) -> int:
         amount_str = f"{amount.get('currencyCode','USD')} {((amount.get('amountMicros') or 0)/1_000_000):,.2f}" if amount else '-'
         company = (node.get('company') or {}).get('name') or '-'
         poc = _full_name((node.get('pointOfContact') or {}).get('name'))
-        print(f"- {node['name']} | id={node['id']} | stage={node['stage']} | closeDate={node.get('closeDate') or '-'} | company={company} | pointOfContact={poc} | amount={amount_str}")
+        owner = _workspace_member_name((node.get('owner') or {}).get('name'))
+        owner_email = (node.get('owner') or {}).get('userEmail') or '-'
+        print(f"- {node['name']} | id={node['id']} | stage={node['stage']} | closeDate={node.get('closeDate') or '-'} | company={company} | pointOfContact={poc} | owner={owner} <{owner_email}> | amount={amount_str}")
     return 0
 
 
 def cmd_create_opportunity(args: argparse.Namespace) -> int:
-    data = compact({'name': args.name, 'closeDate': args.close_date, 'stage': args.stage, 'amount': _currency_input(args.amount, args.currency), 'companyId': args.company_id, 'pointOfContactId': args.person_id})
-    return _print_json(gql('''mutation CreateOpportunity($data: OpportunityCreateInput!) { createOpportunity(data: $data) { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } amount { amountMicros currencyCode } createdAt } }''', {'data': data})['createOpportunity'])
+    data = compact({'name': args.name, 'closeDate': args.close_date, 'stage': args.stage, 'amount': _currency_input(args.amount, args.currency), 'companyId': args.company_id, 'pointOfContactId': args.person_id, 'ownerId': args.owner_id})
+    return _print_json(gql('''mutation CreateOpportunity($data: OpportunityCreateInput!) { createOpportunity(data: $data) { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } owner { id name { firstName lastName } userEmail } amount { amountMicros currencyCode } createdAt } }''', {'data': data})['createOpportunity'])
 
 
 def cmd_update_opportunity(args: argparse.Namespace) -> int:
-    data = compact({'name': args.name, 'closeDate': args.close_date, 'stage': args.stage, 'amount': _currency_input(args.amount, args.currency), 'companyId': args.company_id, 'pointOfContactId': args.person_id})
-    return _print_json(gql('''mutation UpdateOpportunity($id: UUID!, $data: OpportunityUpdateInput!) { updateOpportunity(id: $id, data: $data) { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } amount { amountMicros currencyCode } updatedAt } }''', {'id': args.id, 'data': data})['updateOpportunity'])
+    data = compact({'name': args.name, 'closeDate': args.close_date, 'stage': args.stage, 'amount': _currency_input(args.amount, args.currency), 'companyId': args.company_id, 'pointOfContactId': args.person_id, 'ownerId': args.owner_id})
+    return _print_json(gql('''mutation UpdateOpportunity($id: UUID!, $data: OpportunityUpdateInput!) { updateOpportunity(id: $id, data: $data) { id name closeDate stage company { id name } pointOfContact { id name { firstName lastName } } owner { id name { firstName lastName } userEmail } amount { amountMicros currencyCode } updatedAt } }''', {'id': args.id, 'data': data})['updateOpportunity'])
 
 
 def build_rpc_map() -> Dict[str, Any]:
@@ -327,6 +359,7 @@ def build_rpc_map() -> Dict[str, Any]:
         'person.list': cmd_list_people,
         'person.create': cmd_create_person,
         'person.update': cmd_update_person,
+        'team.list': cmd_list_team,
         'note.list': cmd_list_notes,
         'note.create': cmd_create_note,
         'note.update': cmd_update_note,
@@ -351,6 +384,7 @@ def cmd_rpc(args: argparse.Namespace) -> int:
         'offset': 0,
         'company_id': None,
         'person_id': None,
+        'owner_id': None,
         'opportunity_id': None,
         'status': None,
         'term': None,
@@ -393,6 +427,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser('create-company'); p.add_argument('--name', required=True); p.add_argument('--domain-label'); p.add_argument('--domain-url'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--employees', type=float); p.add_argument('--icp', action='store_true'); p.set_defaults(func=cmd_create_company)
     p = sub.add_parser('update-company'); p.add_argument('--id', required=True); p.add_argument('--name'); p.add_argument('--domain-label'); p.add_argument('--domain-url'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--employees', type=float); p.add_argument('--icp', action='store_true'); p.set_defaults(func=cmd_update_company)
     p = sub.add_parser('list-people'); p.add_argument('--company-id'); p.add_argument('--limit', type=int, default=25); p.add_argument('--offset', type=int, default=0); p.set_defaults(func=cmd_list_people)
+    p = sub.add_parser('list-team'); p.add_argument('--term'); p.add_argument('--limit', type=int, default=25); p.add_argument('--offset', type=int, default=0); p.set_defaults(func=cmd_list_team)
     p = sub.add_parser('create-person'); p.add_argument('--first-name'); p.add_argument('--last-name'); p.add_argument('--email'); p.add_argument('--job-title'); p.add_argument('--city'); p.add_argument('--company-id'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--avatar-url'); p.set_defaults(func=cmd_create_person)
     p = sub.add_parser('update-person'); p.add_argument('--id', required=True); p.add_argument('--first-name'); p.add_argument('--last-name'); p.add_argument('--email'); p.add_argument('--job-title'); p.add_argument('--city'); p.add_argument('--company-id'); p.add_argument('--linkedin-label'); p.add_argument('--linkedin-url'); p.add_argument('--x-label'); p.add_argument('--x-url'); p.add_argument('--avatar-url'); p.set_defaults(func=cmd_update_person)
     p = sub.add_parser('list-notes'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--limit', type=int, default=25); p.set_defaults(func=cmd_list_notes)
@@ -403,8 +438,8 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser('create-task'); p.add_argument('--title', required=True); p.add_argument('--body'); p.add_argument('--due-at'); p.add_argument('--status', default='TODO', choices=['TODO','IN_PROGRESS','DONE']); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--opportunity-id'); p.set_defaults(func=cmd_create_task)
     p = sub.add_parser('update-task'); p.add_argument('--id', required=True); p.add_argument('--title'); p.add_argument('--body'); p.add_argument('--due-at'); p.add_argument('--status', choices=['TODO','IN_PROGRESS','DONE']); p.add_argument('--assignee-id'); p.set_defaults(func=cmd_update_task)
     p = sub.add_parser('list-opportunities'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--stage', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--term'); p.add_argument('--limit', type=int, default=25); p.set_defaults(func=cmd_list_opportunities)
-    p = sub.add_parser('create-opportunity'); p.add_argument('--name', required=True); p.add_argument('--close-date'); p.add_argument('--stage', default='NEW', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--amount', type=float); p.add_argument('--currency', default='USD'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.set_defaults(func=cmd_create_opportunity)
-    p = sub.add_parser('update-opportunity'); p.add_argument('--id', required=True); p.add_argument('--name'); p.add_argument('--close-date'); p.add_argument('--stage', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--amount', type=float); p.add_argument('--currency', default='USD'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.set_defaults(func=cmd_update_opportunity)
+    p = sub.add_parser('create-opportunity'); p.add_argument('--name', required=True); p.add_argument('--close-date'); p.add_argument('--stage', default='NEW', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--amount', type=float); p.add_argument('--currency', default='USD'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--owner-id'); p.set_defaults(func=cmd_create_opportunity)
+    p = sub.add_parser('update-opportunity'); p.add_argument('--id', required=True); p.add_argument('--name'); p.add_argument('--close-date'); p.add_argument('--stage', choices=['NEW','SCREENING','MEETING','PROPOSAL','CUSTOMER']); p.add_argument('--amount', type=float); p.add_argument('--currency', default='USD'); p.add_argument('--company-id'); p.add_argument('--person-id'); p.add_argument('--owner-id'); p.set_defaults(func=cmd_update_opportunity)
     p = sub.add_parser('rpc'); p.add_argument('--json'); p.set_defaults(func=cmd_rpc)
     return parser
 
