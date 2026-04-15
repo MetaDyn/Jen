@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MetaDyn Network Map</title>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      securityLevel: 'loose',
+      themeVariables: {
+        primaryColor: '#18284f',
+        primaryTextColor: '#eef3ff',
+        primaryBorderColor: '#7c9cff',
+        lineColor: '#93a8ff',
+        secondaryColor: '#13203d',
+        tertiaryColor: '#0d1630',
+        background: '#09101f',
+        mainBkg: '#111a33',
+        secondBkg: '#162447',
+        tertiaryBkg: '#0b1327',
+        clusterBkg: '#101a34',
+        clusterBorder: '#4863b8',
+        fontFamily: 'Inter, system-ui, sans-serif'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      }
+    });
+  </script>
+  <style>
+    :root {
+      --bg: #09101f;
+      --bg2: #0d1630;
+      --panel: rgba(17, 26, 51, 0.94);
+      --panel2: rgba(22, 36, 71, 0.92);
+      --text: #eef3ff;
+      --muted: #a8b5d6;
+      --border: rgba(255,255,255,0.08);
+      --accent: #7c9cff;
+      --accent2: #54d2b2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%);
+    }
+    .wrap { max-width: 1600px; margin: 0 auto; padding: 28px 22px 48px; }
+    .hero, .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 18px 48px rgba(0,0,0,0.28);
+    }
+    .hero { padding: 28px; margin-bottom: 20px; }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 10px; font-size: clamp(30px, 5vw, 44px); }
+    p { color: var(--muted); line-height: 1.55; }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(124,156,255,0.14);
+      color: #d6e0ff;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .meta-card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .meta-card strong { display: block; margin-bottom: 8px; }
+    .meta-card span { color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .panel { padding: 20px; }
+    .mermaid {
+      overflow-x: auto;
+      padding: 8px;
+      text-align: center;
+    }
+    .notes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+    .note {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+    ul { margin: 0; padding-left: 18px; color: var(--muted); }
+    li + li { margin-top: 8px; }
+    code {
+      background: rgba(255,255,255,0.06);
+      padding: 2px 6px;
+      border-radius: 8px;
+      color: #dfe7ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">MetaDyn Infrastructure</div>
+      <h1>Network Map</h1>
+      <p>First-pass infrastructure topology built from the current MetaDyn DNS, hosting, and ingress notes. This should be treated as a living map: accurate enough to reason from now, but still meant to be refined as more service placement details are documented.</p>
+      <div class="meta">
+        <div class="meta-card"><strong>Universal Edge</strong><span>Cloudflare sits in front of the MetaDyn estate. Some records are proxied, some DNS-only.</span></div>
+        <div class="meta-card"><strong>Ingress Pattern</strong><span>Wildcard MetaDyn domain pattern with nginx reverse proxy as the standard non-Netlify ingress model.</span></div>
+        <div class="meta-card"><strong>Primary Hosts</strong><span>AWS stage <code>16.58.195.11</code>, Hetzner prod <code>87.99.130.86</code>, on-prem/dev edge <code>136.34.121.206</code>, legacy mail/admin <code>72.167.59.135</code>.</span></div>
+        <div class="meta-card"><strong>Special Note</strong><span>The on-prem rack is described as MetaDyn’s Azure Stack hybrid cloud environment behind the public dev edge.</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="mermaid">
+flowchart LR
+    U([Users / Internet]) --> CF[Cloudflare\nUniversal DNS / edge control plane]
+
+    CF --> NL[Netlify\nFrontend / static app hosting]
+    CF --> AWS[AWS EC2 Stage\nec2-16-58-195-11.us-east-2.compute.amazonaws.com\n16.58.195.11]
+    CF --> HZ[Hetzner Prod\nubuntu-8gb-ash-1\n87.99.130.86\n2a01:4ff:f4:3cc7::/64]
+    CF --> DEV[On-Prem / Dev Edge\n136.34.121.206\nGoogle Fiber 1 Gbps]
+    CF --> GD[Legacy GoDaddy Mail/Admin\n72.167.59.135]
+
+    subgraph Netlify_Surfaces [Netlify surfaces]
+      NL1[metadyn.xyz]
+      NL2[www.metadyn.xyz]
+      NL3[dashboard.metadyn.xyz]
+      NL4[devdashboard.metadyn.xyz]
+      NL5[dev.metadyn.xyz]
+      NL6[agentai-react1.metadyn.xyz]
+      NL7[webxrtest1.metadyn.xyz]
+    end
+    NL --> Netlify_Surfaces
+
+    subgraph AWS_Stage_Surfaces [AWS stage / project origins]
+      AW1[stage.metadyn.xyz]
+      AW2[assets.metadyn.xyz]
+      AW3[starter.metadyn.xyz]
+      AW4[vitl-medical.metadyn.xyz]
+      AW5[netflixhouse.metadyn.xyz\nCloudflare proxied]
+      AW6[seaworld-sd.metadyn.xyz\nCloudflare proxied]
+    end
+    AWS --> AWS_Stage_Surfaces
+
+    HZ --> NGINX1[nginx reverse proxy\nwildcard MetaDyn pattern]
+    subgraph Hetzner_Services [Hetzner production services]
+      H1[prod.metadyn.xyz\nproxied]
+      H2[crm.metadyn.xyz\nnative app]
+      H3[gitlab.metadyn.xyz]
+      H4[analytics.metadyn.xyz]
+      H5[monitor.metadyn.xyz]
+      H6[aurora-01.metadyn.xyz]
+    end
+    NGINX1 --> Hetzner_Services
+
+    DEV --> NGINX2[nginx reverse proxy\nwildcard MetaDyn pattern]
+    NGINX2 --> AZ[MetaDyn On-Prem Azure Stack\nHybrid cloud rack\n1x Dell R810 • 2x Dell 2950 • 4x Dell 1950]
+    subgraph Dev_Surfaces [On-prem / dev services]
+      D1[hyperfy.metadyn.xyz\nlive]
+      D2[pavilion.metadyn.xyz\nlive]
+      D3[lunara.metadyn.xyz]
+      D4[aurora-02.metadyn.xyz]
+    end
+    AZ --> Dev_Surfaces
+
+    subgraph Legacy_Surfaces [Legacy mail / admin cluster]
+      G1[admin.metadyn.xyz]
+      G2[mail.metadyn.xyz]
+      G3[cpanel.metadyn.xyz]
+      G4[webmail.metadyn.xyz]
+      G5[whm.metadyn.xyz]
+      G6[autodiscover / autoconfig / webdisk]
+    end
+    GD --> Legacy_Surfaces
+
+    classDef edge fill:#13203d,stroke:#7c9cff,color:#eef3ff,stroke-width:2px;
+    classDef host fill:#18284f,stroke:#54d2b2,color:#eef3ff,stroke-width:2px;
+    classDef service fill:#101a34,stroke:#4863b8,color:#eef3ff;
+    class U,CF edge;
+    class NL,AWS,HZ,DEV,GD,NGINX1,NGINX2,AZ host;
+    class NL1,NL2,NL3,NL4,NL5,NL6,NL7,AW1,AW2,AW3,AW4,AW5,AW6,H1,H2,H3,H4,H5,H6,D1,D2,D3,D4,G1,G2,G3,G4,G5,G6 service;
+      </div>
+    </section>
+
+    <section class="notes">
+      <article class="note">
+        <h2>What this map currently encodes</h2>
+        <ul>
+          <li>Cloudflare as the universal external control plane.</li>
+          <li>Netlify as the frontend/static hosting layer under MetaDyn-managed domains.</li>
+          <li>AWS EC2 as the current stage and several project-origin surfaces.</li>
+          <li>Hetzner as the primary prod/native-services box.</li>
+          <li>The on-prem Azure Stack rack as a hybrid dev environment behind <code>136.34.121.206</code>.</li>
+        </ul>
+      </article>
+
+      <article class="note">
+        <h2>What still needs refinement</h2>
+        <ul>
+          <li>Exact internal service placement behind Hetzner nginx.</li>
+          <li>Precise machine-by-machine mapping inside the on-prem rack.</li>
+          <li>Databases, storage, CI/CD, and any private east-west flows.</li>
+          <li>Which Cloudflare surfaces are intentional DNS-only exceptions versus legacy behavior.</li>
+        </ul>
+      </article>
+    </section>
+  </div>
+</body>
+</html>
