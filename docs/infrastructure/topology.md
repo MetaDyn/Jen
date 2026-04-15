@@ -7,6 +7,33 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
 - cloud infrastructure
 - multiple VPS/providers
 - AWS as the primary hosting platform for immersive/web experiences
+- Hetzner for current production-adjacent nginx SSL proxy and app/service hosting
+- Netlify for the public website and dashboard hosting surfaces
+
+## Current Environment Inventory
+
+### Stage / AWS
+- Hostname: `ec2-16-58-195-11.us-east-2.compute.amazonaws.com`
+- IPv4: `16.58.195.11`
+- Public URL: `https://stage.metadyn.xyz/`
+- Notes: current documented staging environment / AWS-hosted surface
+
+### Prod / Hetzner
+- Hostname: `ubuntu-8gb-ash-1`
+- IPv4: `87.99.130.86`
+- IPv6 block: `2a01:4ff:f4:3cc7::/64`
+- Public URLs:
+  - `https://prod.metadyn.xyz/`
+  - `https://crm.metadyn.xyz/`
+  - `https://gitlab.metadyn.xyz/`
+  - `https://analytics.metadyn.xyz/`
+- Notes: current production infrastructure / Hetzner-hosted service cluster
+
+### Netlify
+- Public URLs:
+  - `https://metadyn.xyz/`
+  - `https://dashboard.metadyn.xyz/`
+- Notes: current static/frontend hosting surface for the main site and dashboard
 
 ## Primary Hosting Surfaces
 
