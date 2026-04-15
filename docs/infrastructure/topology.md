@@ -67,7 +67,7 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
 - `pavilion.metadyn.xyz` -> `136.34.121.206` (DNS only)
 - Current understanding: this is not officially mapped yet, but should be treated as a dev-server / on-prem environment.
 - Confirmed role notes provided by Josh:
-  - `hyperfy.metadyn.xyz` and `pavilion.metadyn.xyz` are live and active behind a reverse proxy
+  - `hyperfy.metadyn.xyz` and `pavilion.metadyn.xyz` are live and active behind an nginx reverse proxy
   - the rack runs MetaDyn's on-prem Azure Stack hybrid cloud environment
 - Connectivity/footprint notes provided by Josh:
   - Google Fiber 1 Gbps
@@ -156,6 +156,17 @@ Supplementary infrastructure used where appropriate for hosting, services, routi
 
 ## Current Ingress Direction
 
+### MetaDyn environment-wide ingress pattern
+- Cloudflare sits in front of everything across the MetaDyn environment.
+- Some records are Cloudflare proxied and some are DNS-only, but Cloudflare is still the universal external DNS/edge control plane.
+- Everything uses the MetaDyn wildcard pattern unless a specific surface is documented as an exception.
+- nginx reverse proxy is the normal ingress pattern across the non-Netlify infrastructure surfaces.
+- Current working service split:
+  - nginx mainly serves optimized WebGL packages / immersive experience delivery surfaces
+  - some production surfaces are native apps/services rather than packaged WebGL
+  - known example: `crm.metadyn.xyz`
+
+### Jen / OpenClaw control surface
 For the Jen / OpenClaw control surface, the preferred ingress direction is:
 
 - Cloudflare Tunnel
