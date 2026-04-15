@@ -31,6 +31,10 @@
         curve: 'basis'
       }
     });
+    window.addEventListener('DOMContentLoaded', async () => {
+      const el = document.querySelector('.mermaid');
+      if (el) await mermaid.run({ nodes: [el] });
+    });
   </script>
   <style>
     :root {
@@ -131,7 +135,7 @@
     </section>
 
     <section class="panel">
-      <div class="mermaid">
+      <pre class="mermaid">
 flowchart LR
     U([Users / Internet]) --> CF[Cloudflare\nUniversal DNS / edge control plane]
 
@@ -199,7 +203,7 @@ flowchart LR
     class U,CF edge;
     class NL,AWS,HZ,DEV,GD,NGINX1,NGINX2,AZ host;
     class NL1,NL2,NL3,NL4,NL5,NL6,NL7,AW1,AW2,AW3,AW4,AW5,AW6,H1,H2,H3,H4,H5,H6,D1,D2,D3,D4,G1,G2,G3,G4,G5,G6 service;
-      </div>
+      </pre>
     </section>
 
     <section class="notes">
