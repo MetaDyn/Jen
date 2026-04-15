@@ -65,6 +65,17 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
 - `hyperfy.metadyn.xyz` -> `136.34.121.206` (Cloudflare proxied)
 - `lunara.metadyn.xyz` -> `136.34.121.206` (Cloudflare proxied)
 - `pavilion.metadyn.xyz` -> `136.34.121.206` (DNS only)
+- Current understanding: this is not officially mapped yet, but should be treated as a dev-server / on-prem environment.
+- Confirmed role notes provided by Josh:
+  - `hyperfy.metadyn.xyz` and `pavilion.metadyn.xyz` are live and active behind a reverse proxy
+  - the rack runs MetaDyn's on-prem Azure Stack hybrid cloud environment
+- Connectivity/footprint notes provided by Josh:
+  - Google Fiber 1 Gbps
+  - 42U rack
+  - 1x Dell R810
+  - 2x Dell 2950
+  - 4x Dell 1950
+- Working interpretation: `136.34.121.206` currently represents the exposed reverse-proxy/public edge for a broader rack-backed MetaDyn dev/on-prem hybrid cloud environment rather than a single simple VPS-style node.
 
 ### Netlify-routed Surfaces
 - `metadyn.xyz` -> `apex-loadbalancer.netlify.com` (CNAME, DNS only in export)
