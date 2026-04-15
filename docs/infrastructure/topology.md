@@ -69,6 +69,7 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
 - Confirmed role notes provided by Josh:
   - `hyperfy.metadyn.xyz` and `pavilion.metadyn.xyz` are live and active behind an nginx reverse proxy
   - the rack runs MetaDyn's on-prem Azure Stack hybrid cloud environment
+  - `aurora-02.metadyn.xyz/api/v1/chat` is a current public chat endpoint used for Gemma processing and intended to eventually back Aurora, Jen's embodied Metaverse version
 - Connectivity/footprint notes provided by Josh:
   - Google Fiber 1 Gbps
   - 42U rack
@@ -76,6 +77,21 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
   - 2x Dell 2950
   - 4x Dell 1950
 - Working interpretation: `136.34.121.206` currently represents the exposed reverse-proxy/public edge for a broader rack-backed MetaDyn dev/on-prem hybrid cloud environment rather than a single simple VPS-style node.
+
+#### Aurora public endpoint on `aurora-02`
+- Public endpoint: `https://aurora-02.metadyn.xyz/api/v1/chat`
+- Current exposed model in Josh's provided test curl: `gemma-4-e2b-it`
+- Current request example includes:
+  - `Content-Type: application/json`
+  - `system_prompt`: `Answer in a more direct, technical manner`
+  - `input`: `What is the Metaverse?`
+- Reference curl:
+  ```bash
+  curl https://aurora-02.metadyn.xyz/api/v1/chat \
+    -H "Content-Type: application/json" \
+    -d '{"model": "gemma-4-e2b-it", "system_prompt": "Answer in a more direct, technical manner", "input": "What is the Metaverse?"}'
+  ```
+- Infra interpretation: this should be treated as an externally reachable inference/application surface hanging off the on-prem/dev edge, not just a placeholder hostname.
 
 ### Netlify-routed Surfaces
 - `metadyn.xyz` -> `apex-loadbalancer.netlify.com` (CNAME, DNS only in export)
