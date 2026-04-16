@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CRM Overview</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #11182c;
+      --panel-2: #16203a;
+      --text: #eef3ff;
+      --muted: #a9b5d1;
+      --line: #223150;
+      --accent: #7c9cff;
+      --accent-2: #54d2b2;
+      --warn: #f3b562;
+      --danger: #ff7b88;
+      font-family: Inter, system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: linear-gradient(180deg, #09101f, #0d1426); color: var(--text); }
+    .wrap { max-width: 1380px; margin: 0 auto; padding: 24px; display: grid; gap: 16px; }
+    .hero,.card { background: rgba(17,24,44,.92); border: 1px solid var(--line); border-radius: 18px; }
+    .hero { padding: 22px; display: grid; gap: 8px; }
+    .eyebrow { color: var(--accent-2); text-transform: uppercase; letter-spacing: .12em; font-size: 11px; font-weight: 700; }
+    h1,h2 { margin: 0; }
+    p { margin: 0; color: var(--muted); }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .stat { padding: 16px; }
+    .stat .v { font-size: 28px; font-weight: 750; margin-top: 8px; }
+    .grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 16px; }
+    .card { padding: 18px; overflow: hidden; }
+    .table-wrap { overflow: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th,td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; font-size: 14px; }
+    th { color: var(--muted); font-weight: 600; position: sticky; top: 0; background: var(--panel); }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .pill { border: 1px solid var(--line); border-radius: 999px; padding: 8px 10px; color: var(--muted); background: rgba(255,255,255,.02); font-size: 13px; }
+    ul { margin: 12px 0 0; padding-left: 18px; color: var(--muted); display: grid; gap: 8px; }
+    code { color: #cfe0ff; }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } .wrap { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">CRM</div>
+      <h1>Overview</h1>
+      <p>Static snapshot generated from live MetaDyn CRM data for Control UI. Good first operator pass: totals, gaps, top opportunities, and recent movement.</p>
+      <div class="pill-row">
+        <div class="pill">Snapshot: 2026-04-16 03:18 UTC</div>
+        <div class="pill">Opportunities: 24</div>
+        <div class="pill">Pipeline: $2,223,000</div>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="card stat"><div class="eyebrow">Total opportunities</div><div class="v">24</div><div style="color:var(--muted);margin-top:6px">Current visible opportunity count</div></div>
+      <div class="card stat"><div class="eyebrow">Total pipeline</div><div class="v">$2,223,000</div><div style="color:var(--muted);margin-top:6px">Sum of current opportunity amount fields</div></div>
+      <div class="card stat"><div class="eyebrow">Missing amount</div><div class="v">3</div><div style="color:var(--muted);margin-top:6px">Opportunities still missing amount</div></div>
+      <div class="card stat"><div class="eyebrow">Missing owner</div><div class="v">24</div><div style="color:var(--muted);margin-top:6px">Needs assignment / routing</div></div>
+      <div class="card stat"><div class="eyebrow">Missing close date</div><div class="v">18</div><div style="color:var(--muted);margin-top:6px">Missing deadline / target timing</div></div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <div class="eyebrow">Top opportunities</div>
+        <h2 style="margin-top:6px;font-size:22px">Highest visible pipeline items</h2>
+        <p style="margin-top:8px">Sorted by current amount field, with owner and close-date visibility for quick CRM cleanup and prioritization.</p>
+        <div class="table-wrap" style="margin-top:14px">
+          <table>
+            <thead><tr><th>Name</th><th>Stage</th><th>Amount</th><th>Close date</th><th>Owner</th><th>Company</th></tr></thead>
+            <tbody>
+              <tr><td>Department of Culture and Tourism Abu Dhabi / Saadiyat cultural ecosystem</td><td>NEW</td><td>$250,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>National Geographic Museum of Exploration</td><td>NEW</td><td>$180,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Canary Islands digital-twin tourism initiative / EMOTUR Lab</td><td>NEW</td><td>$160,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>KC2026 ecosystem</td><td>SCREENING</td><td>$150,000</td><td>2026-07-11</td><td>—</td><td>—</td></tr>
+<tr><td>UBS Digital Art Museum Hamburg</td><td>NEW</td><td>$140,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Lucas Museum of Narrative Art</td><td>NEW</td><td>$130,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Cleveland Museum of Art / ArtLens relaunch</td><td>NEW</td><td>$125,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Variety KC</td><td>NEW</td><td>$125,000</td><td>—</td><td>—</td><td>Variety KC</td></tr>
+<tr><td>DATALAND</td><td>NEW</td><td>$120,000</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Nelson-Atkins Museum of Art</td><td>SCREENING</td><td>$110,000</td><td>2026-07-11</td><td>—</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="eyebrow">Pipeline shape</div>
+        <h2 style="margin-top:6px;font-size:22px">Stage mix</h2>
+        <div class="pill-row"><div class="pill">NEW: 18</div><div class="pill">SCREENING: 6</div></div>
+        <h2 style="margin-top:18px;font-size:20px">Recent updates</h2>
+        <ul>
+          <li><strong>Nelson-Atkins Museum of Art</strong> — SCREENING · $110,000 · updated 2026-04-15</li><li><strong>Visit KC</strong> — SCREENING · $90,000 · updated 2026-04-15</li><li><strong>KC2026 ecosystem</strong> — SCREENING · $150,000 · updated 2026-04-15</li><li><strong>Negro Leagues Baseball Museum</strong> — SCREENING · $65,000 · updated 2026-04-15</li><li><strong>Union Station / EDCKC World Cup marketplace</strong> — SCREENING · $85,000 · updated 2026-04-15</li><li><strong>KC Current</strong> — SCREENING · — · updated 2026-04-15</li><li><strong>Kansas City Zoo &amp; Aquarium</strong> — NEW · — · updated 2026-04-15</li><li><strong>Kansas City Museum</strong> — NEW · — · updated 2026-04-15</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
