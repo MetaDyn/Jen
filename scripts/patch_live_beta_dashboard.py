@@ -9,6 +9,8 @@ from pathlib import Path
 BUNDLE = Path('/home/jza/.nvm/versions/node/v25.8.1/lib/node_modules/openclaw/dist/control-ui/assets/index-UvgeZ3yV.js')
 LIVE_BETA = Path('/home/jza/.nvm/versions/node/v25.8.1/lib/node_modules/openclaw/dist/control-ui/beta-testers-dashboard.html')
 SRC_BETA = Path('/home/jza/.openclaw/workspace/custom-pages/beta-testers-dashboard.html')
+LIVE_CRM = Path('/home/jza/.nvm/versions/node/v25.8.1/lib/node_modules/openclaw/dist/control-ui/crm-overview.html')
+SRC_CRM = Path('/home/jza/.openclaw/workspace/custom-pages/crm-overview.html')
 LIVE_INDEX = Path('/home/jza/.nvm/versions/node/v25.8.1/lib/node_modules/openclaw/dist/control-ui/metadyn-custom-pages.html')
 SRC_INDEX = Path('/home/jza/.openclaw/workspace/custom-pages/index.html')
 UPSTREAM_STATIC_DASH = Path('/home/jza/.openclaw/workspace/custom-pages/metadyn-dashboard/index.html')
@@ -226,6 +228,8 @@ def main() -> None:
 
     if SRC_BETA.exists():
         LIVE_BETA.write_text(SRC_BETA.read_text())
+    if SRC_CRM.exists():
+        LIVE_CRM.write_text(SRC_CRM.read_text())
     if SRC_INDEX.exists():
         LIVE_INDEX.write_text(SRC_INDEX.read_text())
 
