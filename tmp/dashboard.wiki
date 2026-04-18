@@ -1,0 +1,95 @@
+====== MetaDyn Dashboard ======
+
+{{tag>dashboard homepage metadyn sdk unity6 ops infra crm}}
+
+===== What This Wiki Is =====
+This is the main MetaDyn operating wiki: company context, platform architecture, Unity 6 SDK documentation, infrastructure maps, CRM/ops dashboards, and long-lived working knowledge.
+
+**MetaDyn** — short for **Metaverse Dynamix** — is building a next-generation digital fabric connecting people, places, and things through immersive experiences, persistent identity, and intelligent systems.
+
+===== Start Here =====
+^ If you want to... ^ Go here ^ Why ^
+| understand MetaDyn at a high level | [[metadyn:ops:dashboard|MetaDyn Overview Dashboard]] | best top-level company + platform framing |
+| understand the technical platform quickly | [[metadyn:ops:platform-dashboard|Platform Dashboard]] | best high-level technical map |
+| enter the SDK docs properly | [[sdk:overview|SDK Overview]] | main SDK landing page |
+| understand the Unity platform as a whole | [[sdk:unity6:platform-overview|Unity 6 Platform Overview]] | best first Unity 6 read |
+| understand how the system fits together | [[sdk:unity6:system-architecture|Unity 6 System Architecture]] | layered architecture, runtime vs control plane |
+| understand login / continuity / profiles | [[sdk:unity6:auth-identity|Unity 6 Auth and Identity]] | current web-first identity model |
+| understand deployment / hosting | [[sdk:unity6:deployment-hosting|Unity 6 Deployment and Hosting]] | space isolation, providers, delivery model |
+| understand the infra footprint | [[metadyn:ops:topology-diagram|Infrastructure Topology]] | AWS / Hetzner / Netlify / on-prem map |
+| see operational dashboards | [[metadyn:ops:start|Operations]] | ops namespace entry point |
+
+===== Quick Paths By Audience =====
+
+==== Founders / Strategy ====
+  * [[metadyn:ops:dashboard|MetaDyn Overview Dashboard]]
+  * [[brain:metadyn:company-overview|MetaDyn Company Overview]]
+  * [[brain:metadyn:architecture-overview|MetaDyn Architecture Overview]]
+  * [[metadyn:ops:top-opportunities|Top CRM Opportunities]]
+
+==== Platform / Product / Technical Leadership ====
+  * [[metadyn:ops:platform-dashboard|Platform Dashboard]]
+  * [[sdk:unity6:platform-overview|Unity 6 Platform Overview]]
+  * [[sdk:unity6:system-architecture|Unity 6 System Architecture]]
+  * [[sdk:unity6:sdk-productization|Unity 6 SDK Productization]]
+  * [[sdk:unity6:auth-identity|Unity 6 Auth and Identity]]
+
+==== Unity / SDK / Runtime Builders ====
+  * [[sdk:overview|SDK Overview]]
+  * [[sdk:unity6:platform-overview|Unity 6 Platform Overview]]
+  * [[sdk:unity6:core-systems|Unity 6 Core Systems]]
+  * [[sdk:unity6:multiplayer-social|Unity 6 Multiplayer, Presence, and Social Systems]]
+  * [[sdk:unity6:realtime-voice|Unity 6 Realtime Voice and Media]]
+  * [[sdk:unity6:integration-patterns|Unity 6 Integration Patterns]]
+
+==== Operations / Infra ====
+  * [[metadyn:ops:topology-diagram|Infrastructure Topology]]
+  * [[metadyn:ops:network-architecture|Network Architecture]]
+  * [[metadyn:ops:environment-matrix|Environment Matrix]]
+  * [[metadyn:ops:host-inventory|Host Inventory]]
+  * [[metadyn:ops:ingress-patterns|Ingress Patterns]]
+  * [[metadyn:ops:service-map|Service Map]]
+
+===== Unity 6 Platform Core =====
+^ Page ^ Why it matters ^
+| [[sdk:unity6:platform-overview|Platform Overview]] | the connective-tissue doc: dashboard, identity, SDK, deployment, hosted spaces |
+| [[sdk:unity6:system-architecture|System Architecture]] | layered platform model, control plane vs runtime plane, social/voice/hosting stack |
+| [[sdk:unity6:auth-identity|Auth and Identity]] | current dashboard-led login, shared cookie bridge, Supabase profile continuity |
+| [[sdk:unity6:deployment-hosting|Deployment and Hosting]] | per-space build isolation, Cloudflare/nginx/origin flow, multi-provider delivery |
+| [[sdk:unity6:sdk-productization|SDK Productization]] | what the SDK owns, update model, packaging boundaries, creator product surface |
+| [[sdk:unity6:core-systems|Core Systems]] | subsystem-level runtime and toolkit view |
+| [[sdk:unity6:multiplayer-social|Multiplayer / Social]] | presence, authority, moderation, shared runtime behavior |
+| [[sdk:unity6:realtime-voice|Realtime Voice]] | player voice + AI voice media architecture |
+
+===== Operations / Infrastructure Core =====
+^ Page ^ What it covers ^
+| [[metadyn:ops:topology-diagram|Infrastructure Topology]] | AWS, Hetzner, Netlify, on-prem, ingress, public surface map |
+| [[metadyn:ops:network-architecture|Network Architecture]] | network and routing architecture view |
+| [[metadyn:ops:environment-matrix|Environment Matrix]] | dev / stage / prod / on-prem separation |
+| [[metadyn:ops:host-inventory|Host Inventory]] | machines and host roles |
+| [[metadyn:ops:service-map|Service Map]] | service-to-host / service-to-surface relationships |
+| [[metadyn:ops:crm-dashboard|CRM Dashboard]] | operational CRM dashboard entry point |
+| [[metadyn:ops:top-opportunities|Top CRM Opportunities]] | top founder-facing revenue pipeline snapshot |
+
+===== Recently Expanded =====
+These pages were heavily expanded and are now much more useful than the old thin versions:
+  * [[sdk:unity6:platform-overview|Unity 6 Platform Overview]]
+  * [[sdk:unity6:system-architecture|Unity 6 System Architecture]]
+  * [[sdk:unity6:auth-identity|Unity 6 Auth and Identity]]
+  * [[sdk:unity6:deployment-hosting|Unity 6 Deployment and Hosting]]
+  * [[sdk:unity6:sdk-productization|Unity 6 SDK Productization]]
+  * [[metadyn:ops:topology-diagram|Infrastructure Topology]]
+
+===== Current CRM Snapshot =====
+  * [[metadyn:ops:top-opportunities|Top CRM Opportunities]] provides a compact founder-facing top-20 pipeline view
+  * current visible estimated value on that page is roughly **$1.77M**
+  * strongest visible themes remain **KC2026**, **museums/cultural**, and **destination / placemaking** opportunities
+
+===== Namespace Entry Points =====
+  * [[sdk:overview|SDK Overview]]
+  * [[brain:start|Brain / Structured Memory]]
+  * [[metadyn:ops:start|Operations]]
+  * [[jen:start|Jen Workspace]]
+
+===== Notes =====
+This homepage should act as a decision-support landing page, not just a pile of links. If a major documentation area grows, it should get a curated entry here rather than being left buried inside a namespace.
