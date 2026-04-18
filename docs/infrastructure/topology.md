@@ -10,6 +10,23 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
 - Hetzner for current production-adjacent nginx SSL proxy and app/service hosting
 - Netlify for the public website and dashboard hosting surfaces
 
+The practical topology is not a single cloud deployment. It is a **multi-provider metaverse delivery fabric** with different surfaces playing different roles:
+- marketing/control-plane frontend surfaces
+- immersive WebGL/space surfaces
+- production service surfaces
+- on-prem/dev hybrid experiment and runtime surfaces
+- legacy mail/admin surfaces
+
+## Environment Model
+
+| Environment / Cluster | Primary Provider | Main Role | Current Public Examples |
+|---|---|---|---|
+| Stage / app origins | AWS | staging and several hosted experiences | `stage`, `assets`, `starter`, `vitl-medical`, `netflixhouse`, `seaworld-sd` |
+| Production service cluster | Hetzner | prod/service apps, analytics, CRM, GitLab, monitoring-adjacent surfaces | `prod`, `crm`, `gitlab`, `analytics`, `monitor`, `aurora-01` |
+| On-prem / hybrid dev edge | rack-backed environment behind public edge IP | Hyperfy/Pavilion/dev inference and immersive experiments | `hyperfy`, `lunara`, `pavilion`, `aurora-02` |
+| Frontend static/control-plane | Netlify | main site, dashboard, dev web surfaces | `metadyn.xyz`, `dashboard`, `devdashboard`, `dev` |
+| Legacy mail/admin cluster | GoDaddy/cPanel-style host | legacy admin/mail/related records | `mail`, `cpanel`, `whm`, `webmail`, `autodiscover` |
+
 ## Current Environment Inventory
 
 ### Stage / AWS
@@ -120,12 +137,42 @@ MetaDyn operates a hybrid infrastructure footprint spanning:
   - `send.metadyn.xyz` MX -> `feedback-smtp.us-east-1.amazonses.com`
   - `email.metadyn.xyz` -> `email.josh-garrett33.workers.dev`
 
-### Early Mapping Inferences
+## Routing / Surface Classification
+
+| Surface Type | Examples | Typical Role |
+|---|---|---|
+| Main marketing/public web | `metadyn.xyz`, `www.metadyn.xyz` | public brand/site presence |
+| Control-plane frontend | `dashboard.metadyn.xyz`, `devdashboard.metadyn.xyz` | login, profile, management UI |
+| Immersive stage/app origins | `stage`, `starter`, `assets`, `vitl-medical` | Unity/experience hosting |
+| Production service apps | `prod`, `crm`, `gitlab`, `analytics`, `monitor` | operational/business systems |
+| Immersive / on-prem experiments | `hyperfy`, `pavilion`, `lunara`, `aurora-02` | immersive runtime and AI/dev surfaces |
+| Legacy mail/admin | `mail`, `cpanel`, `whm`, `webmail` | mail/admin continuity |
+
+## Early Mapping Inferences
 - AWS EC2 (`16.58.195.11`) is currently the primary stage/staging-app origin and also fronts several project/experience-specific subdomains.
 - Hetzner (`87.99.130.86`) is currently the main production service host for prod, CRM, GitLab, analytics, and monitoring-related surfaces.
 - Netlify is the main frontend/static hosting layer for the public site, dashboard, and some dev/test app surfaces.
 - `72.167.59.135` appears to be a legacy/GoDaddy hosting/mail/cPanel surface and should be treated as a separate service cluster from AWS/Hetzner/Netlify.
-- `136.34.121.206` is an additional host serving Hyperfy/Lunara/Pavilion-related surfaces and should be documented as its own infrastructure node until ownership/purpose is clarified.
+- `136.34.121.206` is an additional host serving Hyperfy/Lunara/Pavilion-related surfaces and should be documented as the exposed edge of a broader on-prem/dev hybrid environment.
+
+## Logical Topology
+
+```mermaid
+flowchart LR
+    Internet[Internet Users] --> CF[Cloudflare DNS / Proxy / Edge]
+
+    CF --> Netlify[Netlify Frontend Surfaces]
+    CF --> AWS[AWS Stage / Experience Origins]
+    CF --> Hetzner[Hetzner Prod Service Cluster]
+    CF --> OnPrem[On-Prem Hybrid Edge\n136.34.121.206]
+    CF --> Legacy[Legacy Mail/Admin Cluster\n72.167.59.135]
+
+    Netlify --> Site[metadyn.xyz / dashboard / dev web]
+    AWS --> Stage[stage / starter / assets / experience hosts]
+    Hetzner --> Services[prod / crm / gitlab / analytics / monitor]
+    OnPrem --> Immersive[hyperfy / pavilion / lunara / aurora-02]
+    Legacy --> Mail[mail / cpanel / whm / webmail]
+```
 
 ## Primary Hosting Surfaces
 
@@ -158,19 +205,9 @@ Supplementary infrastructure used where appropriate for hosting, services, routi
 - Unity WebGL
 - ThreeJS experiences
 - Hyperfy immersive spaces
+- AI/inference endpoints exposed from platform-adjacent infrastructure
 
-## Documentation Gaps To Fill
-
-- environment inventory
-- DNS and domains
-- ingress/proxy layout
-- deployment targets
-- backup strategy
-- monitoring and alerting
-- security controls
-- cost ownership and provider roles
-
-## Current Ingress Direction
+## Ingress / Edge Pattern
 
 ### MetaDyn environment-wide ingress pattern
 - Cloudflare sits in front of everything across the MetaDyn environment.
@@ -182,7 +219,50 @@ Supplementary infrastructure used where appropriate for hosting, services, routi
   - some production surfaces are native apps/services rather than packaged WebGL
   - known example: `crm.metadyn.xyz`
 
-### Jen / OpenClaw control surface
+### Ingress Pattern Matrix
+
+| Layer | Common Implementation |
+|---|---|
+| DNS authority / edge control | Cloudflare |
+| Static frontend hosting | Netlify |
+| Non-Netlify origin ingress | nginx reverse proxy |
+| Immersive build serving | optimized WebGL package delivery |
+| Native app/service delivery | proxied app/service origin |
+
+## Environment Tensions / Risks
+
+| Tension | Why It Exists |
+|---|---|
+| Multi-provider sprawl | different surfaces evolved onto different providers |
+| DNS-only vs proxied variability | some services require direct origin behavior or were configured differently over time |
+| On-prem clarity | the rack-backed environment is real but not yet fully modeled in docs |
+| Legacy surface persistence | mail/admin cluster still exists beside the newer stack |
+| Control-plane vs runtime split | dashboard/frontend lives separately from several immersive/service origins |
+
+## Documentation Gaps To Fill
+
+- environment inventory by owner and purpose
+- DNS and domains with source-of-truth ownership
+- ingress/proxy layout per cluster
+- deployment targets and allowed workflows
+- backup strategy
+- monitoring and alerting
+- security controls
+- cost ownership and provider roles
+- environment-specific runbooks for AWS, Hetzner, and on-prem
+
+## Recommended Next Infra Docs
+
+| Doc | Why |
+|---|---|
+| environment matrix | clarify dev/stage/prod/on-prem boundaries |
+| ingress runbook | standardize nginx + Cloudflare patterns |
+| provider ownership map | show who owns which services and costs |
+| space deployment target map | tie Unity/Hyperfy spaces to real hosts |
+| AI endpoint surface doc | document Aurora/Gemma and related inference paths |
+
+## Current Ingress Direction For Jen / OpenClaw
+
 For the Jen / OpenClaw control surface, the preferred ingress direction is:
 
 - Cloudflare Tunnel
@@ -191,3 +271,10 @@ For the Jen / OpenClaw control surface, the preferred ingress direction is:
 
 See:
 - `docs/runbooks/cloudflare-jen-tunnel.md`
+
+## Source Basis
+
+This topology doc synthesizes:
+- workspace `MEMORY.md` infra inventory notes
+- imported platform/infrastructure docs
+- current curated MetaDyn infrastructure notes

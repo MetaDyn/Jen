@@ -16,6 +16,17 @@ Today the canonical flow is:
 
 This is not merely a convenience feature. It is the current bridge that makes MetaDyn feel like a platform rather than a disconnected set of scenes.
 
+## Identity Stack
+
+| Layer | Current Role | Main Systems |
+|---|---|---|
+| Login surface | where the user authenticates | `dashboard.metadyn.xyz` |
+| Session transport | how session state reaches spaces | shared `metadyn_token` cookie on `.metadyn.xyz` |
+| Browser bridge | how WebGL reads browser session state | `AuthBridge.jslib`, `WebAuthBridge.cs` |
+| Identity backend | canonical auth + profile source | Supabase auth + profiles |
+| Unity auth bootstrap | validates session and loads user context | `SupabaseAuthManager.cs` |
+| Runtime continuity | applies identity to in-world experience | profile fetch, avatar restore, user-facing display state |
+
 ## Why This Model Matters
 
 Moving auth out of in-Unity UI and into the dashboard creates several platform advantages:
@@ -83,6 +94,30 @@ The bridge is intentionally lightweight. Browser-specific auth handling stays in
 5. Persisted identity fields such as avatar selection are restored.
 6. User enters the space without repeating login or setup.
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant Dashboard
+    participant Browser as Browser Cookie Store
+    participant Unity as Unity WebGL Space
+    participant Supabase
+
+    User->>Unity: Open space URL
+    Unity->>Browser: Check metadyn_token
+    alt No valid token
+        Unity->>Dashboard: Redirect to login?redirect={space}
+        User->>Dashboard: Authenticate
+        Dashboard->>Supabase: Login/signup
+        Supabase-->>Dashboard: Session
+        Dashboard->>Browser: Set shared metadyn_token cookie
+        Dashboard->>Unity: Redirect back to space
+    end
+    Unity->>Browser: Read cookie token
+    Unity->>Supabase: Validate session + fetch profile
+    Supabase-->>Unity: User UUID + profile data
+    Unity-->>User: Enter world with persistent identity
+```
+
 ## Identity Data Model
 
 ### Current Canonical Identity Backend
@@ -113,6 +148,16 @@ Unity currently uses the fetched profile to restore:
 
 That means current auth is already more than access control. It is the start of persistent presence.
 
+## Current Identity Contract
+
+| Identity Field / Artifact | Current Owner | Current Use In Unity |
+|---|---|---|
+| `auth.users.id` / canonical UUID | Supabase | stable identity anchor |
+| profile `name` | dashboard/profile backend | display identity |
+| profile `avatar_index` | dashboard/profile backend | avatar continuity at spawn |
+| `metadyn_token` cookie | dashboard session layer | runtime session bootstrap |
+| local Unity display state | Unity runtime | presentation only, should not be identity proof |
+
 ## Auth Modes
 
 The imported platform docs describe three modes:
@@ -133,6 +178,14 @@ The imported platform docs describe three modes:
 - `LoginUI.cs` provides direct email/password login
 - useful for testing when the full browser-cookie flow is unavailable
 
+### Auth Mode Comparison
+
+| Mode | Best For | Main Tradeoff |
+|---|---|---|
+| Guest | demos, open testing, low-friction entry | weak continuity / no authenticated identity |
+| Web-first | real product flow, cross-space continuity | depends on browser + same-root-domain model |
+| Manual login | editor/testing fallback | not the intended polished production path |
+
 ## Domain Architecture
 
 The current model assumes MetaDyn-controlled surfaces under the same root domain.
@@ -143,6 +196,26 @@ Typical shape:
 - shared cookie on `.metadyn.xyz`
 
 This same-root-domain model is what makes the current cookie-based SSO workable without a more complex brokered handoff.
+
+```mermaid
+flowchart LR
+    Dashboard[dashboard.metadyn.xyz] --> Cookie[metadyn_token\n domain=.metadyn.xyz]
+    Cookie --> Unity1[Unity Space A\n*.metadyn.xyz]
+    Cookie --> Unity2[Unity Space B\n*.metadyn.xyz]
+    Cookie --> Hyperfy[Hyperfy Surface\n*.metadyn.xyz]
+```
+
+## Identity Continuity Value
+
+The current model already creates several kinds of continuity:
+
+| Continuity Type | Current Status | Mechanism |
+|---|---|---|
+| Login continuity | implemented | shared cookie + dashboard redirect flow |
+| Avatar continuity | implemented for Unity | Supabase profile `avatar_index` |
+| Canonical user identity | implemented | Supabase UUID |
+| Cross-space entry continuity | partly implemented | shared auth + hosted spaces under same root domain |
+| Cross-runtime profile continuity | in progress / next major documentation target | Unity + Hyperfy data alignment |
 
 ## Current Strengths
 
@@ -180,11 +253,29 @@ The next integration step should therefore be understood as:
 
 That is the more accurate current framing than “auth is not yet unified.”
 
+### Cross-Runtime Continuity Priorities
+
+| Priority | Why It Matters |
+|---|---|
+| username/display name continuity | user recognizability across runtimes |
+| avatar continuity | consistent embodied identity |
+| canonical UUID continuity | unified account and permissions model |
+| logout/session clearing coherence | trust and predictability |
+| profile-field ownership clarity | avoids runtime-specific drift |
+
 ## Custom Domain Implication
 
 The current cookie model depends on `.metadyn.xyz`. If a space is served from a customer-owned domain, that space cannot read the MetaDyn root-domain cookie directly.
 
 That creates a future requirement for a more explicit auth handoff, likely dashboard-mediated, when custom domains become a standard product feature.
+
+### Custom Domain Tension Table
+
+| Concern | Why It Exists | Likely Direction |
+|---|---|---|
+| Shared cookie access | cookies do not cross unrelated root domains | brokered redirect or token exchange |
+| Smooth launch UX | user should still feel one-login continuity | dashboard-mediated handoff |
+| Security | raw token passing must be disciplined | short-lived exchange or signed handoff |
 
 ## Security And Operational Notes
 
@@ -210,6 +301,23 @@ Current highest-priority concerns now include:
 - JavaScript-readable shared browser tokens increasing XSS sensitivity on trusted subdomains
 
 See `security-priority-fixes.md` for the priority remediation plan and file-level patch scope.
+
+## Trust Boundary Model
+
+```mermaid
+flowchart TD
+    Dashboard[Dashboard Login] --> Cookie[Shared Browser Cookie]
+    Cookie --> UnityBridge[WebAuthBridge / AuthBridge.jslib]
+    UnityBridge --> Validate[Supabase Session Validation]
+    Validate --> Profile[Profile Fetch]
+    Profile --> Runtime[Unity Runtime Presentation State]
+
+    Runtime -. should not be treated as proof .-> Authz[Authorization Decisions]
+    Validate --> Authz
+```
+
+The key rule is simple:
+**validated identity can inform authorization; mutable runtime display state should not.**
 
 ## Recommended Documentation Position
 
