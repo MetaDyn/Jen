@@ -14,30 +14,120 @@ def load_token() -> str:
     return m.group(1)
 
 
+def convert_table(block_lines):
+    rows = []
+    for line in block_lines:
+        raw = line.strip()
+        if not raw.startswith('|'):
+            return block_lines
+        cells = [c.strip() for c in raw.strip('|').split('|')]
+        rows.append(cells)
+    if len(rows) >= 2 and all(re.fullmatch(r':?-{3,}:?', c) for c in rows[1]):
+        header = rows[0]
+        body = rows[2:]
+    else:
+        header = None
+        body = rows
+    out = []
+    if header:
+        out.append('^ ' + ' ^ '.join(header) + ' ^')
+    for row in body:
+        out.append('| ' + ' | '.join(row) + ' |')
+    return out
+
+
 def md_to_dokuwiki(md: str, title: str) -> str:
     lines = md.splitlines()
     out = [f'====== {title} ======', '']
-    for line in lines:
-        if line.startswith('### '):
-            out += [f'==== {line[4:].strip()} ====', '']
-        elif line.startswith('## '):
-            out += [f'===== {line[3:].strip()} =====', '']
-        elif line.startswith('# '):
+    i = 0
+    in_code = False
+    code_lang = None
+    code_buf = []
+
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
+
+        m = re.match(r'^```\s*([A-Za-z0-9_-]+)?\s*$', stripped)
+        if m:
+            if not in_code:
+                in_code = True
+                code_lang = (m.group(1) or '').lower()
+                code_buf = []
+            else:
+                if code_lang == 'mermaid':
+                    out.append('<mermaid>')
+                    out.extend(code_buf)
+                    out.append('</mermaid>')
+                    out.append('')
+                elif code_lang:
+                    out.append(f'<code {code_lang}>')
+                    out.extend(code_buf)
+                    out.append('</code>')
+                    out.append('')
+                else:
+                    out.append('<code>')
+                    out.extend(code_buf)
+                    out.append('</code>')
+                    out.append('')
+                in_code = False
+                code_lang = None
+                code_buf = []
+            i += 1
             continue
-        elif re.match(r'^- ', line):
-            out.append('  * ' + line[2:])
-        else:
-            out.append(line)
-    return '\n'.join(out).rstrip() + '\n'
+
+        if in_code:
+            code_buf.append(line)
+            i += 1
+            continue
+
+        if stripped.startswith('### '):
+            out += [f'==== {stripped[4:].strip()} ====', '']
+            i += 1
+            continue
+        if stripped.startswith('## '):
+            out += [f'===== {stripped[3:].strip()} =====', '']
+            i += 1
+            continue
+        if stripped.startswith('# '):
+            i += 1
+            continue
+
+        if re.match(r'^\|.*\|\s*$', stripped):
+            block = []
+            while i < len(lines) and re.match(r'^\|.*\|\s*$', lines[i].strip()):
+                block.append(lines[i])
+                i += 1
+            out.extend(convert_table(block))
+            out.append('')
+            continue
+
+        if re.match(r'^- ', stripped):
+            out.append('  * ' + stripped[2:])
+            i += 1
+            continue
+
+        out.append(line)
+        i += 1
+
+    if in_code:
+        out.append('<code>')
+        out.extend(code_buf)
+        out.append('</code>')
+        out.append('')
+
+    body = '\n'.join(out)
+    body = re.sub(r'\n{3,}', '\n\n', body).rstrip() + '\n'
+    return body
 
 
-def put_page(page: str, body: str, summary: str):
+def rpc(method: str, params: list):
     token = load_token()
     payload = json.dumps({
         'jsonrpc': '2.0',
         'id': 1,
-        'method': 'wiki.putPage',
-        'params': [page, body, {'sum': summary}],
+        'method': method,
+        'params': params,
     }).encode()
     req = urllib.request.Request(
         RPC_URL,
@@ -47,8 +137,13 @@ def put_page(page: str, body: str, summary: str):
     with urllib.request.urlopen(req, timeout=60) as resp:
         res = json.load(resp)
     if 'error' in res:
-        raise SystemExit(f"RPC error for {page}: {res['error']}")
-    print(f"UPDATED {page}: {res.get('result')}")
+        raise SystemExit(f"RPC error for {method}: {res['error']}")
+    return res.get('result')
+
+
+def put_page(page: str, body: str, summary: str):
+    res = rpc('wiki.putPage', [page, body, {'sum': summary}])
+    print(f"UPDATED {page}: {res}")
 
 
 if __name__ == '__main__':
