@@ -13,6 +13,24 @@ The current documented product shape has three related parts:
 
 The practical challenge is that the current codebase already contains much of this functionality, but the package boundaries are still transitional.
 
+## What Productization Means Here
+
+In MetaDyn, productization does not just mean “zip up some scripts.”
+It means turning a powerful but historically evolved Unity platform into a repeatable creator product with:
+- clear file ownership
+- stable install/update expectations
+- explicit dependency contracts
+- in-editor visibility
+- safe upgrade behavior
+- a documented split between reusable systems and project content
+
+A productized SDK should answer all of these questions cleanly:
+- What belongs to MetaDyn and should travel between projects?
+- What can be updated safely?
+- What must stay under creator/project control?
+- How does a creator understand update state from inside Unity?
+- How do deployment, identity, and runtime bridges fit into the SDK contract?
+
 ## Current Product Boundary
 
 ### What Counts As SDK Today
@@ -56,6 +74,17 @@ That is important for two reasons:
 1. the updater should not invent a fantasy file layout that the working project does not use
 2. product docs should reflect current operational reality, not only future cleanup goals
 
+## SDK Product Surface Map
+
+| Surface | What It Includes | Why It Is Part Of The SDK Product |
+|---|---|---|
+| Runtime systems | interaction, social, audio, AI, auth bootstrap, user list | These are the reusable platform capabilities creators rely on |
+| Editor tooling | MetaDyn Dashboard, menu, project config, deployment manager | The SDK experience is intentionally Unity-native |
+| Browser bridge layer | WebGL `.jslib` files, mic processor, auth bridge | WebGL is the primary delivery target, so browser interop is core product surface |
+| Deployment tooling | deploy UX, config, version-aware tooling | Deployment is part of creator workflow, not separate ops garnish |
+| Dependency contract | Photon Fusion compatibility and required versions | The SDK is incomplete without its networking substrate |
+| Update system | local manifest, remote manifest plan, dashboard update state | Productization requires visible lifecycle management |
+
 ## Why Productization Matters
 
 Without clear SDK boundaries, MetaDyn risks several problems:
@@ -98,6 +127,18 @@ Examples:
 
 These are part of the SDK story because the primary target is WebGL.
 
+## SDK Component Taxonomy
+
+| Category | Example Files / Systems | Productization Implication |
+|---|---|---|
+| Core runtime components | `Interactable`, `SeatHotspot`, `ProjectionSurface`, `Trigger` | Should become clean reusable package content |
+| Session/player bootstrap | `GameManager`, `Player`, `PlayerInput`, `UIGameMenu` | Transitional today, but effectively baseline SDK |
+| Identity/auth bridge | `SupabaseAuthManager`, `WebAuthBridge`, `AuthBridge.jslib` | Platform-critical and tightly tied to hosted identity flow |
+| Social/presence | user list, name tags, moderation-adjacent runtime | Core platform value, not optional garnish |
+| Voice/media | WebRTC bridge, mic processor, lip sync adapters | Must remain visible as WebGL/runtime dependencies |
+| Editor UX | dashboard, menus, config assets, deployment manager | Must feel like an integrated toolkit |
+| Update machinery | manifest, version comparison, tracked roots | Needed for a credible install/update lifecycle |
+
 ## SDK Experience Goals
 
 The imported docs already point toward a productized creator experience inside Unity.
@@ -112,6 +153,37 @@ Expected UX:
 - eventually browse/install optional components
 
 This matters because MetaDyn is not just shipping runtime scripts. It is shipping a creator workflow.
+
+## Creator Experience Flow
+
+```mermaid
+flowchart TD
+    OpenUnity[Creator opens Unity project] --> Bootstrap[MetaDyn editor bootstrap runs]
+    Bootstrap --> LocalVersion[Read local SDK manifest/version]
+    Bootstrap --> RemoteManifest[Fetch remote SDK manifest - planned]
+    LocalVersion --> Compare[Compare installed vs latest]
+    RemoteManifest --> Compare
+
+    Compare --> Status[Show SDK status in MetaDyn Dashboard]
+    Status --> Fusion[Show supported + installed Photon Fusion version]
+    Status --> Update{Update available?}
+
+    Update -->|No| Continue[Continue working normally]
+    Update -->|Yes| Review[Review release notes / compatibility / warnings]
+    Review --> Apply[Run controlled update flow]
+    Apply --> Validate[Validate tracked roots + dependency state]
+    Validate --> Continue
+```
+
+## Distribution Model Layers
+
+| Layer | Purpose | Current State |
+|---|---|---|
+| Source of truth | GitHub/release/manifest-backed SDK source | Planned direction |
+| Local project metadata | installed version + tracked roots | Present via local manifest direction |
+| Unity editor UI | update visibility and actions | Mock UI exists, real fetch still pending |
+| Update engine | replace tracked roots safely | Planned, not fully implemented |
+| Optional component catalog | discover/install extra modules | Planned only |
 
 ## Update System Direction
 
@@ -143,6 +215,29 @@ That means update productization needs:
 - migration notes when needed
 - a safe user-controlled flow rather than silent mutation
 
+## Update Decision Table
+
+| Situation | Expected Dashboard State | Expected Updater Behavior |
+|---|---|---|
+| Installed version matches latest | `Up to date` | Disable update button |
+| New compatible version exists | `Update available` | Allow creator-controlled update |
+| Remote manifest fetch fails | `Check failed` or equivalent | Do not mutate project |
+| Fusion version incompatible | Warning / blocked state | Require correction before normal update |
+| Local SDK files modified | Warning / review state | Avoid silent overwrite; require explicit review |
+| Installed version below migration floor | Special migration warning | Do not treat as standard in-place update |
+
+## Remote Manifest Contract
+
+| Field | Purpose | Why It Matters |
+|---|---|---|
+| `latestVersion` | current SDK release | drives update decision |
+| `minimumSupportedVersion` | minimum direct-update floor | protects against unsafe leap updates |
+| `unity.minimumVersion` | baseline supported Unity version | avoids invalid editor combinations |
+| `unity.recommendedVersion` | preferred editor version | gives creators a target environment |
+| `fusion.supportedVersion` | expected networking dependency version | avoids subtle networking drift |
+| `downloadUrl` | release artifact source | powers the update flow |
+| `trackedRoots` | canonical replace/manage scope | defines what the updater owns |
+
 ## Photon Fusion As A Product Dependency
 
 The docs are explicit that Photon Fusion is a required dependency of the MetaDyn SDK.
@@ -157,6 +252,16 @@ MetaDyn should treat Fusion as:
 - a clearly surfaced compatibility item in the editor dashboard
 - part of the supported installation contract
 
+### Fusion Visibility Table
+
+| Fusion Concern | Product Requirement |
+|---|---|
+| Supported version | Show exact supported version in dashboard |
+| Installed version | Detect and display local project version |
+| Compatibility mismatch | Warn clearly before update/install actions |
+| Distribution expectation | Treat as required dependency of a working SDK install |
+| Licensing/scale nuance | Document separately when relevant, but keep compatibility visible in Unity |
+
 ## The MetaDyn Bridge / Service Direction
 
 The imported SDK docs point at an architectural improvement that would make productization stronger: a clearer central bridge/service model rather than direct singleton discovery everywhere.
@@ -167,6 +272,27 @@ Suggested future direction includes:
 - cleaner separation between stable SDK-facing contracts and project-level implementation details
 
 This is not yet the full current implementation, but it is a useful north star for documentation and refactoring decisions.
+
+### Service-Oriented SDK Target
+
+```mermaid
+flowchart LR
+    Creator[Creator / Project Code] --> Bridge[MetaDynBridge]
+
+    Bridge --> Auth[Auth Service]
+    Bridge --> Users[Users / Presence Service]
+    Bridge --> Voice[Voice Service]
+    Bridge --> AI[AI Embodiment Service]
+    Bridge --> Deploy[Deployment Service]
+    Bridge --> Config[Runtime Config Service]
+
+    Auth --> Supabase[Supabase / Dashboard Identity]
+    Voice --> WebGL[WebGL Bridge + WebRTC]
+    Users --> Fusion[Photon Fusion]
+    Deploy --> Host[Host / Deployment API]
+```
+
+This target matters because a productized SDK should expose a stable conceptual API even while underlying implementation details evolve.
 
 ## Starter Template vs SDK
 
@@ -183,6 +309,14 @@ Environment-specific assets, scene polish, and world-specific glue that should n
 
 This distinction is one of the main things that prevents future update pain.
 
+## Deliverable Boundary Matrix
+
+| Deliverable | Includes | Excludes |
+|---|---|---|
+| MetaDyn SDK | reusable runtime/editor/platform systems, browser bridges, deployment tooling, dependency contract | project-specific environment art, bespoke scenes, client-specific content |
+| Starter Space Template | SDK + starter environment + baseline setup | unrelated customer/world-specific customization |
+| Project Content | scene-specific polish, custom world logic, activation-specific assets | reusable MetaDyn platform systems unless explicitly extended |
+
 ## Deployment Tooling Belongs In The SDK
 
 One of the most important product decisions in the imported docs is that deployment tooling is not separate ops garnish. It is part of the SDK.
@@ -193,6 +327,19 @@ That means:
 - the SDK is partly a runtime package and partly a creator operations surface
 
 That is a stronger and more ambitious product stance than a conventional “asset pack.”
+
+## SDK Ownership And Update Safety
+
+A productized SDK needs clear answers on who owns what.
+
+| Asset / Area | Default Owner | Update Safety Expectation |
+|---|---|---|
+| SDK runtime/editor files | MetaDyn | Updater may manage when tracked |
+| Browser bridge files | MetaDyn | Updater may manage when tracked |
+| Template baseline files | Shared / transitional | Needs careful review during updates |
+| Scenes and environment content | Creator / project | Must not be silently overwritten |
+| Avatar assets and bespoke content | Creator / project | Outside normal SDK replacement scope |
+| ProjectSettings | Project / template-specific | Not part of SDK by default |
 
 ## Current Packaging Gaps
 
@@ -205,6 +352,19 @@ Most important ones:
 4. update/install safety mechanisms need more detail
 5. optional component/catalog install flow is still planned, not realized
 6. the final package/install story for external use is still being formed
+
+## Productization Roadmap Shape
+
+```mermaid
+flowchart TD
+    Current[Current state:\nsubstantial SDK, transitional boundaries] --> Boundary[Formalize SDK vs template vs project ownership]
+    Boundary --> Manifest[Complete remote manifest + version check flow]
+    Manifest --> Updater[Implement safe tracked-root updater]
+    Updater --> Detection[Add local modification detection / warnings]
+    Detection --> Distribution[Finalize package/release distribution model]
+    Distribution --> Catalog[Add optional component catalog]
+    Catalog --> Mature[Credible installable MetaDyn SDK product]
+```
 
 ## Documentation Guidance
 
@@ -231,6 +391,17 @@ The normalized docs should keep pointing readers to four distinct concerns:
 4. Which systems are baseline SDK versus optional installable modules?
 5. What is the exact division between SDK and starter-space template over time?
 
+## Recommended Next Moves
+
+| Priority | Move | Why |
+|---|---|---|
+| High | Finish remote manifest fetch in `MetaDynDashboard` | Makes update UX real instead of conceptual |
+| High | Formalize tracked-root ownership contract | Prevents destructive or fuzzy updates |
+| High | Document local modification handling rules | Protects creator trust |
+| Medium | Clarify package-friendly folder targets | Reduces long-term packaging friction |
+| Medium | Define optional modules vs baseline SDK | Enables cleaner product tiers |
+| Medium | Harden dependency validation around Fusion | Avoids install drift |
+
 ## Source Basis
 
 Primary imported sources used in this synthesis:
@@ -238,3 +409,4 @@ Primary imported sources used in this synthesis:
 - `import/unity6-docs/.claude/Quick Reference/SDK_TOOLKIT_INVENTORY.md`
 - `import/unity6-docs/.claude/Quick Reference/SDK_UPDATE_MANIFEST.md`
 - `import/unity6-docs/.claude/Planning/MetaDyn_Platform_PRD_v1.0.md`
+- `import/unity6-docs/.claude/Planning/Dashboard_Unity_Hyperfy_Flows.md`
