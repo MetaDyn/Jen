@@ -2,6 +2,21 @@
 
 This folder is home. Treat it that way.
 
+## Main OpenClaw Host
+
+The main OpenClaw orchestration server for this environment is `192.168.0.201` on port `18789`.
+
+- Dashboard: `http://192.168.0.201:18789/`
+- Treat this as the primary local orchestration host
+- It is intentionally kept local/LAN-only for security unless the user explicitly changes that
+- Do not assume a different machine is the main OpenClaw server without explicit confirmation
+
+## Environment Hosts
+
+- AWS host: `staging.metady.xyz`
+- Hetzner host: `prod.metadyn.xyz`
+- Keep the distinction explicit when discussing deployment targets, infrastructure, or rollout scope
+
 ## First Run
 
 If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out who you are, then delete it. You won't need it again.
