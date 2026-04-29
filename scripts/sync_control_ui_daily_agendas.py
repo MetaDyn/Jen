@@ -94,6 +94,19 @@ def replace_object(text: str, path: str, replacement: str) -> str:
 
 def main() -> None:
     text = BUNDLE.read_text()
+
+    # Newer control-ui builds load daily agendas dynamically from
+    # docs/operations/daily-agendas/ via metadyn-docs/index.html instead of
+    # embedding a serialized docs object inside the JS bundle. In that mode,
+    # there is nothing to patch in the bundle; the archive is already the
+    # source of truth as soon as the markdown file exists on disk.
+    if 'operations/daily-agendas' not in text:
+        print(
+            'Daily agendas are dynamically discovered from docs/operations/daily-agendas/; '
+            'no embedded bundle sync needed.'
+        )
+        return
+
     text = replace_object(text, 'operations/daily-agendas', build_root_object())
     for month_dir in sorted(p for p in ARCHIVE_ROOT.iterdir() if p.is_dir() and re.match(r'^[A-Za-z]+-\d{4}$', p.name)):
         text = replace_object(text, f'operations/daily-agendas/{month_dir.name}', build_month_object(month_dir))
