@@ -12,6 +12,10 @@ The current Unity platform has **two distinct voice systems**:
 
 These should be documented separately but understood together, because they shape the same platform experience: embodied, social, browser-delivered presence.
 
+## Current Production Direction Note
+
+As of the 2026-05-25 UGS production sprint milestone, the active UGS Starter branch treats **Vivox** as the production player voice/text direction, while AI voice remains its own separate pipeline. Older WebRTC descriptions in this doc remain useful for historical context, specialized browser-media work, and legacy/reference understanding, but should not be mistaken for the declared active UGS baseline.
+
 ## Why Voice Matters In MetaDyn
 
 MetaDyn is not aiming to be a static 3D web viewer.
@@ -90,14 +94,15 @@ Current documented files include:
 
 ### Current Behavior
 
-The imported docs describe the current realtime voice system as:
-- production-ready in the current project context
+For the active migrated UGS branch, the current production direction is Vivox-backed player voice/text integrated with the session/user-list flow.
+
+The imported docs also describe an earlier/current-adjacent realtime voice system that is:
 - browser-native WebRTC based
 - spatially aware
 - integrated with avatar lip sync
 - using mesh topology rather than SFU routing
 
-That is a serious, meaningful implementation state — but it comes with clear scale implications.
+That reference implementation remains important context for browser-media work and embodiment features, but the active UGS baseline should now be documented primarily through the Vivox path.
 
 ## AI Voice And Social Voice Must Be Kept Conceptually Separate
 
@@ -208,5 +213,8 @@ Primary imported sources used in this synthesis:
 - `import/unity6-docs/.claude/Quick Reference/INFRASTRUCTURE.md`
 - `import/unity6-docs/.claude/Quick Reference/QUICK_REFERENCE.md`
 - `import/unity6-docs/.claude/Quick Reference/SDK_TOOLKIT_INVENTORY.md`
+- `import/unity6-docs/.claude/Planning/WebRTC_Scaling_Options.md`
+- `import/unity6-docs/.claude/Planning/MetaDyn_Platform_PRD_v1.0.md`
+TOOLKIT_INVENTORY.md`
 - `import/unity6-docs/.claude/Planning/WebRTC_Scaling_Options.md`
 - `import/unity6-docs/.claude/Planning/MetaDyn_Platform_PRD_v1.0.md`

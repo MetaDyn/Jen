@@ -6,6 +6,8 @@ This document captures the current social-runtime model of the MetaDyn Unity 6 p
 
 MetaDyn’s Unity runtime is built around a clear product goal: users should enter a shared world with persistent identity, realtime voice, and enough moderation/control primitives to make the experience feel like a platform instead of a demo.
 
+As of the 2026-05-25 UGS production sprint milestone, the active Starter runtime path should be understood as **UGS/NGO-first** rather than Fusion-first. Older Fusion language in this document remains useful as implementation history/reference context, but should not be mistaken for the declared active production baseline on the migrated branch.
+
 The current documented foundation is:
 - Photon Fusion multiplayer
 - Shared Mode networking

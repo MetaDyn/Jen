@@ -81,6 +81,9 @@ A few points are worth keeping explicit throughout this doc set:
 - Each Unity space is currently treated as its **own build**.
 - Deployment tooling is considered part of the SDK/product story, not separate internal ops garnish.
 - The SDK is real and substantial today, but its packaging and update story are still transitional.
+- The active Starter runtime path now uses **UGS/NGO** as the declared networking baseline.
+- The active UGS voice/text direction is **Vivox**, while browser/WebRTC work remains relevant for adjacent/legacy or specialized media cases.
+- Mobile browser support is now part of the practical runtime hardening track, not just a distant future aspiration.
 - The current social/voice stack is meaningful and usable, but very large-room media scale will require a later SFU path.
 
 ## Source Basis

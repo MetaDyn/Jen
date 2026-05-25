@@ -240,17 +240,17 @@ That means update productization needs:
 
 ## Photon Fusion As A Product Dependency
 
-The docs are explicit that Photon Fusion is a required dependency of the MetaDyn SDK.
+The older docs describe Photon Fusion as a required dependency of the MetaDyn SDK, but that is no longer the best description of the active Starter runtime baseline.
 
-Current supported version:
-- `Photon Fusion 2.0.9 Stable`
+Current platform direction after the UGS migration sprint:
+- the active Starter networking baseline is **UGS + Netcode for GameObjects (NGO)**
+- the dashboard/product surface should prioritize visibility into installed UGS packages and Unity Services readiness
+- Photon/Fusion may still appear in historical or reference-only contexts, but it should not be presented as the primary production requirement for the migrated branch
 
-That should remain visible in the docs because the SDK is not complete without its required networking substrate.
-
-MetaDyn should treat Fusion as:
-- a required dependency in install/update planning
-- a clearly surfaced compatibility item in the editor dashboard
-- part of the supported installation contract
+MetaDyn should now treat the networking dependency contract as:
+- required UGS/NGO package visibility in install/update planning
+- clear editor/dashboard surfacing for Unity Services readiness
+- explicit differentiation between active baseline dependencies and legacy/reference context
 
 ### Fusion Visibility Table
 
