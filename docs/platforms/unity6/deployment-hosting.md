@@ -56,6 +56,8 @@ MetaDyn also intends to support self-hosted deployments where:
 - customers, partners, or studios deploy to infrastructure they control
 - the same core deployment model still applies
 - runtime config, deployment metadata, and routing remain important
+- creators can preserve long-term independence from MetaDyn-operated services when desired
+- a standalone path should remain possible even if the creator later disconnects from MetaDyn-connected auth or ecosystem features
 
 ### Hosting Model Comparison
 

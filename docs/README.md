@@ -28,6 +28,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `platforms/unity6/realtime-voice.md` — AI voice path, WebRTC player voice, and media scale direction
 - `platforms/unity6/deployment-hosting.md` — deployment, Cloudflare, hosting, and delivery model
 - `platforms/unity6/sdk-productization.md` — SDK boundary, updater direction, and productization gaps
+- `platforms/unity6/open-sdk-and-hosting-model-2026-05-25.md` — open-source SDK stance, self-host vs MetaDyn-hosted model, and optional ecosystem-connected value
 - `platforms/unity6/platform-deep-dive.md` — strengths, gaps, and strategic direction
 - `platforms/unity6/import-notes.md` — mapping from raw imported material into the normalized docs
 - `platforms/immersive-spaces.md` — cross-platform immersive-space context outside Unity

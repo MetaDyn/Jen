@@ -96,6 +96,17 @@ Without clear SDK boundaries, MetaDyn risks several problems:
 
 Productization is what turns “we have a sophisticated project” into “we have a platform.”
 
+## Open SDK And Connected Ecosystem Direction
+
+A major product decision documented on 2026-05-25 sharpens the intended release model:
+- the advanced SDK itself is intended to be released as an **open-source SDK**
+- creators should be able to self-host and run their own build independently
+- creators should also be able to host with MetaDyn or connect to the broader MetaDyn ecosystem for added value
+- the connected ecosystem layer can carry membership-gated or service-gated benefits
+- the platform should not strand creators if MetaDyn disappears; a creator should be able to disable MetaDyn authentication in Unity and keep running their own build
+
+This is a strategically important clarification because it means productization is not only about packaging. It is also about preserving creator continuity, trust, and exit safety while still creating strong reasons to participate in the wider MetaDyn network.
+
 ## Current SDK Scope Categories
 
 ### 1. Runtime Systems

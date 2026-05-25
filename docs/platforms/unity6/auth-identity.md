@@ -182,8 +182,8 @@ The imported platform docs describe three modes:
 
 | Mode | Best For | Main Tradeoff |
 |---|---|---|
-| Guest | demos, open testing, low-friction entry | weak continuity / no authenticated identity |
-| Web-first | real product flow, cross-space continuity | depends on browser + same-root-domain model |
+| Guest / Standalone | demos, open testing, low-friction entry, independent/self-hosted continuity | weak continuity / no authenticated identity |
+| Web-first | real product flow, cross-space continuity, MetaDyn-connected ecosystem value | depends on browser + same-root-domain model |
 | Manual login | editor/testing fallback | not the intended polished production path |
 
 ## Domain Architecture
@@ -348,5 +348,8 @@ That balance matters. The docs should not undersell what is working, and they sh
 Primary imported sources used in this synthesis:
 - `import/unity6-docs/.claude/Quick Reference/AUTH_SYSTEM.md`
 - `import/unity6-docs/.claude/Planning/Dashboard_Unity_Hyperfy_Flows.md`
+- `import/unity6-docs/.claude/Planning/MetaDyn_Platform_PRD_v1.0.md`
+- workspace `MEMORY.md` for current platform reality around Unity ↔ Hyperfy continuity
+ude/Planning/Dashboard_Unity_Hyperfy_Flows.md`
 - `import/unity6-docs/.claude/Planning/MetaDyn_Platform_PRD_v1.0.md`
 - workspace `MEMORY.md` for current platform reality around Unity ↔ Hyperfy continuity

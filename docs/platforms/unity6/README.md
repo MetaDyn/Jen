@@ -59,6 +59,8 @@ If you want the fastest solid understanding of the platform, read in this order:
 ### Deployment And Productization
 - `deployment-hosting.md` — per-space deployment, hosting models, Cloudflare/nginx delivery, and deployment architecture
 - `sdk-productization.md` — what the SDK currently is, package boundaries, updater direction, and productization gaps
+- `ugs-production-sprint-summary-2026-05-25.md` — milestone summary for the completed UGS migration worklist plus mobile/WebGL, Vivox, and SDK-hardening sprint
+- `open-sdk-and-hosting-model-2026-05-25.md` — open-source SDK stance, self-host vs MetaDyn-hosted model, optional MetaDyn-connected ecosystem value, and planned platform-site IA direction
 
 ### Source Mapping
 - `import-notes.md` — mapping from the imported `.claude` material into this normalized doc set

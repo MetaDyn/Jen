@@ -36,3 +36,5 @@ These statements are intended as the current canonical starting point. They can 
 - social/community bios
 - pitch decks
 - documentation front matter
+
+A current website/product-IA direction reported on 2026-05-25 is to give the platform its own clearer public surface under routes such as `platform.metadyn.xyz`, including onboarding paths like `platform.metadyn.xyz/getting-started`, while removing Photon as the active platform story from the site.
