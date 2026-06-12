@@ -1,141 +1,131 @@
-# MetaDyn CRM Integration
+# MetaDyn CRM + Calendly Integration
 
 ## Purpose
 
-This document describes Jen's local integration with `https://crm.metadyn.xyz`, which is currently a Twenty CRM instance.
+This document describes MetaDyn's operational CRM and scheduling bridge:
 
-The integration is designed to give Jen and future MetaDyn agents a reliable, auditable, scriptable way to work with CRM data without embedding raw secrets in docs or chat flows.
+- Twenty CRM at `https://crm.metadyn.xyz`
+- Calendly direct API access plus CRM sync flows
 
-## Current State
+The goal is a reliable, auditable operator surface for reading and updating CRM context, then turning scheduled meetings into usable follow-up context instead of scattered chat residue.
 
-Jen now has a working local CRM toolkit backed by the Twenty GraphQL API.
+## Current Implementation
 
-Current implementation files:
+Primary files:
 
-- `tools/metadyn_crm.py` — primary CLI for CRM operations
+- `tools/metadyn_crm.py` — main Twenty CRM CLI
+- `tools/metadyn_crm_mcp.py` — lightweight stdio MCP-style bridge for the CRM CLI
 - `tools/metadyn_crm_list_companies.py` — compatibility wrapper for simple company listing
-- `tools/metadyn_calendly.py` — direct Calendly API integration plus CRM bridge flows
+- `tools/metadyn_calendly.py` — Calendly direct API integration plus CRM bridge flows
 
-Secrets are intentionally kept out of version control.
-The API tokens are stored locally outside the repo in:
+Local secrets live outside the repo:
 
 - `/home/jza/.openclaw/.secrets/metadyn-crm-api-key`
 - `/home/jza/.openclaw/.secrets/calendly-api-key`
 
 ## Design Goals
 
-- keep the CRM API as the source of truth
-- expose a small, practical operational surface for agents
-- prefer explicit commands over vague API calls
-- support both human CLI usage and future MCP-style tool wrapping
-- avoid committing credentials or customer-sensitive dumps into the workspace
+- keep Twenty as the CRM source of truth
+- expose a narrow, practical command surface instead of vague raw API access
+- support both direct operator use and future tool wrapping
+- keep additive workflows easy and destructive workflows explicit
+- avoid committing credentials or broad customer data dumps into the workspace
 
-## Supported Capabilities
+## What This Tooling Is Good At
 
-### Company operations
+### CRM
 
-- list companies
-- search companies by name/domain
-- get one company by id or name filter
-- create company
-- update company
+- companies
+- people
+- internal team/workspace-member lookup
+- notes
+- tasks
+- opportunities
+- structured JSON/RPC-style operations
 
-### Person operations
+### Calendly
 
-- list people
-- list people scoped to a company
-- create person
-- update person
+- account/profile confirmation
+- event type listing
+- scheduled event listing
+- contact listing/creation
+- webhook subscription listing/creation
+- syncing meetings into CRM people/companies/notes/tasks
+- pushing a CRM person into Calendly contacts for continuity
 
-### Notes
-
-- create a note
-- attach a note to a company
-- attach a note to a person
-- list notes associated with a company
-- list notes associated with a person
-
-### Tasks
-
-- create task
-- optionally attach task to a company
-- optionally attach task to a person
-
-### Calendly integration layer
-
-Calendly is wired as a direct API integration rather than an MCP auth surface.
-That is deliberate: for MetaDyn's workflow automation, the enterprise-ready path is a stable direct API bridge that can:
-
-- read Calendly user/profile state
-- list event types
-- list scheduled events
-- list/create webhook subscriptions
-- list/create Calendly contacts
-- sync meeting activity into CRM people/companies/notes/tasks
-- push CRM people into Calendly contacts when Josh wants contact continuity both ways
-
-The current implementation uses a Calendly personal access token from:
-
-- `/home/jza/.openclaw/.secrets/calendly-api-key`
-
-### Higher-level operation layer
-
-A lightweight MCP-style operation wrapper is included via the `rpc` command.
-This allows callers to invoke structured operations such as:
-
-- `company.list`
-- `company.search`
-- `company.get`
-- `company.create`
-- `company.update`
-- `person.list`
-- `person.create`
-- `person.update`
-- `note.list`
-- `note.create`
-- `task.create`
-
-This is not a full MCP server yet, but it provides a clean operation contract that can be wrapped by one later with minimal translation.
-
-## CLI Usage
+## Command Surface Reference
 
 Run from the workspace root:
 
 ```bash
 ./tools/metadyn_crm.py <command> [...args]
+./tools/metadyn_calendly.py <command> [...args]
 ```
 
-### List companies
+---
+
+## CRM CLI Reference
+
+### Commands
+
+| Command | Purpose |
+|---|---|
+| `list-companies` | List companies |
+| `search-companies` | Search companies by term |
+| `get-company` | Get one company by id or name |
+| `create-company` | Create company |
+| `update-company` | Update company |
+| `list-people` | List people, optionally scoped to a company |
+| `list-team` | List/search internal Twenty workspace members |
+| `create-person` | Create person |
+| `update-person` | Update person |
+| `list-notes` | List notes linked to a company or person |
+| `create-note` | Create note |
+| `update-note` | Update note |
+| `delete-note` | Delete note |
+| `list-tasks` | List tasks, optionally scoped to company/person/opportunity/status |
+| `create-task` | Create task |
+| `update-task` | Update task |
+| `list-opportunities` | List opportunities |
+| `create-opportunity` | Create opportunity |
+| `update-opportunity` | Update opportunity |
+| `rpc` | Structured JSON operation wrapper |
+
+### Companies
+
+#### List companies
 
 ```bash
-./tools/metadyn_crm.py list-companies --limit 10
+./tools/metadyn_crm.py list-companies --limit 10 --offset 0
 ```
 
-### Search companies
+#### Search companies
 
 ```bash
-./tools/metadyn_crm.py search-companies Netflix
+./tools/metadyn_crm.py search-companies Netflix --limit 10
 ```
 
-### Get company details
+#### Get company details
 
 ```bash
 ./tools/metadyn_crm.py get-company --id <company-id>
 ./tools/metadyn_crm.py get-company --name Netflix
 ```
 
-### Create a company
+#### Create company
 
 ```bash
 ./tools/metadyn_crm.py create-company \
   --name "Acme Studios" \
   --domain-label acmestudios.com \
   --domain-url https://acmestudios.com \
+  --linkedin-label "Acme Studios" \
+  --linkedin-url https://linkedin.com/company/acme-studios \
   --employees 45 \
   --icp
 ```
 
-### Update a company
+#### Update company
 
 ```bash
 ./tools/metadyn_crm.py update-company \
@@ -144,14 +134,28 @@ Run from the workspace root:
   --employees 60
 ```
 
-### List people
+Supported company fields in create/update flows:
+
+- `--name`
+- `--domain-label`
+- `--domain-url`
+- `--linkedin-label`
+- `--linkedin-url`
+- `--x-label`
+- `--x-url`
+- `--employees`
+- `--icp`
+
+### People
+
+#### List people
 
 ```bash
 ./tools/metadyn_crm.py list-people
 ./tools/metadyn_crm.py list-people --company-id <company-id>
 ```
 
-### Create a person
+#### Create person
 
 ```bash
 ./tools/metadyn_crm.py create-person \
@@ -159,10 +163,11 @@ Run from the workspace root:
   --last-name Doe \
   --email jane@acmestudios.com \
   --job-title "Partnerships Director" \
+  --city "Los Angeles" \
   --company-id <company-id>
 ```
 
-### Update a person
+#### Update person
 
 ```bash
 ./tools/metadyn_crm.py update-person \
@@ -171,7 +176,39 @@ Run from the workspace root:
   --city "Los Angeles"
 ```
 
-### Create a note
+Supported person fields in create/update flows:
+
+- `--first-name`
+- `--last-name`
+- `--email`
+- `--job-title`
+- `--city`
+- `--company-id`
+- `--linkedin-label`
+- `--linkedin-url`
+- `--x-label`
+- `--x-url`
+- `--avatar-url`
+
+### Internal Team / Workspace Members
+
+This is the important distinction inside Twenty:
+
+- **People** = external contacts
+- **Team / workspace members** = internal MetaDyn staff
+
+Use `list-team` when you need an internal owner/assignee surface.
+
+```bash
+./tools/metadyn_crm.py list-team
+./tools/metadyn_crm.py list-team --term Chris --limit 10
+```
+
+This is the correct lookup path before assigning opportunity owners with `--owner-id`.
+
+### Notes
+
+#### Create note
 
 ```bash
 ./tools/metadyn_crm.py create-note \
@@ -180,14 +217,46 @@ Run from the workspace root:
   --company-id <company-id>
 ```
 
-### List notes for a company or person
+#### List notes
 
 ```bash
 ./tools/metadyn_crm.py list-notes --company-id <company-id>
 ./tools/metadyn_crm.py list-notes --person-id <person-id>
 ```
 
-### Create a task
+#### Update note
+
+```bash
+./tools/metadyn_crm.py update-note \
+  --id <note-id> \
+  --title "Discovery call - updated" \
+  --body "Added recap and next steps."
+```
+
+#### Delete note
+
+```bash
+./tools/metadyn_crm.py delete-note --id <note-id>
+```
+
+### Tasks
+
+#### List tasks
+
+```bash
+./tools/metadyn_crm.py list-tasks --status TODO --limit 20
+./tools/metadyn_crm.py list-tasks --company-id <company-id>
+./tools/metadyn_crm.py list-tasks --person-id <person-id>
+./tools/metadyn_crm.py list-tasks --opportunity-id <opportunity-id>
+```
+
+Valid task statuses:
+
+- `TODO`
+- `IN_PROGRESS`
+- `DONE`
+
+#### Create task
 
 ```bash
 ./tools/metadyn_crm.py create-task \
@@ -198,15 +267,98 @@ Run from the workspace root:
   --company-id <company-id>
 ```
 
-## Calendly CLI Usage
+A task can also be attached to a person or opportunity.
 
-Run from the workspace root:
+#### Update task
 
 ```bash
-./tools/metadyn_calendly.py <command> [...args]
+./tools/metadyn_crm.py update-task \
+  --id <task-id> \
+  --status IN_PROGRESS \
+  --assignee-id <workspace-member-id>
 ```
 
-### Confirm the Calendly token / account
+Supported task update fields:
+
+- `--title`
+- `--body`
+- `--due-at`
+- `--status`
+- `--assignee-id`
+
+### Opportunities
+
+#### List opportunities
+
+```bash
+./tools/metadyn_crm.py list-opportunities --limit 25
+./tools/metadyn_crm.py list-opportunities --term Nelson
+./tools/metadyn_crm.py list-opportunities --company-id <company-id>
+./tools/metadyn_crm.py list-opportunities --person-id <person-id>
+./tools/metadyn_crm.py list-opportunities --stage MEETING
+```
+
+Valid opportunity stages:
+
+- `NEW`
+- `SCREENING`
+- `MEETING`
+- `PROPOSAL`
+- `CUSTOMER`
+
+#### Create opportunity
+
+```bash
+./tools/metadyn_crm.py create-opportunity \
+  --name "Acme Spatial Pilot" \
+  --stage SCREENING \
+  --amount 25000 \
+  --currency USD \
+  --company-id <company-id> \
+  --owner-id <workspace-member-id>
+```
+
+#### Update opportunity
+
+```bash
+./tools/metadyn_crm.py update-opportunity \
+  --id <opportunity-id> \
+  --stage MEETING \
+  --amount 40000 \
+  --owner-id <workspace-member-id>
+```
+
+Supported opportunity fields:
+
+- `--name`
+- `--close-date`
+- `--stage`
+- `--amount`
+- `--currency`
+- `--company-id`
+- `--person-id`
+- `--owner-id`
+
+---
+
+## Calendly CLI Reference
+
+### Commands
+
+| Command | Purpose |
+|---|---|
+| `whoami` | Confirm the active Calendly account/token |
+| `list-event-types` | List event types |
+| `list-contacts` | List contacts |
+| `create-contact` | Create a Calendly contact |
+| `list-scheduled-events` | List scheduled events |
+| `list-webhook-subscriptions` | List webhook subscriptions |
+| `create-webhook-subscription` | Create webhook subscription |
+| `sync-event-to-crm` | Pull a scheduled event into CRM |
+| `sync-webhook-to-crm` | Turn a Calendly webhook payload into CRM context |
+| `push-crm-person-to-contact` | Seed a CRM person into Calendly contacts |
+
+### Confirm token / account
 
 ```bash
 ./tools/metadyn_calendly.py whoami
@@ -215,31 +367,66 @@ Run from the workspace root:
 ### List event types
 
 ```bash
-./tools/metadyn_calendly.py list-event-types --limit 10
+./tools/metadyn_calendly.py list-event-types --scope user --limit 10
+./tools/metadyn_calendly.py list-event-types --scope organization --limit 10 --json
 ```
 
-### List upcoming scheduled events
+### List scheduled events
 
 ```bash
 ./tools/metadyn_calendly.py list-scheduled-events --upcoming --limit 10
+./tools/metadyn_calendly.py list-scheduled-events --invitee-email jane@acmestudios.com
+./tools/metadyn_calendly.py list-scheduled-events --status canceled --json
 ```
 
-### List Calendly contacts
+Useful filters:
+
+- `--scope user|organization`
+- `--status active|canceled`
+- `--min-start-time <iso>`
+- `--max-start-time <iso>`
+- `--invitee-email <email>`
+- `--sort <field:dir>`
+- `--upcoming`
+- `--json`
+
+### List contacts
 
 ```bash
 ./tools/metadyn_calendly.py list-contacts --limit 25
+./tools/metadyn_calendly.py list-contacts --json
 ```
 
-### Create a Calendly contact directly
+### Create a contact
 
 ```bash
 ./tools/metadyn_calendly.py create-contact \
   --first-name Jane \
   --last-name Doe \
   --email jane@acmestudios.com \
+  --phone +18165551234 \
+  --job-title "Partnerships Director" \
   --company "Acme Studios" \
-  --job-title "Partnerships Director"
+  --linkedin https://linkedin.com/in/janedoe \
+  --time-zone America/Chicago \
+  --city Kansas_City \
+  --state Missouri \
+  --country US
 ```
+
+Supported contact fields:
+
+- `--first-name`
+- `--last-name`
+- `--email`
+- `--phone`
+- `--job-title`
+- `--company`
+- `--linkedin`
+- `--time-zone`
+- `--city`
+- `--state`
+- `--country`
 
 ### Push an existing CRM person into Calendly contacts
 
@@ -247,15 +434,18 @@ Run from the workspace root:
 ./tools/metadyn_calendly.py push-crm-person-to-contact --person-id <person-id>
 ```
 
+This is the clean reverse-continuity path when an important CRM contact should also exist in Calendly.
+
 ### List webhook subscriptions
 
 ```bash
 ./tools/metadyn_calendly.py list-webhook-subscriptions --limit 10
+./tools/metadyn_calendly.py list-webhook-subscriptions --organization <org-uri> --json
 ```
 
-### Create a webhook subscription
+### Create webhook subscription
 
-Use this when you have a workflow endpoint ready to receive Calendly events.
+Use this once a controlled receiver endpoint exists.
 
 ```bash
 ./tools/metadyn_calendly.py create-webhook-subscription \
@@ -264,13 +454,19 @@ Use this when you have a workflow endpoint ready to receive Calendly events.
   --event invitee.canceled
 ```
 
+Optional fields:
+
+- `--organization <org-uri>`
+- `--user <user-uri>`
+- `--signing-key <secret>`
+
 ### Sync a scheduled event into CRM
 
-This pulls the scheduled event plus invitees from Calendly, then:
+This pulls the scheduled event and invitees from Calendly, then:
 
 - finds or creates the CRM person by invitee email
-- finds or creates the CRM company from the email domain when it looks like a company domain
-- creates a CRM note with the meeting summary
+- finds or creates the CRM company from the email domain when it looks like a real company domain
+- creates a CRM note with meeting context
 - optionally creates a follow-up/prep task
 
 ```bash
@@ -281,22 +477,34 @@ This pulls the scheduled event plus invitees from Calendly, then:
 
 ### Sync a webhook payload into CRM
 
-This is the most practical automation path for production workflows.
-Feed a saved webhook JSON payload to the bridge:
+This is the best current automation path.
+
+From file:
 
 ```bash
 ./tools/metadyn_calendly.py sync-webhook-to-crm --file /path/to/calendly-webhook.json --create-task
 ```
 
-Or stream it via stdin from an automation layer:
+Or via stdin:
 
 ```bash
 cat /path/to/calendly-webhook.json | ./tools/metadyn_calendly.py sync-webhook-to-crm --create-task
 ```
 
-## MCP-Style Operation Layer
+Optional fallback fetch support:
 
-The `rpc` mode accepts a JSON payload with `operation` and `params`.
+```bash
+./tools/metadyn_calendly.py sync-webhook-to-crm \
+  --file /path/to/calendly-webhook.json \
+  --event-uri https://api.calendly.com/scheduled_events/<event-uuid> \
+  --create-task
+```
+
+---
+
+## RPC / MCP-Style Operation Layer
+
+The CRM CLI includes a structured JSON wrapper through `rpc`.
 
 Example:
 
@@ -323,71 +531,91 @@ Another example:
 }'
 ```
 
-## Operational Notes
+Current operation families include:
 
-- The CRM integration talks directly to Twenty's GraphQL API.
-- The Calendly integration talks directly to Calendly's REST API using a PAT.
-- The helper prefers narrow, task-oriented commands instead of exposing arbitrary raw GraphQL or arbitrary raw Calendly calls by default.
-- The Calendly→CRM sync path is intentionally conservative and additive:
-  - it does not delete CRM records
-  - it only creates companies automatically when the invitee email domain looks like a real company domain
-  - it ignores common free-mail domains for company auto-creation
-- The clean operational pattern for MetaDyn is:
-  1. create a Calendly webhook subscription to a controlled workflow endpoint
-  2. let that workflow hand the payload to `sync-webhook-to-crm`
-  3. create CRM notes/tasks automatically so Chris and Josh can act on the next step immediately
-- The reverse continuity path is `push-crm-person-to-contact`, which lets an important CRM contact be seeded into Calendly's contacts surface.
+- `company.*`
+- `person.*`
+- `note.*`
+- `task.*`
+- `opportunity.*`
+
+This is not a full long-running MCP server, but it is a clean structured contract that can be wrapped by one.
+
+---
+
+## Practical Operator Patterns
+
+### 1) Use Calendly as the scheduling front door
+
+- let meetings enter through Calendly
+- sync the result into CRM notes/tasks
+- work the follow-up from CRM
+
+### 2) Use team lookup before assigning owners
+
+When assigning an opportunity or task owner, use `list-team` first so you are using the internal workspace-member surface, not an external Person record.
+
+### 3) Keep CRM notes pointed at the next move
+
+A good note should usually capture:
+
+- current status
+- who owns next action
+- next checkpoint
+- funding/contact logic if relevant
+
+### 4) Prefer additive writes
+
+The bridge is strongest when it is adding:
+
+- context
+- notes
+- tasks
+- ownership clarity
+
+That fits the intended workflow better than heavy structural mutation.
+
+---
 
 ## Known Limitations
 
-- This is not yet a full long-running MCP server process.
-- The current interface is local CLI + JSON operation wrapper on the CRM side, plus local direct REST calls on the Calendly side.
-- The Calendly webhook command expects a payload shape compatible with Calendly scheduled-event webhooks and uses defensive fallback fetching when fields are missing.
-- There is not yet a dedicated always-on webhook receiver in this workspace; the current bridge assumes an upstream workflow runner or endpoint will pass payloads into the CLI.
-- CRM opportunity auto-linking from Calendly meetings is not yet implemented; notes/tasks currently attach to people/companies.
-- Assignee-aware task workflows are not yet implemented in the Calendly sync path.
-
-## Recommended MetaDyn Workflow Usage
-
-1. Use Calendly as the scheduling front door.
-2. Register webhook subscriptions for at least:
-   - `invitee.created`
-   - `invitee.canceled`
-3. Point those webhooks at a controlled MetaDyn workflow endpoint.
-4. Have that workflow call `sync-webhook-to-crm` so every meeting becomes CRM context automatically.
-5. For high-value prospects already in CRM, use `push-crm-person-to-contact` so contact context exists in Calendly too.
-6. Let Chris/Josh work from CRM notes/tasks instead of manually reconstructing meeting history.
+- not a full always-on MCP server yet
+- no dedicated always-on webhook receiver in this workspace yet
+- Calendly webhook automation still assumes an upstream workflow/endpoint hands payloads into the CLI
+- Calendly meeting sync does not yet auto-link notes/tasks to an existing opportunity
+- Calendly sync does not yet do assignee-aware task routing
+- destructive CRM actions are intentionally not the easy/default path
 
 ## Recommended Next Steps
 
-1. Add a small receiver/automation endpoint that validates Calendly webhook signatures and forwards payloads into this bridge.
-2. Add opportunity matching logic so meetings can automatically attach to the right active opportunity when one clearly exists.
-3. Add assignee-aware task workflows and task ownership tooling.
-4. Add audit-oriented logging around write actions if this becomes a multi-agent shared integration.
-5. Optionally wire the stdio bridge into OpenClaw/ACP-facing tool registration so CRM operations become first-class callable tools.
-6. Add approval-aware wrappers for destructive operations so deletion requests can automatically route to Josh for confirmation.
+1. Add a small receiver endpoint that validates Calendly webhook signatures and forwards payloads into `sync-webhook-to-crm`.
+2. Add opportunity matching so meeting activity can attach to the correct live opportunity when the match is clear.
+3. Add assignee-aware task routing for Chris/Josh/internal owners.
+4. Add audit-oriented logging around write actions if this becomes a heavier shared integration.
+5. Optionally expose the CRM operation layer as a first-class registered tool surface.
+6. Add approval-aware wrappers for destructive flows.
 
 ## Approval Rules
 
-For CRM actions that are potentially destructive or materially risky, Jen should seek approval from Josh Garrett before proceeding.
+Potentially destructive or materially risky CRM actions should get approval from Josh Garrett before execution.
 
 Primary approval contact:
 
 - Josh Garrett — Discord user ID `709916025101090886`
 
-Examples of actions that should require approval before execution:
+Examples that should require approval:
 
 - deleting a company
 - deleting a person
 - bulk deletes or bulk updates
-- major record merges
-- destructive pipeline or ownership changes
-- any action that could materially alter customer/prospect history or remove important CRM data
+- major merges
+- destructive ownership/pipeline changes
+- any action that could materially alter prospect/customer history or remove important CRM data
 
 Practical rule:
 
-- low-risk reads and normal additive actions are fine without approval
-- destructive or major write actions should pause, reach out to Josh for approval, and then proceed once approved
+- normal reads and ordinary additive writes are fine
+- destructive or major risky writes should pause for approval
 
 ## Security Rules
 
@@ -395,16 +623,4 @@ Practical rule:
 - Never dump broad customer datasets into docs or memory files.
 - Prefer targeted queries over large exports.
 - Treat CRM writes as production actions.
-- For bulk or potentially destructive updates, require explicit human confirmation.
-ctical rule:
-
-- low-risk reads and normal additive actions are fine without approval
-- destructive or major write actions should pause, reach out to Josh for approval, and then proceed once approved
-
-## Security Rules
-
-- Never commit API keys, bearer tokens, or raw CRM credentials.
-- Never dump broad customer datasets into docs or memory files.
-- Prefer targeted queries over large exports.
-- Treat CRM writes as production actions.
-- For bulk or potentially destructive updates, require explicit human confirmation.
+- For bulk or destructive updates, require explicit human confirmation.
