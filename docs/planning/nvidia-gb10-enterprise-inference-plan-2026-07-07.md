@@ -13,9 +13,12 @@ MetaDyn is considering:
 - upgrading Jen / OpenClaw infrastructure toward a more professional Nvidia-centered stack
 - using Nvidia-oriented components described in current discussion as NemoClaw, Hermes, and OpenShell
 - purchasing **2 x Dell Pro Max GB10** systems with networking
+- starting with just the first **2 units** as the initial production footprint
 - moving toward running Jen more directly on dedicated production infrastructure
+- using the current system here as a migration source, example deployment, and potentially a reusable enterprise baseline/system image
 - eventually running **Nemotron** models custom-trained for MetaDyn
 - using this infrastructure not just internally, but as the basis for a revenue-generating **enterprise inference** offer
+- potentially hosting Unity WebGL workloads directly on a GB10 as part of the same enterprise-grade platform story
 
 ## Initial Commercial Thesis
 
