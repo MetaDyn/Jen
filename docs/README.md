@@ -33,6 +33,11 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `platforms/unity6/import-notes.md` — mapping from raw imported material into the normalized docs
 - `platforms/immersive-spaces.md` — cross-platform immersive-space context outside Unity
 
+## Planning
+
+- `planning/Runtime_Avatar_Upload_And_Rigging_Plan.md` — runtime GLB avatar upload, Supabase persistence, auto-rigging, NGO sync, and the verified owner-authoritative animation fix.
+- `planning/MetaDyn_UGS_SDK_Production_PunchList.md` — production readiness punch-list for the UGS/NGO SDK baseline, including validation, hardening, migration, social, economy, and creator tooling priorities.
+
 ## Project Workspaces
 
 - `projects/README.md` — index for active project-specific working memory
@@ -45,6 +50,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 
 - `operations/community-marketing-cadence.md` — weekly and monthly operating cadence for community + marketing
 - `runbooks/repo-setup.md` — repo and local environment setup
+- `runbooks/openclaw-openai-codex-oauth-refresh.md` — fix `openai-codex` OAuth token refresh failures in main OpenClaw chat
 - `runbooks/local-static-demo-server.md` — local static serving for LAN/testing
 - `runbooks/cloudflare-jen-tunnel.md` — recommended HTTPS ingress pattern for `jen.metadyn.xyz`
 - `runbooks/grafana-supabase-monitoring.md` — Grafana deployment pattern for Supabase reporting at `monitor.metadyn.xyz`
