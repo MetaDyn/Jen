@@ -50,6 +50,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 
 - `operations/community-marketing-cadence.md` — weekly and monthly operating cadence for community + marketing
 - `runbooks/repo-setup.md` — repo and local environment setup
+- `runbooks/ingest-platform-context.md` — lightweight workflow for turning new platform docs into lasting Jen context without bloating every session startup
 - `runbooks/openclaw-openai-codex-oauth-refresh.md` — fix `openai-codex` OAuth token refresh failures in main OpenClaw chat
 - `runbooks/local-static-demo-server.md` — local static serving for LAN/testing
 - `runbooks/cloudflare-jen-tunnel.md` — recommended HTTPS ingress pattern for `jen.metadyn.xyz`
