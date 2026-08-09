@@ -11,6 +11,40 @@ The main OpenClaw orchestration server for this environment is `192.168.0.201` o
 - It is intentionally kept local/LAN-only for security unless the user explicitly changes that
 - Do not assume a different machine is the main OpenClaw server without explicit confirmation
 
+### Fast Dashboard Token Refresh
+
+If the OpenClaw dashboard token is expired or Josh asks for an authorized link, run:
+
+```bash
+openclaw dashboard --no-open
+```
+
+That prints a fresh tokenized localhost URL. For LAN access, keep the printed `#token=...` fragment and replace the host with the primary OpenClaw host:
+
+```text
+http://192.168.0.201:18789/#token=<printed-token>
+```
+
+If needed, confirm the gateway is running with `openclaw status`. Do not rotate the configured gateway token unless Josh explicitly asks for rotation; the dashboard helper is the fast path for a fresh authorized UI link.
+
+### Emergency OpenAI Codex OAuth Refresh
+
+If Josh asks to refresh the OpenAI token, Codex token, `openai-codex` token, or says to follow the OpenAI/Codex OAuth refresh runbook, treat it as an urgent lockout recovery procedure.
+
+Do exactly the existing runbook procedure in `docs/runbooks/openclaw-openai-codex-oauth-refresh.md`:
+
+```bash
+openclaw models auth login --provider openai-codex
+```
+
+Do not start by editing docs, auditing the runbook, changing model routing, adding fallbacks, rotating gateway/dashboard tokens, changing OpenClaw config, or looking for something else to fix. Run the refresh flow first, provide the OAuth URL, accept the full redirect URL, then verify with:
+
+```bash
+openclaw models status --plain
+```
+
+Only troubleshoot beyond that if the refresh command itself fails or Josh explicitly asks for more investigation.
+
 ## Environment Hosts
 
 - AWS host: `staging.metady.xyz`
