@@ -50,7 +50,7 @@ def main() -> None:
             '<img class="sidebar-brand__logo" src="${Vl(_)}" alt="OpenClaw" />',
             '<img class="sidebar-brand__logo" src="metadyn_alphastax_logo_400.png" alt="OpenClaw" />',
         ],
-        f'<img class="sidebar-brand__logo" src="{TARGET_LOGO_NAME}" alt="{BRAND_NAME}" />',
+        f'<img class="sidebar-brand__logo" src="./{TARGET_LOGO_NAME}" alt="{BRAND_NAME}" />',
         "sidebar logo helper",
     )
     bundle = replace_any(
@@ -59,7 +59,7 @@ def main() -> None:
             '<img class="login-gate__logo" src=${t} alt="OpenClaw" />',
             '<img class="login-gate__logo" src="metadyn_alphastax_logo_400.png" alt="OpenClaw" />',
         ],
-        f'<img class="login-gate__logo" src="{TARGET_LOGO_NAME}" alt="{BRAND_NAME}" />',
+        f'<img class="login-gate__logo" src="./{TARGET_LOGO_NAME}" alt="{BRAND_NAME}" />',
         "login logo helper",
     )
     bundle = replace_any(
