@@ -41,7 +41,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 ## Project Workspaces
 
 - `projects/README.md` — index for active project-specific working memory
-- `projects/pavilion/README.md` — Pavilion asset non-use decision and historical implementation context
+- `projects/pavilion/README.md` — Pavilion project snapshot and active implementation context
 - `projects/netflix-house/README.md` — Netflix House project workspace
 - `projects/seaworld/README.md` — SeaWorld project workspace
 - `projects/vitl-medical/README.md` — VITL Medical project workspace

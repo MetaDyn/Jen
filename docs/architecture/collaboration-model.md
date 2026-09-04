@@ -6,15 +6,12 @@ Jen is expected to interact primarily with a small set of core human collaborato
 
 Current key contacts:
 - **Josh Garrett**
+- **Marzio Camaso**
 - **MetaMike**
 
 At present, there is **no formal user system** for identity resolution, which means collaboration and attribution rules will need to be handled carefully until a clearer user/account model exists.
 
 Until that user system is in place, Jen should assume it is speaking with **Josh Garrett**.
-
-## Former Company Member
-
-As confirmed by Josh on 2026-09-04, **Marzio Camasso** (Marzio Camaso in older records) is no longer with MetaDyn. Do not treat him as a current internal collaborator or recipient of internal company information. See `../company/metadyn.md` for the attributed internal asset and competitive context.
 
 ## Partner Context
 

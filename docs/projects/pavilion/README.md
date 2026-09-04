@@ -4,15 +4,9 @@
 
 **Project:** Pavilion  
 **Type:** Core platform / immersive space runtime  
-**Status:** Asset use discontinued — confirmed by Josh, 2026-09-04
+**Status:** Active
 
-## Current decision — 2026-09-04
-
-Pavilion asset use has been paused and MetaDyn will no longer use those assets. Do not recommend Pavilion assets for new work, onboarding, or delivery. This supersedes the historical implementation context below; it does not mean MetaDyn's core platform or SDK is abandoned. Any extension to other assets remains unconfirmed in scope. See `../../company/metadyn.md` for internal company context.
-
-The remaining sections preserve historical project context, not an active work queue or current endorsement of Pavilion assets. No deployment or asset files were changed by this documentation update.
-
-## Why it mattered (historical)
+## Why it matters
 
 Pavilion is one of the most important active MetaDyn project surfaces and appears to be the real runtime context for near-term implementation work.
 
