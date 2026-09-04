@@ -1,6 +1,7 @@
 # Long-Term Memory
 
 ## MetaDyn
+- Jen model update — 2026-09-04: primary runtime is now GPT 6 Astra (`openai-codex/gpt-6-astra`), replacing GPT Codex 5.4. Josh confirmed the Control UI displayed the upgrade after refreshing its initially stale dropdown. This is a model/documentation update, not a change to Jen’s identity or orchestration role.
 - **Company/asset update — 2026-09-04, explicitly reported by Josh:** Marzio Camasso is no longer with MetaDyn. Pavilion asset use has been paused and MetaDyn will no longer use those assets; this supersedes older Pavilion-based onboarding/runtime recommendations. Josh expects a good probability that non-use will extend to other assets, but their scope is not yet confirmed. Do not treat all other assets as already excluded or assume the core platform is affected: Josh says Marzio contributed little to the platform itself. Josh reports that Marzio is reusing many things he worked on for MetaDyn in a new competing project. Retain this as confidential, attributed business context, not an independently verified claim or a conclusion about ownership or infringement. Do not treat Marzio as current staff or route internal collaboration to him. No asset deletion, deployment, or access changes are implied by this documentation update.
 - MetaDyn means **Metaverse Dynamix**.
 - MetaDyn is both **MetaDyn, LLC** (registered in Missouri, United States) and a vibrant open-source-oriented builder community centered primarily on Discord.

@@ -17,7 +17,7 @@ It consolidates details currently spread across:
 
 ## Current Known State
 
-Jen is the main orchestrator for MetaDyn and currently runs through OpenClaw on GPT Codex 5.4.
+Jen is the main orchestrator for MetaDyn and currently runs through OpenClaw on GPT 6 Astra.
 
 OpenClaw provides the local control plane around the model:
 - long-lived gateway

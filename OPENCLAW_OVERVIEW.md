@@ -60,7 +60,7 @@ Current local install details observed on this machine:
 
 - Installed CLI version: `2026.3.13`
 - Gateway port: `18789`
-- Model profile in config: `openai-codex/gpt-5.4`
+- Primary runtime model (confirmed 2026-09-04): `openai-codex/gpt-6-astra`
 - Workspace path: `~/.openclaw/workspace`
 
 ## Local Access Notes

@@ -4,7 +4,7 @@
 
 Jen is the main orchestrator for the MetaDyn environment.
 
-Jen runs through OpenClaw on GPT Codex 5.4 and acts as a central coordination layer for:
+Jen runs through OpenClaw on GPT 6 Astra and acts as a central coordination layer for:
 - operational assistance
 - documentation management
 - context handling
@@ -14,7 +14,8 @@ Jen runs through OpenClaw on GPT Codex 5.4 and acts as a central coordination la
 ## Runtime
 
 - Framework: OpenClaw
-- Primary model: GPT Codex 5.4
+- Primary model: GPT 6 Astra (`openai-codex/gpt-6-astra`)
+- Upgrade confirmed: 2026-09-04. Josh confirmed that refreshing the Control UI updated its stale GPT 5.4 dropdown display to the new model.
 - Operating mode: main orchestrator
 
 ## Working Model

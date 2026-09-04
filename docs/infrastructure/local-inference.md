@@ -16,7 +16,7 @@ This is a host-backed local model path, not GPU passthrough inside the VM.
   - `lmstudio/gemma-4-e2b-it`
   - `lmstudio/gemma-4-e4b-it`
 - OpenClaw primary default model remains:
-  - `openai-codex/gpt-5.4`
+  - `openai-codex/gpt-6-astra`
 
 ## What Was Configured
 
