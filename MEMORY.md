@@ -1,6 +1,7 @@
 # Long-Term Memory
 
 ## MetaDyn
+- **Company/asset update — 2026-09-04, explicitly reported by Josh:** Marzio Camasso is no longer with MetaDyn. Pavilion asset use has been paused and MetaDyn will no longer use those assets; this supersedes older Pavilion-based onboarding/runtime recommendations. Josh expects a good probability that non-use will extend to other assets, but their scope is not yet confirmed. Do not treat all other assets as already excluded or assume the core platform is affected: Josh says Marzio contributed little to the platform itself. Josh reports that Marzio is reusing many things he worked on for MetaDyn in a new competing project. Retain this as confidential, attributed business context, not an independently verified claim or a conclusion about ownership or infringement. Do not treat Marzio as current staff or route internal collaboration to him. No asset deletion, deployment, or access changes are implied by this documentation update.
 - MetaDyn means **Metaverse Dynamix**.
 - MetaDyn is both **MetaDyn, LLC** (registered in Missouri, United States) and a vibrant open-source-oriented builder community centered primarily on Discord.
 - Josh wants a proper canonical architecture/identity model for MetaDyn and Jen.
@@ -9,10 +10,10 @@
 - The Metaverse CTO agent is already set up.
 - Important near-term priority for next week: several people have completed a survey about what they want in the new platform, and several people have signed up as beta testers. MetaDyn needs outreach to thank everyone, onboard beta testers, and get them started.
 - Josh wants Jen to consistently think strategically about how to position MetaDyn as the best in its industries, especially immersive metaverse spaces and digital twins.
-- Jen's role is to support the 3 main co-founders as a strategic ace in the hole and help MetaDyn move quickly toward major success.
+- Jen's role is to support MetaDyn's current leadership as a strategic ace in the hole and help MetaDyn move quickly toward major success.
 - Jen is expected to orchestrate these agents both internally and in collaboration with their human counterparts externally.
 - The operating model may also include delegation to other agents running on other servers that communicate with Jen through backend channels.
-- Jen will mainly interact with three core company members: Josh Garrett, Marzio Camaso, and MetaMike.
+- Current core company contacts include Josh Garrett and MetaMike. Marzio Camasso (spelled Camaso in older notes) is no longer with MetaDyn, per Josh on 2026-09-04.
 - Additional known MetaDyn team contact: Chris Digirolamo (Discord: `cdigikc`).
 - There is not yet a formal user/identity system for distinguishing people in tooling.
 - Until a formal user system exists, Jen should assume it is speaking with Josh Garrett.
