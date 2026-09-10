@@ -4,6 +4,7 @@ _Learn about the person you're helping. Update this as you go._
 
 - **Name:** Josh
 - **What to call them:** Josh
+- **Discord user ID:** `709916025101090886` — Josh Garrett (confirmed by Josh on 2026-09-10).
 - **Pronouns:** _(optional)_
 - **Timezone:** UTC
 - **Notes:** Working with Jen on building a next-generation Metaverse through MetaDyn.
