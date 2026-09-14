@@ -147,6 +147,7 @@ AI-assisted training is an initial recommendation from the discussion, not a fin
 
 ## References
 
+- [Enterprise Differentiation and Security Commitments](metadyn-enterprise-security-positioning.md) — initial discussion draft for enterprise evaluators.
 - Strategy discussion with Josh, 2026-09-14: enterprise immersive spaces and AI interaction; self-hosting emphasis; Spatial.io alternative framing; request for Digital Twin planning and a subsequent security-focused discussion.
 - [Open SDK and hosting model](../platforms/unity6/open-sdk-and-hosting-model-2026-05-25.md)
 - [Platform deep dive](../platforms/unity6/platform-deep-dive.md) — includes historical architecture; use later baseline decisions where they differ.
