@@ -35,7 +35,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 
 ## Planning
 
-- `planning/metadyn-enterprise-security-positioning.md` — enterprise-facing discussion draft: differentiation, verifiable security commitments, and a bounded evaluation approach.
+- `planning/metadyn-enterprise-security-positioning.md` — client-facing introduction to MetaDyn differentiation, enterprise security approach, and initial evaluation.
 - `planning/metadyn-digital-twin.md` — enterprise immersive spaces and AI strategy, digital-twin scope, self-hosting boundaries, and next security-planning questions.
 - `planning/Runtime_Avatar_Upload_And_Rigging_Plan.md` — runtime GLB avatar upload, Supabase persistence, auto-rigging, NGO sync, and the verified owner-authoritative animation fix.
 - `planning/MetaDyn_UGS_SDK_Production_PunchList.md` — production readiness punch-list for the UGS/NGO SDK baseline, including validation, hardening, migration, social, economy, and creator tooling priorities.
