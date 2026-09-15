@@ -75,3 +75,10 @@
 
 ## Enterprise focus — 2026-09-14
 - Josh clarified that MetaDyn is shifting its emphasis toward solving immersive spaces and AI interaction within the enterprise, with the new platform's self-hosting capability a key differentiator. Use this as the current strategic emphasis over broader metaverse-first positioning; it does not by itself establish abandonment of community/open-source goals or verified enterprise security/compliance features.
+
+## MetaDyn Agent Toolkit (MAT) — 2026-09-15
+- Josh supplied the context handoff at https://github.com/MetaDyn/Jen/blob/main/docs/planning/jen-quick-reference.md (updated 2026-09-15). MAT connects NVIDIA NeMo, Google ADK, and MetaDyn Digital Fabric through shared contracts and isolated runtime adapters; the documented initial target is Python 3.12 with Google ADK and NVIDIA NeMo Agent Toolkit.
+- The direction separates agent definitions, execution, Fabric connectivity, orchestration, governance, and observability. Fabric is the intended source of truth for identity, topology, asset state, events, policies, and runtime coordination.
+- Enterprise direction: MAT alongside MetaDyn enterprise NemoClaw deployments and Aurora AI Avatars, with intended connectivity to client NemoClaw deployments. Repository is early scaffold; connectivity implementation is unverified and protocols, responsibilities, runtime mappings, and priorities remain undefined. NVIDIA NeMo Agent Toolkit is distinct from NemoClaw.
+- Jen is the internal intelligence/orchestration hub across Editor, cloud, and client; Aurora agents are autonomous embodied agents supported by Jen's broader coordination. Unity/ThreeJS NVIDIA integration paths remain subject to the embodied-agent plan's assumptions and planning status.
+- NVIDIA DLI's Securing Agents with OpenShell and NemoClaw is a shared learning reference, not proof of MAT architecture or client-version compatibility. Verify the build checklist and implementation before asserting capabilities.
