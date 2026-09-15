@@ -35,6 +35,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 
 ## Planning
 
+- `planning/jen-context-intake-plan.md` — draft context-dump protocol and punch list for turning rough input into durable docs and clear next actions.
 - `planning/jen-connected-development.md` — implementation plan and phased punch list for Jen-coordinated WSL/Codex execution and approved external developers.
 - `planning/metadyn-enterprise-client-overview.md` — client-facing overview of platform differentiation, deployment control, security approach, and Digital Twin applications.
 - `planning/metadyn-enterprise-security-positioning.md` — client-facing introduction to MetaDyn differentiation, enterprise security approach, and initial evaluation.
