@@ -24,6 +24,16 @@ MetaDyn's approach focuses on four practical areas:
 
 **Our security value is greater deployment choice and explicit boundaries—not a blanket claim that self-hosting or immersive technology is inherently secure.** Specific controls, external dependencies, and operating responsibilities are assessed for each proposed deployment.
 
+## An Enterprise Hosting Path with Netlify
+
+Through our Netlify hosting partnership, MetaDyn offers a practical starting point for immersive deployments and a path to evaluate Netlify Enterprise as your requirements grow.
+
+Netlify Enterprise offers web-delivery protections such as DDoS protection, WAF, and SSL/TLS, alongside centralized hosting-team permissions, audit logs, and private connectivity options. Its advertised 99.99% uptime SLA and 24/7 support provide an established foundation for discussing enterprise hosting reliability and support.
+
+This lets us combine MetaDyn's immersive experiences and AI interaction with enterprise hosting capabilities, selecting the appropriate plan and configuration with your technology and security teams. These protections apply to the contracted Netlify services; application access, AI permissions, and other connected services remain part of the overall deployment review.
+
+[Explore Netlify Enterprise](https://www.netlify.com/enterprise/). Capabilities and SLA coverage depend on the agreed offering and terms.
+
 ## Applying This to Digital Twins
 
 Immersive representations of facilities, assets, and processes can give teams a shared reference for training, planning, and security preparedness. Contextual AI can help users navigate information and understand procedures within that representation.

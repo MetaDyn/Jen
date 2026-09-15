@@ -120,6 +120,18 @@ Existing security review documents identify authorization-hardening concerns. Th
 
 No security architecture, new service, control integration, or production change is authorized by this planning document.
 
+## Netlify Enterprise Hosting Progression
+
+Josh confirmed on 2026-09-15 that MetaDyn partners with Netlify for hosting and is placing new clients on Netlify plans. This provides a potential progression from initial experiences to Netlify Enterprise as customer governance, support, and delivery requirements grow, rather than requiring a wholesale change of the immersive platform.
+
+Netlify's Enterprise page advertises global edge delivery, automated build/deploy pipelines, unified staging and review workflows, DDoS protection, WAF, SSL/TLS, private connectivity, centralized role-based team management, audit logs, a 99.99% uptime SLA, and 24/7 support. It also points enterprise evaluators toward its compliance and assurance materials.
+
+Strategic division of responsibility: MetaDyn supplies the immersive application and AI experience; Netlify supplies the contracted web-hosting and delivery capabilities. Netlify Enterprise is a managed-hosting upgrade path, not synonymous with customer-premises hosting or an entirely private MetaDyn stack.
+
+Next planning step: define the upgrade path with the Netlify partner contact, including account ownership, commercial terms, upgrade triggers, security evidence, and support responsibilities. Treat this as a proposed roadmap until those details are confirmed. Netlify's assurances do not automatically extend to MetaDyn application authorization, UGS/Vivox, identity, or AI services.
+
+Source: [Netlify Enterprise](https://www.netlify.com/enterprise/), reviewed 2026-09-15. Feature eligibility and contractual scope require confirmation.
+
 ## Commercial Approach
 
 Recommended initial approach: validate one bounded, repeatable enterprise workflow before presenting an all-purpose digital-twin platform.
