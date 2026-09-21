@@ -50,6 +50,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 - `projects/netflix-house/README.md` — Netflix House project workspace
 - `projects/seaworld/README.md` — SeaWorld project workspace
 - `projects/vitl-medical/README.md` — VITL Medical project workspace
+- `projects/morgan-stanley/README.md` — Morgan Stanley Unity immersive art gallery discovery and subagent brief
 
 ## Operations, Runbooks, And Standards
 

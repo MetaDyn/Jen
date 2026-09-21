@@ -35,5 +35,6 @@ Each project `README.md` should try to answer:
 - `netflix-house/`
 - `seaworld/`
 - `vitl-medical/`
+- `morgan-stanley/` — Unity immersive art gallery discovery and subagent brief
 
 This structure is intentionally simple. Add depth inside each project folder as the work becomes real.
