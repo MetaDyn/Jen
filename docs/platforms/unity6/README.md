@@ -18,15 +18,16 @@ That means these docs are not just “Unity project notes.” They are platform 
 
 ## Current Platform Snapshot
 
-- Engine: **Unity 6** (`6000.0.62f1` documented baseline)
+**Unity project sync: 2026-10-04.** This dated snapshot supersedes older networking and SDK-status statements in this doc set where they conflict. It reflects Unity project documentation and the public SDK release; it is not a live Editor or production check.
+
+- Engine: **Unity 6** (`6000.0.67f1` in the current Unity workspace)
 - Rendering: **URP 17.0.4**
-- Networking: **Photon Fusion 2.0.9 Stable**
-- Primary Delivery Target: **WebGL**
-- Auth Backend: **Supabase**
-- Edge / DNS / SSL: **Cloudflare**
-- Player Voice: **WebRTC**
-- AI Voice Stack: **Whisper + LLM provider(s) + ElevenLabs**
-- Avatar Continuity: **profile-linked**, including persisted avatar selection
+- Networking: **UGS Multiplayer Sessions 2.3.0 + NGO 2.7.0 Distributed Authority**, with Relay WSS for WebGL; Photon Fusion is historical for this Starter baseline
+- Primary delivery target: **WebGL**; native is secondary
+- Auth backend: **Supabase** for MetaDyn accounts and profiles, with UGS Authentication for session participants
+- WebGL communication: **NGO DA room text + browser WebRTC spatial voice**; native Vivox remains supported
+- SDK release: **v1.4.0 core source**, published 2026-09-26; companion browser bridges, configured player assets, and glTFast Resources materials remain outside the standalone package
+- Production readiness: **open**; clean-project install and full WebGL regression gates have not been recorded as passed
 
 ## Recommended Reading Order
 
@@ -82,13 +83,21 @@ A few points are worth keeping explicit throughout this doc set:
 - Hyperfy unified login is no longer just a future aspiration; the next documentation step is profile/data continuity across surfaces, not merely raw login parity.
 - Each Unity space is currently treated as its **own build**.
 - Deployment tooling is considered part of the SDK/product story, not separate internal ops garnish.
-- The SDK is real and substantial today, but its packaging and update story are still transitional.
-- The active Starter runtime path now uses **UGS/NGO** as the declared networking baseline.
-- The active UGS voice/text direction is **Vivox**, while browser/WebRTC work remains relevant for adjacent/legacy or specialized media cases.
+- The SDK v1.4.0 core source is released, while a clean install, companion-asset packaging, and WebGL regression coverage remain open.
+- The active Starter runtime uses **UGS/NGO Distributed Authority**. The former Relay listen-server host-migration approach was rejected after runtime testing.
+- WebGL room text uses the NGO DA player RPC path and browser spatial voice uses WebRTC. Native Vivox remains supported.
 - Mobile browser support is now part of the practical runtime hardening track, not just a distant future aspiration.
 - The current social/voice stack is meaningful and usable, but very large-room media scale will require a later SFU path.
 
+## Verified behavior and next gates
+
+Owner-built WebGL tests in August 2026 passed two-client DA join/spawn, roughly five minutes of movement and animation, uninterrupted departure in both directions, and rejoin. A later two-client test passed DA text delivery, bidirectional WebRTC voice, mute/unmute, and speaking indicators. These are bounded runtime observations, not a production-ready declaration.
+
+The exact 2026-08-29 missing-join-code recovery is present in source but awaits an owner-built WebGL test. Three-player reliability, shared-object authority, broader chat/voice/avatar regression, and clean-project package installation remain open. Follow the Unity workspace `.claude/session_notes/2026-08-20_UGS_DA_MULTIPLAYER_RESTART_HANDOFF.md` and `.claude/Planning/SDK_NEXT_RELEASE_PREPARATION.md` for the detailed gates.
+
 ## Source Basis
+
+Current sync sources: Unity workspace `.claude/CHANGELOG.md` (2026-09-26 and 2026-08-29), the multiplayer restart handoff, and `SDK_NEXT_RELEASE_PREPARATION.md`. Public SDK release: [MetaDynSDK v1.4.0](https://github.com/MetaDyn/MetaDynSDK/releases/tag/v1.4.0).
 
 Primary source material for this section came from:
 - `import/unity6-docs/.claude/Quick Reference/`
