@@ -1,6 +1,10 @@
 # MetaDyn UGS SDK Production Punch-List
-**Status:** Post-Migration / Pre-Production  
-**Target:** Master SDK v1.2.0 (UGS/NGO Baseline)
+**Status:** Historical checklist with a 2026-10-04 status correction; pre-production  
+**Current public SDK release:** v1.4.0 core source (2026-09-26)
+
+> **Current networking direction:** The Unity Starter uses UGS Multiplayer Sessions with NGO Distributed Authority. The Relay listen-server host-migration work under Pillar 3 below was rejected after runtime testing and must not be treated as an active implementation plan. Its checkboxes are historical. See the Unity workspace `.claude/session_notes/2026-08-20_UGS_DA_MULTIPLAYER_RESTART_HANDOFF.md` for the DA architecture and exact validation gates.
+>
+> The v1.4.0 public package contains avatar upload/restore and DA core source. Browser bridges, the microphone worklet, configured player assets, and glTFast Resources materials are still project-level companions. Two-client DA continuity and basic WebGL chat/voice passed owner-built tests; the 2026-08-29 missing-join-code retry, clean package install, three-player reliability, shared-object authority, and full regression remain open. This note reflects Unity project documentation, not a live production or Editor check.
 
 ---
 
