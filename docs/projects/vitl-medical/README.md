@@ -5,7 +5,7 @@
 **Project:** VITL Medical  
 **Type:** medical simulation / client platform experience  
 **Status:** Active  
-**Current focus:** Milestone 1 end-to-end learner loop for the infant UTI scenario
+**Current focus:** Milestone 1 learner loop and pilot PIN analytics/reporting
 
 ## Why it matters
 
@@ -16,6 +16,16 @@ VITL is shaping into a meaningful MetaDyn simulation product surface, not just a
 - model-backed communication scoring
 - structured patient-history capture
 - analytics/reporting architecture for future assessment use
+
+## Pilot analytics and reporting update (2026-10-04)
+
+- Unity C# now carries the accepted PIN through session context and adds `pin_code` to the access-granted event and later Umami events. The existing `simulation_started` event is expected to carry that field when it fires after access. Unity does not perform PIN lookup. Source: `VITL-Medical/Assets/MetaDyn/Core/Runtime/Components/Access/MetaDynAccessPanel.cs`, `MetaDynSessionContext.cs`, and `Assets/MetaDyn/Analytics/UmamiAnalytics.cs`.
+- The separate, private [VITL-Reporting React repository](https://github.com/MetaDyn/VITL-Reporting) is at commit [`164224a`](https://github.com/MetaDyn/VITL-Reporting/commit/164224a). Its PIN-only page calls the existing Umami site directly, lists matching custom `session_id` values, and opens chronological event reports. It has no separate API host or Netlify Function.
+- The dedicated read-only `vitl` Umami account was added to the MetaDyn team holding the website. The reporting app's `VITE_` credential settings are embedded in its static browser build; the project owner accepted that exposure for this account. Do not copy credentials into these docs.
+- The project owner reported a successful Netlify build and a visible PIN form over HTTPS. A live PIN lookup and event report are **not yet verified**. The updated Unity code has not been built or deployed as part of this update; a new PIN-gated Unity session is needed to produce lookup data.
+- The companion [VITL-Web repository](https://github.com/MetaDyn/VITL-Web) updated the welcome and movement video embeds in commit [`b1eb781`](https://github.com/MetaDyn/VITL-Web/commit/b1eb781).
+
+**Next:** After the project owner deploys the Unity update and records a new session, look up its PIN in VITL-Reporting and confirm the expected events appear in time order. The Unity project remains authoritative for implementation state. Local handoff: `VITL-Medical/.claude/SESSION_HANDOFF.md`.
 
 ## Current understanding
 
@@ -115,10 +125,9 @@ Milestone 1 should not try to prove:
 
 ## Recommended next actions
 
-- turn Milestone 1 into a concrete build checklist
-- define the first implementation pass for `VITLPatientIntakeController` and `VITLPatientIntakeRecord`
-- document the exact Activity 1 -> Activity 2 demo path as the primary proof sequence
-- capture any real repo / scene / prefab specifics once we begin code-grounded implementation review
+- Deploy the updated Unity C# analytics code through the project's normal Unity workflow, then record a new PIN-gated session.
+- In VITL-Reporting, use that PIN to confirm the session list and chronological events, including `simulation_started` when recorded. Treat this as pending until observed.
+- Continue the Milestone 1 learner-loop and structured-intake work according to the Unity project's current plans.
 
 ## Files in this project workspace
 
