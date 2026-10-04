@@ -244,6 +244,18 @@ It currently anchors or is expected to anchor:
 
 That makes the dashboard the **front door** to the broader MetaDyn fabric, not a separate app living beside it.
 
+## Dashboard Status Snapshot (2026-10-04)
+
+The dashboard repository is [jgarrettvml/dashboard-scaffolding](https://github.com/jgarrettvml/dashboard-scaffolding). Its `.claude/PROJECT_CONTEXT.md`, `.claude/SESSION_HANDOFF.md`, `.claude/AUTH_WALLET_DEV_STATUS.md`, `.claude/STRIPE_MEMBERSHIP_IMPLEMENTATION_PLAN.md`, and `.claude/ADMIN_MODERATION_PLAN.md` are the dashboard sources for this snapshot. The handoff and plan corrections were still uncommitted in the local working tree on 2026-10-04. This snapshot distinguishes code and documented deployments from completed live checks.
+
+- The dashboard has login, profile, space management and launch, favorites, a friends dashboard, and platform-owner admin controls. Launching an existing Unity space works; dashboard-managed publishing is still a future capability.
+- Production password recovery delivered the email, showed the recovery form, and updated the password. A later fix that ends the temporary recovery session and returns to normal login is documented as deployed; owner confirmation of the return and new-password sign-in is pending.
+- Individual and Organization membership Checkout, webhook-backed status, and Customer Portal are documented as deployed and exercised. A strict Settings display/copy gate for the existing Supabase SDK access token is committed on `main`; active and inactive account behavior still needs live verification. The first linked active Checkout confirmation email also awaits delivery verification. This UI gate is not server-side SDK authorization: the actual protected SDK operation and its policy must be identified before enforcement is added.
+- The platform-owner ban, unban, and permanent-account-deletion UI is committed on `main`. Its production server foundation is documented as deployed, but UI deployment and the disposable-account ban/unban/delete sequence are not independently verified in the dashboard handoff.
+- Ethereum and Solana wallet sign-in and profile linking remain in dev validation. The existing dashboard-to-Unity Supabase identity and launch path remains the supported production bridge; membership work is intended to preserve it.
+
+For current release decisions, check the dashboard repository and live service state directly. A local Git tracking ref or committed implementation does not establish a current production deployment.
+
 ## Why The SDK Matters Strategically
 
 The SDK is the mechanism that lets the MetaDyn platform travel.
