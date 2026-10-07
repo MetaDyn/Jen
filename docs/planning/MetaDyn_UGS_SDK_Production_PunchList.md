@@ -8,6 +8,22 @@
 
 ---
 
+## Launch mini-checklist — resume here (2026-10-07)
+
+Saved from the October 6 launch discussion at Josh's request. Use this ordered shortlist instead of repeating the full background review. These are pending gates, not new claims of completion. Items 1–3 come from the October 4 technical handoff; items 4–5 are recommended customer/deployment checks whose completion has not been verified.
+
+1. [ ] **Clean v1.4.0 installation — first next action.** Install into a fresh Unity project; verify dependencies, compilation, and assets. Resolve package versus starter ownership for browser bridges, microphone worklet, player prefabs/registry, and glTFast Resources materials; make setup instructions match. **Pass:** no hidden dependency on our development project.
+2. [ ] **WebGL multiplayer gates.** Verify bounded missing-join-code retry; test three-player spawn/movement/animation, departure/rejoin, late joins, and shared-object authority; regress text, bidirectional WebRTC voice, mute/unmute, and speaking indicators. **Pass:** supported sessions remain usable through join/departure/reconnect.
+3. [ ] **Avatar reliability.** Investigate GLB importer lifecycle/out-of-memory risk; validate replacements before removing visible models; guard stale async loads; verify upload/restore and animation across three players, reloads, and late joins. **Pass:** supported avatar changes do not crash, leave players invisible, or break remote animation.
+4. [ ] **One complete customer deployment.** Clean starter → configure → build → deploy → public URL; verify dashboard login/profile continuity and browser experience, dev/production session isolation, and repeatable managed-deployment instructions. **Pass:** deliver a customer space without relying on the existing development space.
+5. [ ] **Signup → onboarding → live space.** Verify membership/checkout/account state and post-signup next step; establish onboarding owner, intake, delivery expectations, and support; complete one controlled early-customer activation before wider promotion. **Pass:** no customer funnel dead end.
+
+**Working baseline:** Initial soft launch has occurred; broader rollout still needs hardening. SDK v1.4.0 core source released September 26. Networking is UGS Sessions + NGO Distributed Authority, not the rejected Relay host-migration plan; two-client owner-built WebGL tests are not three-player/full-production validation. Enterprise immersive spaces and AI interaction, with self-hosting, remain the current emphasis.
+
+**Scope:** Broker orchestration and advanced social/economy/world-building features are not automatic launch blockers unless promised in the launch offer. Resume at the first unchecked gate; update individual gates when new evidence arrives. Recheck only changed/unknown facts or the live behavior needed to pass a gate—not the entire platform history.
+
+---
+
 ## 🛡️ Pillar 1: Declaration (Establishing the Baseline)
 *Goal: Officially transition the SDK identity to UGS-native and clearly categorize legacy assets.*
 
