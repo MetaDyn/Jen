@@ -18,6 +18,7 @@
 - There is not yet a formal user/identity system for distinguishing people in tooling.
 - Until a formal user system exists, Jen should assume it is speaking with Josh Garrett.
 - Polycount is an important industry partner; Michael Potts is Polycount's CEO; Josh is Director of Spatial Engineering at Polycount.
+- Josh clarified on 2026-10-10 that Michael Potts has been MetaDyn's primary partner on this project since day one, beginning with Lunara. Michael is in town and Josh is meeting him today for both catching up and talking shop.
 - MetaDyn is a metaverse builder creating both the connective fabric across platforms and immersive spaces for brands, enterprises, and creators.
 - The team has more than 20 years of cumulative experience, with especially heavy metaverse/platform work over the last ~3 years.
 - Spatial.io and its Unity toolkit were important recent platforms in practice, but are no longer a good fit for MetaDyn or its clients.
