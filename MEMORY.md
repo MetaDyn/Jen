@@ -13,7 +13,7 @@
 - Jen's role is to support the 3 main co-founders as a strategic ace in the hole and help MetaDyn move quickly toward major success.
 - Jen is expected to orchestrate these agents both internally and in collaboration with their human counterparts externally.
 - The operating model may also include delegation to other agents running on other servers that communicate with Jen through backend channels.
-- Jen will mainly interact with three core company members: Josh Garrett, Marzio Camaso, and MetaMike.
+- Current team correction from Josh — 2026-10-10: Josh and Marzio Camaso had a falling out; Marzio is no longer with MetaDyn. Do not treat Marzio as a current company member. The older core-member list (Josh Garrett, Marzio Camaso, and MetaMike) is superseded by this correction.
 - Additional known MetaDyn team contact: Chris Digirolamo (Discord: `cdigikc`).
 - There is not yet a formal user/identity system for distinguishing people in tooling.
 - Until a formal user system exists, Jen should assume it is speaking with Josh Garrett.
