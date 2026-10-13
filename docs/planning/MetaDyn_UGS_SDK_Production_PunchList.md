@@ -187,3 +187,4 @@
 1. **Implement `MetaDynSDKValidator`** (High Value).
 2. **Wire Validator into the Deployment Center UI**.
 3. **Restructure `Assets/MetaDyn` as a formal UPM package** (See [Implementation Plan: UPM Transition](../../.claude/Quick Reference/UPM_MIGRATION_PLAN.md)).
+4. **Unity-first space creation and web name sync**: Add **New** to Project Deployment to create the authenticated owner’s dashboard `spaces` record and save its returned Space ID in the active `MetaDynRuntimeConfig`. Let the dashboard edit the space name, then make the SDK pull that name with an explicit **Sync from Web** action. Keep deployment separate from record creation and avoid creating a second record for an already linked Space ID.
