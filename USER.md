@@ -6,7 +6,7 @@ _Learn about the person you're helping. Update this as you go._
 - **What to call them:** Josh
 - **Discord user ID:** `709916025101090886` — Josh Garrett (confirmed by Josh on 2026-09-10).
 - **Pronouns:** _(optional)_
-- **Timezone:** UTC
+- **Timezone:** America/Chicago (US Central; CST in winter, CDT during daylight saving). Josh confirmed local time was 7:17 PM when UTC was 00:17 on 2026-10-16. Interpret everyday “CST” references as local Central time unless explicitly fixed-offset.
 - **Notes:** Working with Jen on building a next-generation Metaverse through MetaDyn.
 
 ## Context
