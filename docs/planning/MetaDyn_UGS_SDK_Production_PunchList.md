@@ -6,6 +6,8 @@
 >
 > The v1.4.0 public package contains avatar upload/restore and DA core source. Browser bridges, the microphone worklet, configured player assets, and glTFast Resources materials are still project-level companions. Two-client DA continuity and basic WebGL chat/voice passed owner-built tests; the 2026-08-29 missing-join-code retry, clean package install, three-player reliability, shared-object authority, and full regression remain open. This note reflects Unity project documentation, not a live production or Editor check.
 
+> **2026-10-19 picture-frame update:** Unity source, additive Supabase setup, and Dashboard direct image assignment are implemented. The owner confirmed Unity Play Mode DA join, placeholder rendering, and Dashboard-assigned image display after correcting a mismatched space ID. This is partial progress on the creator-tooling picture-frame item, not completion: WebGL picker/upload/restore, multi-client behavior, and clean SDK packaging remain open. The published v1.4.0 package predates this feature; proposed next minor release is 1.5.0 after those gates. The Unity workspace `.claude/Planning/MetaDyn_UGS_SDK_Production_PunchList.md` and `.claude/SESSION_HANDOFF.md` are authoritative for current implementation status.
+
 ---
 
 ## Launch mini-checklist — resume here (2026-10-07)
