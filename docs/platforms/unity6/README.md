@@ -18,7 +18,7 @@ That means these docs are not just “Unity project notes.” They are platform 
 
 ## Current Platform Snapshot
 
-**Unity project sync: 2026-10-04.** This dated snapshot supersedes older networking and SDK-status statements in this doc set where they conflict. It reflects Unity project documentation and the public SDK release; it is not a live Editor or production check.
+**Unity project sync: 2026-10-19.** The platform baseline below comes from the 2026-10-04 Unity documentation and public SDK release. The dated picture-frame update below reflects later Unity source and owner-reported Play Mode behavior; it is not a WebGL build, clean SDK install, or live production check.
 
 - Engine: **Unity 6** (`6000.0.67f1` in the current Unity workspace)
 - Rendering: **URP 17.0.4**
@@ -28,6 +28,15 @@ That means these docs are not just “Unity project notes.” They are platform 
 - WebGL communication: **NGO DA room text + browser WebRTC spatial voice**; native Vivox remains supported
 - SDK release: **v1.4.0 core source**, published 2026-09-26; companion browser bridges, configured player assets, and glTFast Resources materials remain outside the standalone package
 - Production readiness: **open**; clean-project install and full WebGL regression gates have not been recorded as passed
+
+## 2026-10-19 Picture Frame And Dashboard Progress
+
+- New `MetaDynEmptyFrame` Unity source and an additive Supabase `space_picture_frames` / private `space-images` contract support images keyed by space and frame ID. The owner reported SQL setup success. The Dashboard Manage Space view supports direct file assignment and signed preview; the owner confirmed that flow works. CSV mapping preview exists, while external-URL import deployment and end-to-end verification remain pending.
+- The owner joined a DA session in Unity Play Mode, saw the frame placeholder, corrected a mismatched Unity project space ID, and then saw the Dashboard-assigned image display in world space. The frame reported image revision 1. This verifies the local Editor restore path only.
+- During that test, the repository agent's DA implementation had configured the scene transport while Unity Multiplayer Services replaced it with a separate DA transport, causing a WebSockets/UDP mismatch. The agent's first UDP workaround was also wrong because the installed package allows only WSS with a WebGL build target. Corrected source prepares the DA transport for WSS before joining; the owner then joined successfully in Play Mode. A fresh WebGL test is still required.
+- The picture-frame MVP punch-list item remains open until browser picker/upload/restore and multiplayer behavior pass. The current public SDK is still v1.4.0 and does not contain the frame feature. If those gates pass and the addition is backward compatible, 1.5.0 is the proposed next release, with the component, storage service, WebGL picker bridge, setup guidance, and clean consumer-project installation included.
+
+Unity implementation authority: `MetaDynStarter-UGS/.claude/SESSION_HANDOFF.md`, `.claude/Planning/Persistent_Picture_Frame_Component_Plan.md`, and `.claude/session_notes/2026-08-20_UGS_DA_MULTIPLAYER_RESTART_HANDOFF.md`.
 
 ## Recommended Reading Order
 
