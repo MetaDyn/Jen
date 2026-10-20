@@ -1,4 +1,4 @@
-# Remote Agent Connectivity MVP — FastAPI + Netlify
+# Remote Agent Connectivity MVP — Provider-Neutral First
 
 **Status:** Approved planning direction; implementation and deployment not yet verified.
 **Date:** 2026-10-20
@@ -6,7 +6,7 @@
 
 ## Goal
 
-Jen submits a task through a portable FastAPI application to a Netlify-hosted execution function and receives a real model-generated `OK`. Begin with one observable round trip while preserving the existing remote-subagent architecture.
+Jen submits a task through a portable FastAPI application to a provider-neutral remote agent handler and receives a real model-generated `OK`. Build the generic handler first. Netlify is one possible deployment adapter, not the application architecture or a required first deployment. Begin with one observable round trip while preserving the existing remote-subagent architecture.
 
 ## Required reading
 
@@ -20,14 +20,16 @@ Those documents describe broader plans, not proof that services already exist. T
 
 Request path:
 
-`Jen -> FastAPI -> authenticated Netlify Function -> model -> response through the same path`
+`Jen -> FastAPI -> generic remote agent handler -> configured model -> response`
 
-- **FastAPI:** common Python API and orchestration boundary, packaged as a portable container. Run on an explicitly approved Python/container-capable host, such as an existing server or AWS/Azure container hosting. Do not attempt to deploy the Python container to Netlify.
-- **Netlify:** TypeScript execution function deployed with the selected Netlify app. It calls the configured model provider; Netlify AI Gateway is a candidate subject to account availability and current documented integration.
-- **Execution adapter:** FastAPI calls the Netlify function through a narrow interface. Future execution adapters must preserve the caller-facing task contract rather than create provider-specific APIs for Jen.
-- A model call proves remote inference execution, not a persistent autonomous agent with memory/tools. No existing Netlify agent runtime is assumed.
+- **FastAPI:** common Python API and orchestration boundary, packaged as a portable container. Run on an approved Python/container-capable host. Do not attempt to deploy the Python container to Netlify.
+- **Generic agent core:** provider-neutral task validation, bounded execution, normalized results/errors, and correlation metadata. No Netlify imports, event objects, environment assumptions, or deployment URLs in the core contract.
+- **HTTP transport:** FastAPI calls a configured remote HTTPS endpoint implementing the shared contract. It must not require a Netlify-specific adapter or URL shape.
+- **Deployment wrappers:** expose the same core behavior on a conventional server/container first. A thin Netlify wrapper may expose the same contract later; AWS/Azure wrappers must not change the contract either.
+- **Netlify compatibility:** Netlify's runtime may require a JavaScript/TypeScript HTTP wrapper rather than running the Python server. Keep that packaging concern outside the agent contract and business logic. Do not claim identical Python binaries run on every host. Before implementation, select a portable execution-core runtime supported by intended deployment targets; a framework-independent TypeScript core with thin HTTP wrappers is a recommended starting point, with FastAPI remaining the common Python orchestration layer.
+- A model call proves remote inference execution, not a persistent autonomous agent with memory/tools.
 
-Before deployment, obtain the target repository/site, approved FastAPI host, and approved model/provider configuration. Do not invent another service, site, or deployment target to resolve missing information.
+Build and test the generic core and standard HTTP endpoint before provider-specific packaging. Obtain approved repository, deployment target, and model/provider configuration before deployment. Do not create another service/site to resolve missing information.
 
 ## MVP API
 
@@ -51,8 +53,8 @@ Capabilities must accurately report the narrow MVP: no file modifications, comma
 
 1. Inspect existing code and deployment conventions; identify the approved targets and dependencies.
 2. Implement validated request/result models and the synchronous FastAPI endpoints.
-3. Separate endpoint handling from execution through a small adapter interface. Add one Netlify HTTP adapter only.
-4. Implement an authenticated Netlify function that invokes the configured model with the bounded instruction `Reply with exactly: OK.` It must return actual model output and safe errors.
+3. Separate endpoint handling from execution through a small adapter interface. Add one generic HTTP execution adapter; no provider-specific adapter is required.
+4. Implement a framework-independent agent handler that invokes the configured model with the bounded instruction `Reply with exactly: OK.` Expose it through a minimal standard HTTP server wrapper. Return actual model output and safe errors. Keep Netlify support to a thin optional deployment wrapper after the generic path works.
 5. Propagate correlation IDs, enforce timeouts, and add structured logs on both sides.
 6. Add automated tests with a mocked provider plus an explicitly enabled live integration test.
 7. Provide local/container startup and deployment instructions. Deploy only to authorized targets, then test the actual deployed path from Jen's host.
@@ -60,7 +62,7 @@ Capabilities must accurately report the narrow MVP: no file modifications, comma
 ## Security and operational bounds
 
 - HTTPS for non-localhost calls.
-- Separate bearer secrets for Jen-to-FastAPI and FastAPI-to-Netlify; validate both hops.
+- Separate bearer secrets for Jen-to-FastAPI and FastAPI-to-remote-agent; validate both hops.
 - Secrets remain in environment/provider secret settings, never source, client bundles, logs, or this repo.
 - Use a configured, allowlisted execution URL; never accept arbitrary downstream URLs from task input.
 - Bound input size, model output, concurrent work, and execution time within deployed platform limits.
@@ -81,19 +83,19 @@ Do not log raw prompts, private context, or credentials by default.
 
 ## Acceptance gates
 
-- A request originating on Jen's host passes through deployed FastAPI and the deployed Netlify function, invokes the configured model, and returns exactly `OK` as the task summary.
+- A request originating on Jen's host passes through deployed FastAPI and the deployed generic agent endpoint, invokes the configured model, and returns exactly `OK` as the task summary.
 - Structured logs correlate the full round trip with the same request/task IDs.
 - Both hops reject missing/invalid authentication; unauthorized requests never trigger model calls.
 - Invalid input, unexpected model output, downstream errors, and timeouts produce explicit failures rather than false success.
 - Automated tests cover those paths without requiring paid live calls by default.
 - FastAPI runs locally and in its container using configuration-only host/provider differences.
-- Deployment documentation clearly distinguishes the Netlify function from separately hosted FastAPI.
+- Deployment documentation clearly distinguishes the remote agent endpoint from separately hosted FastAPI.
 
 A hardcoded `OK` is permitted only as a labeled connectivity fixture, never as evidence that the model/agent round trip passed.
 
 ## Out of scope
 
-No broker, new database, UI/dashboard, persistent agent memory, autonomous workflows, tools, streaming, callbacks, durable task queue, or full registry. No implementation of other cloud adapters yet. No production changes outside the authorized deployment scope.
+No broker, new database, UI/dashboard, persistent agent memory, autonomous workflows, tools, streaming, callbacks, durable task queue, or full registry. No required cloud-specific implementation in the first generic milestone. Netlify compatibility must be preserved without making Netlify a dependency. No production changes outside the authorized deployment scope.
 
 ## Codex handoff deliverables
 
@@ -102,6 +104,6 @@ No broker, new database, UI/dashboard, persistent agent memory, autonomous workf
 - Setup/deployment instructions for both components and secret configuration.
 - Exact supported request/result/error contract and telemetry fields.
 - Test results distinguishing mocked, local, deployed connectivity, and actual model execution evidence.
-- Deployed Netlify URL and approved FastAPI URL, or explicit blockers if either is unavailable.
+- Deployed remote agent URL and approved FastAPI URL, or explicit blockers if either is unavailable.
 
-Do not report end-to-end completion after testing only the Netlify function. A full pass requires the actual Jen-host-to-FastAPI-to-Netlify-to-model return path.
+Do not report end-to-end completion after testing only the remote agent endpoint. A full pass requires the actual Jen-host-to-FastAPI-to-remote-agent-to-model return path.

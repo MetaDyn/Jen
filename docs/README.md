@@ -35,7 +35,7 @@ This is the fastest entry point for MetaDyn context in this workspace.
 
 ## Planning
 
-- `planning/remote-agent-connectivity-mvp.md` — Codex handoff for the portable FastAPI → Netlify execution-function → model “OK” MVP, security, telemetry, and deployment gates.
+- `planning/remote-agent-connectivity-mvp.md` — Codex handoff for the provider-neutral FastAPI → remote agent → model “OK” MVP, security, telemetry, and deployment gates.
 
 - `planning/jen-context-intake-plan.md` — draft context-dump protocol and punch list for turning rough input into durable docs and clear next actions.
 - `planning/jen-connected-development.md` — implementation plan and phased punch list for Jen-coordinated WSL/Codex execution and approved external developers.
