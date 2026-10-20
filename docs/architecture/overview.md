@@ -25,6 +25,8 @@ Presence should persist across environments and platforms, allowing continuity o
 ### 3. Intelligence
 AI avatars and orchestration agents should be capable, context-aware, and available across the ecosystem.
 
+MetaDynAI now has a user-validated web AR avatar capability: its Dashboard-selected React/Three.js avatar can enter an opt-in WebXR passthrough session at `/agent/:identifier/ar` while retaining the existing voice and lip-sync path. The first Android Chrome Industrial demo passed user testing on 2026-09-27. This is a web-client milestone, not evidence of Unity AR, persistent anchors, or a live Jen/OpenClaw connection. See [Immersive Platforms](../platforms/immersive-spaces.md) for the implementation and validation boundary.
+
 ### 4. Memory
 A unified, persistent memory model should support continuity across platforms, environments, and interactions.
 
