@@ -1,109 +1,117 @@
-# Remote Agent Connectivity MVP — Provider-Neutral First
+# Remote Subagent API MVP — Codex Build Handoff
 
-**Status:** Approved planning direction; implementation and deployment not yet verified.
-**Date:** 2026-10-20
-**Audience:** Josh, Jen, and the manually started Codex implementation session.
+**Updated:** 2026-10-20
+**Status:** Implementation instructions; not a claim of deployment.
 
-## Goal
+## Immediate assignment
 
-Jen submits a task through a portable FastAPI application to a provider-neutral remote agent handler and receives a real model-generated `OK`. Build the generic handler first. Netlify is one possible deployment adapter, not the application architecture or a required first deployment. Begin with one observable round trip while preserving the existing remote-subagent architecture.
+Build a small remote subagent application with an authenticated HTTP API. Send it a message and receive an actual model-generated `OK` response. Deploy this application to Josh's selected Netlify site. Keep its core portable for later deployment on ordinary servers, AWS, or Azure.
 
-## Required reading
+**FastAPI is NOT a requirement or dependency of this application. Do not provision a separate Python host, build an orchestration service, or block this MVP on FastAPI.** A future/existing FastAPI orchestration layer can call this API like any other HTTP client. It is outside this assignment.
+
+This section supersedes prior versions of this document that required a FastAPI deployment or a separate backend before the first test.
+
+## Build one application, not provider-specific systems
+
+Use a framework-independent TypeScript core for validation, bounded model execution, normalized results, and errors.
+
+Provide thin HTTP entry points around that SAME core:
+
+- A Netlify-compatible entry point for the immediate deployment. Use Netlify's supported server-side execution mechanism; any function wrapper is packaging only, not another agent implementation.
+- A standard Node HTTP server entry point for local use and portable server/container deployment.
+
+No provider event objects, Netlify imports, or host-specific request logic in the core. Both entry points call the same handler and expose the same contract. Select the model/provider through server-side configuration. Use available approved credentials; do not assume Netlify supplies a persistent agent or that its AI Gateway is enabled.
+
+First working path:
+
+`Jen or test HTTP client -> deployed subagent API -> configured model -> OK response`
+
+No intermediary orchestration app is needed to prove this path. Later:
+
+`Jen -> FastAPI orchestration -> this same subagent API`
+
+## Existing plans and narrow MVP scope
+
+Read for architectural context:
 
 - [Agent orchestration and remote subagents](../ai-systems/agent-orchestration-and-remote-subagents.md)
 - [Remote subagent API layer](../ai-systems/remote-subagent-api-layer.md)
-- [Jen connected development](jen-connected-development.md)
 
-Those documents describe broader plans, not proof that services already exist. This MVP implements only the synchronous subset below. Inspect the selected repository and existing deployment configuration before editing; reuse established structures.
+Keep their versioned API, bounded delegation, authentication, task IDs, and error conventions. Those documents describe the larger target, not a requirement to build all endpoints now. This document scopes the immediate MVP.
 
-## Architecture and deployment boundaries
+## API contract
 
-Request path:
+Implement:
 
-`Jen -> FastAPI -> generic remote agent handler -> configured model -> response`
+- `GET /agent/v1/health` — basic application liveness, not a claim that a model call succeeded.
+- `POST /agent/v1/tasks` — synchronous, authenticated connectivity task.
 
-- **FastAPI:** common Python API and orchestration boundary, packaged as a portable container. Run on an approved Python/container-capable host. Do not attempt to deploy the Python container to Netlify.
-- **Generic agent core:** provider-neutral task validation, bounded execution, normalized results/errors, and correlation metadata. No Netlify imports, event objects, environment assumptions, or deployment URLs in the core contract.
-- **HTTP transport:** FastAPI calls a configured remote HTTPS endpoint implementing the shared contract. It must not require a Netlify-specific adapter or URL shape.
-- **Deployment wrappers:** expose the same core behavior on a conventional server/container first. A thin Netlify wrapper may expose the same contract later; AWS/Azure wrappers must not change the contract either.
-- **Netlify compatibility:** Netlify's runtime may require a JavaScript/TypeScript HTTP wrapper rather than running the Python server. Keep that packaging concern outside the agent contract and business logic. Do not claim identical Python binaries run on every host. Before implementation, select a portable execution-core runtime supported by intended deployment targets; a framework-independent TypeScript core with thin HTTP wrappers is a recommended starting point, with FastAPI remaining the common Python orchestration layer.
-- A model call proves remote inference execution, not a persistent autonomous agent with memory/tools.
+Use a small validated subset of the existing task envelope:
 
-Build and test the generic core and standard HTTP endpoint before provider-specific packaging. Obtain approved repository, deployment target, and model/provider configuration before deployment. Do not create another service/site to resolve missing information.
+```json
+{
+  "task_id": "client-generated-unique-id",
+  "requested_by": "jen",
+  "domain": "connectivity",
+  "objective": "Reply with exactly: OK.",
+  "constraints": [],
+  "timeout_seconds": 20
+}
+```
 
-## MVP API
+Require `Authorization: Bearer <service-token>`. Accept/generate `X-MetaDyn-Request-Id` and return it for correlation. Caller headers are metadata, not authentication.
 
-Expose on FastAPI:
+The initial supported operation is the bounded connectivity check, not arbitrary prompts or tool execution. Reject unsupported domains/objectives rather than silently ignoring them. Extend supported operations later through the same task contract and handler interface.
 
-- `GET /agent/v1/health`
-- `GET /agent/v1/capabilities`
-- `POST /agent/v1/tasks`
+Call the real configured model with `Reply with exactly: OK.` Return HTTP 200 only when the call succeeds and its trimmed text equals `OK`:
 
-Reuse the envelope and error conventions from the existing remote-subagent API document. The first supported domain is a bounded connectivity check. Accept the relevant existing fields including `task_id`, `requested_by`, `domain`, `objective`, `constraints`, and `timeout_seconds`. Validate supported values; do not silently accept unsupported actions or permissions.
+```json
+{
+  "task_id": "client-generated-unique-id",
+  "status": "completed",
+  "summary": "OK",
+  "metadata": {
+    "request_id": "correlation-id",
+    "duration_ms": 123
+  }
+}
+```
 
-Carry `X-MetaDyn-Request-Id` through both hops. Keep this request/correlation ID distinct from the task ID, even when initially generated together.
+Return safe structured errors using the existing `error.code`, `error.message`, `error.request_id`, and `error.retryable` conventions. Invalid authentication, malformed input, unsupported work, provider failure, timeout, and unexpected model output must not become success responses. Do not replace failed or unexpected model output with hardcoded `OK`.
 
-**Explicit synchronous subset:** return HTTP 200 with a completed task result directly, or an appropriate structured failure. Do not return HTTP 202, advertise asynchronous processing, or provide pretend task-status/cancellation endpoints. Durable jobs, polling, and cancellation are later extensions of the existing specification.
+Synchronous only: no 202 acceptance response, polling, durable task storage, or cancellation claims. Task IDs correlate work; they are not durable idempotency guarantees.
 
-Completed results should use the existing conventions: `task_id`, `status: completed`, timestamps, and `summary: OK`. Preserve the actual model output; unexpected output must fail the connectivity check rather than be replaced with a success string. Include request correlation and elapsed timing in an explicitly documented compatible metadata extension.
+## Minimum security and telemetry
 
-Capabilities must accurately report the narrow MVP: no file modifications, commands, tools, memory, streaming, or autonomous actions.
+- HTTPS for deployed calls; server-side bearer-token validation before model execution.
+- Store service token and provider credentials in environment/hosting secret settings. Never place them in browser bundles, source, logs, or docs.
+- Enforce bounded body size, output tokens, and execution deadline compatible with the deployed runtime. Use provider cancellation where supported.
+- No automatic retries, arbitrary downstream URLs, commands, tools, or uncontrolled model proxying.
+- Log structured request-received, model-call-started, completed, and failed events with UTC timestamp, request ID, task ID, local elapsed duration, and safe outcome/error code.
+- Do not log credentials, private context, raw prompts, or raw provider exception traces by default.
+- Do not build a telemetry service, UI, broker, or database for this test.
 
-## Implementation steps
+## Implementation sequence
 
-1. Inspect existing code and deployment conventions; identify the approved targets and dependencies.
-2. Implement validated request/result models and the synchronous FastAPI endpoints.
-3. Separate endpoint handling from execution through a small adapter interface. Add one generic HTTP execution adapter; no provider-specific adapter is required.
-4. Implement a framework-independent agent handler that invokes the configured model with the bounded instruction `Reply with exactly: OK.` Expose it through a minimal standard HTTP server wrapper. Return actual model output and safe errors. Keep Netlify support to a thin optional deployment wrapper after the generic path works.
-5. Propagate correlation IDs, enforce timeouts, and add structured logs on both sides.
-6. Add automated tests with a mocked provider plus an explicitly enabled live integration test.
-7. Provide local/container startup and deployment instructions. Deploy only to authorized targets, then test the actual deployed path from Jen's host.
+1. Inspect the approved repository and Netlify site conventions. Obtain the intended site/repository and credential configuration if not already supplied; do not invent targets.
+2. Implement the generic handler and injectable model adapter; test using a fake model adapter.
+3. Add the standard Node server entry point and verify a local HTTP round trip.
+4. Add the thin Netlify entry point using the same handler; configure API routing and server-side secrets.
+5. Deploy to the approved Netlify site and test the real model-backed API.
+6. Provide the URL and secure credential-setup instructions so Jen can test from her host. Do not publish secret values in handoff messages.
 
-## Security and operational bounds
+## Acceptance criteria
 
-- HTTPS for non-localhost calls.
-- Separate bearer secrets for Jen-to-FastAPI and FastAPI-to-remote-agent; validate both hops.
-- Secrets remain in environment/provider secret settings, never source, client bundles, logs, or this repo.
-- Use a configured, allowlisted execution URL; never accept arbitrary downstream URLs from task input.
-- Bound input size, model output, concurrent work, and execution time within deployed platform limits.
-- No automatic retries in the MVP, preventing inadvertent duplicate model calls. Durable idempotency/replay protection is a later gate before enabling retries or side-effecting tasks; do not claim it is solved by a correlation ID.
-- Treat caller metadata headers as metadata, not authentication.
-- Do not expose an unauthenticated general-purpose model proxy or arbitrary prompt/tool execution.
-- Failure responses must not disclose tokens, provider credentials, or raw internal exception traces.
+- An HTTP client can submit the task to the deployed Netlify URL and receive actual model-generated `OK` in the normalized result.
+- The same core passes contract tests through the standard Node server and Netlify entry point. No duplicated agent logic.
+- Missing/invalid auth never triggers inference.
+- Tests cover bad input, unsupported work, provider failure, timeout, and unexpected output. Default automated tests do not require paid calls.
+- Correlated logs identify the request and outcome without exposing secrets.
+- Provide one copy-paste HTTP example using an environment variable for the bearer token.
+- Distinguish local/mock results from deployed live-model evidence. Jen-host verification is a separate reported gate if Codex cannot access that host; do not block deployment on building an intermediary.
 
-## Minimum telemetry
+## Deliverables and extension boundaries
 
-Structured logs only; no separate telemetry service or dashboard.
+Deliver source, tests, secret-free environment example, standard Node startup instructions, Netlify deployment instructions, supported API contract, deployed endpoint URL, and verification results.
 
-Record at the appropriate boundary: `request.sent`, `request.received`, `response.sent`, `response.received`, and failures/timeouts. Include UTC timestamp, request ID, task ID, emitting component, event, outcome, duration, and safe error code where applicable.
-
-Use locally measured elapsed durations; do not rely on cross-host clock subtraction for latency. Correlation must let an operator distinguish requests not observed at the receiver from received requests that failed to answer. Logs alone do not prove why a missing event is absent.
-
-Do not log raw prompts, private context, or credentials by default.
-
-## Acceptance gates
-
-- A request originating on Jen's host passes through deployed FastAPI and the deployed generic agent endpoint, invokes the configured model, and returns exactly `OK` as the task summary.
-- Structured logs correlate the full round trip with the same request/task IDs.
-- Both hops reject missing/invalid authentication; unauthorized requests never trigger model calls.
-- Invalid input, unexpected model output, downstream errors, and timeouts produce explicit failures rather than false success.
-- Automated tests cover those paths without requiring paid live calls by default.
-- FastAPI runs locally and in its container using configuration-only host/provider differences.
-- Deployment documentation clearly distinguishes the remote agent endpoint from separately hosted FastAPI.
-
-A hardcoded `OK` is permitted only as a labeled connectivity fixture, never as evidence that the model/agent round trip passed.
-
-## Out of scope
-
-No broker, new database, UI/dashboard, persistent agent memory, autonomous workflows, tools, streaming, callbacks, durable task queue, or full registry. No required cloud-specific implementation in the first generic milestone. Netlify compatibility must be preserved without making Netlify a dependency. No production changes outside the authorized deployment scope.
-
-## Codex handoff deliverables
-
-- Source and tests using the selected repository's conventions.
-- Secret-free environment configuration example and portable FastAPI container configuration.
-- Setup/deployment instructions for both components and secret configuration.
-- Exact supported request/result/error contract and telemetry fields.
-- Test results distinguishing mocked, local, deployed connectivity, and actual model execution evidence.
-- Deployed remote agent URL and approved FastAPI URL, or explicit blockers if either is unavailable.
-
-Do not report end-to-end completion after testing only the remote agent endpoint. A full pass requires the actual Jen-host-to-FastAPI-to-remote-agent-to-model return path.
+No FastAPI service in this assignment. No new database, agent registry, memory system, dashboard, broker, streaming, asynchronous jobs, or autonomous tools. Preserve extensibility through the shared handler, model adapter, HTTP contract, and thin hosting entry points—not speculative infrastructure.
