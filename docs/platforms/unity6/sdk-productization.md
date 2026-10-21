@@ -13,13 +13,13 @@ The current documented product shape has three related parts:
 
 The practical challenge is that the current codebase already contains much of this functionality, but the package boundaries are still transitional.
 
-## 2026-10-19 Picture Frame Candidate For The Next SDK Update
+## SDK v1.5.0 Empty Frame Release — 2026-10-20
 
-The Unity workspace now contains `MetaDynEmptyFrame` and its Supabase storage service. The owner verified in Unity Play Mode that a Dashboard-assigned image replaced the placeholder after correcting the Unity project config space ID. Dashboard direct file assignment and preview are owner-confirmed. A new owner-built WebGL test then passed the frame browser picker, image upload, immediate in-world update, and Dashboard readback after refresh. The exact file format was not reported. This is runtime validation, not a shipped SDK or clean-project install.
+[MetaDyn SDK v1.5.0](https://github.com/MetaDyn/MetaDynSDK/releases/tag/v1.5.0) was published from commit `11d6a8f`. It includes `MetaDynEmptyFrame`, `MetaDynPictureFrameStorageService`, the importable `Samples~/PictureFrameWebGL` image-picker bridge, and the DA WebSockets transport correction. Package metadata, SDK version, manifest, and existing README tag references are aligned at 1.5.0.
 
-The published v1.4.0 package predates this feature. The WebGL picker/upload/display path passed the owner's test; after fresh-session restore and multiplayer checks pass, prepare a backward-compatible **proposed v1.5.0** update. Include `Assets/MetaDyn/Runtime/Core/Components/MetaDynEmptyFrame.cs`, `MetaDynPictureFrameStorageService.cs`, the required `Assets/Plugins/WebGL/MetaDynImagePicker.jslib` companion, reviewed Supabase setup and creator instructions, and clean consumer-project verification. Decide whether a sample frame prefab belongs in the package or starter template before release. Do not treat the Dashboard UI or external-URL import backend as Unity package content.
+The owner verified the Dashboard-assigned image in Unity Play Mode and the picker, upload, immediate frame update, and Dashboard readback in an owner-built WebGL build. On 2026-10-20, the owner also confirmed fresh-session restore and multi-client propagation, closing the picture-frame MVP flow. The exact uploaded file format, client count, and late-join timing were not recorded. A separate consumer-project install, sample import, and WebGL check remain unverified; broader DA regression, clear/replace, and negative cases remain follow-up work.
 
-The DA join correction also needs the next release's WebGL regression gate. Its source now prepares Unity Multiplayer Services' actual DA transport for WebSockets when WebGL is the active build target; owner Play Mode join succeeded after the correction, and the new WebGL build passed the frame upload round trip. Broader DA and multi-client regression checks remain open. Detailed current status and gates remain in the Unity workspace handoff and SDK release preparation documents.
+The public SDK contains only its existing README as documentation, plus its license. Backend setup instructions/SQL, internal project information, Dashboard UI, and developer-created Project configuration assets do not belong in the package. A developer specifies the release capability and version; the SDK maintainer traces and reviews its SDK-owned components and required dependencies before publishing. The current Unity-side release procedure is `.claude/Planning/SDK_GITHUB_RELEASE_WORKFLOW.md` in the Unity workspace.
 
 ## What Productization Means Here
 
