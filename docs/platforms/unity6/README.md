@@ -18,7 +18,7 @@ That means these docs are not just “Unity project notes.” They are platform 
 
 ## Current Platform Snapshot
 
-**Unity project sync: 2026-10-19.** The platform baseline below comes from the 2026-10-04 Unity documentation and public SDK release. The dated picture-frame update below reflects later Unity source and owner-reported Play Mode behavior; it is not a WebGL build, clean SDK install, or live production check.
+**Unity project sync: 2026-10-21.** The platform baseline comes from the Unity workspace handoff and the public SDK v1.5.0 release. Picture-frame runtime results below were reported by the project owner; a separate consumer-project install and WebGL check remain unverified.
 
 - Engine: **Unity 6** (`6000.0.67f1` in the current Unity workspace)
 - Rendering: **URP 17.0.4**
@@ -26,16 +26,16 @@ That means these docs are not just “Unity project notes.” They are platform 
 - Primary delivery target: **WebGL**; native is secondary
 - Auth backend: **Supabase** for MetaDyn accounts and profiles, with UGS Authentication for session participants
 - WebGL communication: **NGO DA room text + browser WebRTC spatial voice**; native Vivox remains supported
-- SDK release: **v1.4.0 core source**, published 2026-09-26; companion browser bridges, configured player assets, and glTFast Resources materials remain outside the standalone package
+- SDK release: **v1.5.0**, published 2026-10-20 at commit `11d6a8f`; includes Empty Frame source, an importable WebGL picker sample, and the DA WebSockets transport correction. Other browser bridges, configured player assets, and glTFast Resources materials remain separate companions.
 - Production readiness: **open**; clean-project install and full WebGL regression gates have not been recorded as passed
 
-## 2026-10-19 Picture Frame And Dashboard Progress
+## Picture Frame, Dashboard, And SDK v1.5.0
 
 - New `MetaDynEmptyFrame` Unity source and an additive Supabase `space_picture_frames` / private `space-images` contract support images keyed by space and frame ID. The owner reported SQL setup success. The Dashboard Manage Space view supports direct file assignment and signed preview; the owner confirmed that flow works. CSV mapping preview exists, while external-URL import deployment and end-to-end verification remain pending.
 - The owner joined a DA session in Unity Play Mode, saw the frame placeholder, corrected a mismatched Unity project space ID, and then saw the Dashboard-assigned image display in world space. The frame reported image revision 1. This verifies the local Editor restore path only.
 - During that test, the repository agent's DA implementation had configured the scene transport while Unity Multiplayer Services replaced it with a separate DA transport, causing a WebSockets/UDP mismatch. The agent's first UDP workaround was also wrong because the installed package allows only WSS with a WebGL build target. Corrected source prepares the DA transport for WSS before joining; the owner then joined successfully in Play Mode. A new owner-built WebGL frame upload test passed, while broader DA regression remains open.
-- In a new owner-built WebGL build, the frame's browser picker opened, an image uploaded and appeared in world space, and the refreshed Dashboard showed that Unity-uploaded image. This verifies the tested browser upload round trip; exact file format was not reported. Fresh-session restore and multi-client behavior remain open.
-- The picture-frame MVP punch-list item remains open until fresh-session restore, multiplayer behavior, and release checks pass. The current public SDK is still v1.4.0 and does not contain the frame feature. If those gates pass and the addition is backward compatible, 1.5.0 is the proposed next release, with the component, storage service, WebGL picker bridge, setup guidance, and clean consumer-project installation included.
+- In a new owner-built WebGL build, the frame's browser picker opened, an image uploaded and appeared in world space, and the refreshed Dashboard showed that Unity-uploaded image. This verifies the tested browser upload round trip; exact file format was not reported. On 2026-10-20, the owner confirmed fresh-session restore and multi-client image propagation.
+- The owner-confirmed picture-frame MVP flow is closed. SDK v1.5.0 is published with `MetaDynEmptyFrame`, its storage service, and an importable WebGL picker sample. The official package has only its existing README as documentation; backend setup material and developer-created Project configuration assets are outside the SDK. Clean consumer-project installation and WebGL behavior remain follow-up checks.
 
 Unity implementation authority: `MetaDynStarter-UGS/.claude/SESSION_HANDOFF.md`, `.claude/Planning/Persistent_Picture_Frame_Component_Plan.md`, and `.claude/session_notes/2026-08-20_UGS_DA_MULTIPLAYER_RESTART_HANDOFF.md`.
 
@@ -93,7 +93,7 @@ A few points are worth keeping explicit throughout this doc set:
 - Hyperfy unified login is no longer just a future aspiration; the next documentation step is profile/data continuity across surfaces, not merely raw login parity.
 - Each Unity space is currently treated as its **own build**.
 - Deployment tooling is considered part of the SDK/product story, not separate internal ops garnish.
-- The SDK v1.4.0 core source is released, while a clean install, companion-asset packaging, and WebGL regression coverage remain open.
+- SDK v1.5.0 is released. Clean consumer-project installation, remaining companion-asset packaging, and broader WebGL regression coverage remain open.
 - The active Starter runtime uses **UGS/NGO Distributed Authority**. The former Relay listen-server host-migration approach was rejected after runtime testing.
 - WebGL room text uses the NGO DA player RPC path and browser spatial voice uses WebRTC. Native Vivox remains supported.
 - Mobile browser support is now part of the practical runtime hardening track, not just a distant future aspiration.
@@ -107,7 +107,7 @@ The exact 2026-08-29 missing-join-code recovery is present in source but awaits 
 
 ## Source Basis
 
-Current sync sources: Unity workspace `.claude/CHANGELOG.md` (2026-09-26 and 2026-08-29), the multiplayer restart handoff, and `SDK_NEXT_RELEASE_PREPARATION.md`. Public SDK release: [MetaDynSDK v1.4.0](https://github.com/MetaDyn/MetaDynSDK/releases/tag/v1.4.0).
+Current sync sources: Unity workspace `.claude/SESSION_HANDOFF.md`, `.claude/CHANGELOG.md` (2026-10-20), and `.claude/Planning/SDK_GITHUB_RELEASE_WORKFLOW.md`. Public SDK release: [MetaDynSDK v1.5.0](https://github.com/MetaDyn/MetaDynSDK/releases/tag/v1.5.0).
 
 Primary source material for this section came from:
 - `import/unity6-docs/.claude/Quick Reference/`
