@@ -1,7 +1,14 @@
 # Remote Subagent API MVP — Codex Build Handoff
 
 **Updated:** 2026-10-20
-**Status:** Implementation instructions; not a claim of deployment.
+**Status:** Source implemented for the current MVP; deployment acceptance remains unverified.
+
+## Implementation progress (2026-10-21)
+
+- Source: [MetaDyn/MetaDynRemoteSubagent](https://github.com/MetaDyn/MetaDynRemoteSubagent), `main` through `cd9dcfc`. The shared Node handler, Node HTTP server, thin Netlify entry point, bearer auth, bounded tasks, telemetry, OpenAI-compatible model adapter, and read-only Codex workspace review are implemented. The core is JavaScript ES modules; the original TypeScript preference was not followed.
+- Automated verification: 17 tests passed for the supported contract, both entry points, error handling, and configured adapters. Codex itself was mocked in those tests.
+- Observed local inference: a MetaDyn-network Ollama model returned a basic answer through the model adapter. The strict API connectivity request reached the model but returned HTTP 502 because it answered `OK.` rather than exact `OK`; the shorter example prompt returned `OK` through the adapter. No exact-`OK` API success is claimed.
+- Remaining acceptance: deploy the selected Netlify site, configure its secrets and model endpoint, verify an exact-`OK` response at the deployed URL, and verify a call from Jen's host. A live Codex workspace review is also unverified. Future text/audio/video capability routing and long media jobs are outside this MVP.
 
 ## Immediate assignment
 
