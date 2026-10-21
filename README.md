@@ -33,7 +33,13 @@ The broader mission spans:
 
 MetaDyn brings more than 20 years of cumulative experience, with especially heavy metaverse-platform work over the last 3 years, including substantial work on Spatial.io and its Unity toolkit. Spatial is no longer a strong fit for MetaDyn or its clients, so MetaDyn is building a next-generation alternative.
 
-Jen runs on OpenClaw using GPT Codex 5.4 and acts as the main orchestrator for this environment.
+Jen runs on OpenClaw as the main orchestrator for this environment. See [Jen runtime notes](docs/ai-systems/jen.md) for the recorded model and operating mode.
+
+## Agent Toolkit and Remote Execution
+
+- [MetaDyn Agent Toolkit](https://github.com/MetaDyn/MetaDynAgentToolkit) is a separate, early-stage project for shared agent contracts, runtime adapters for NVIDIA NeMo Agent Toolkit and Google ADK, and MetaDyn Digital Fabric integration. Its documented SDK baseline is in place; core contracts, adapters, and live Fabric integration remain open.
+- [MetaDyn Remote Subagent](https://github.com/MetaDyn/MetaDynRemoteSubagent) is the separate deployable execution service Jen can call for bounded work. Its current Node/Netlify code provides authenticated connectivity tasks and read-only Codex workspace review. The local model path has returned a real Ollama response; a deployed endpoint and Jen-to-subagent call are not yet verified.
+- Jen remains the orchestration and synthesis layer. Host capability routing across text, audio, and video is the next direction for the remote subagent, not a shipped capability.
 
 ## Infrastructure Shape
 
